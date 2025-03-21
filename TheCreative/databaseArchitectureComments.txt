@@ -1,0 +1,8 @@
+Each lesson has its id as follows:
+    TGN
+  where T is the term {1, 2}
+        G is the grade {3: M3, 4: S1, 5: S2}
+        N is the number of the lecture {1, 2, 3, ...}
+
+Grades encoding -> {3: M3, 4: S1, 5: S2}
+Terms encoding -> {1: T1, 2: T2}
