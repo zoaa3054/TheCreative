@@ -4,7 +4,7 @@
   "description": "The official course website for Mr. Alaa Mohey",
   "main": "api/server.js",
   "scripts": {
-    "server": "nodemon api/server"
+    "build": "node api/server.js"
   },
   "author": "Ibrahim Mohamed Omar",
   "license": "ISC",

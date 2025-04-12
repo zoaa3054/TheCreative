@@ -11,7 +11,5 @@
         "src": "/express-api/(.*)",
         "dest": "/api/server.js"
       }
-    ],
-    "installCommand": "npm install",
-    "buildCommand": "node api/server.js"
+    ]
   }
