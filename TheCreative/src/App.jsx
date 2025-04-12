@@ -13,7 +13,7 @@ import EditLecturePage from './Pages/EditLecturePage';
 
 function App() {
   // const backend = `https://192.168.1.17:8081`;
-  const backend = `http://localhost:8081`;
+  const backend = `https://the-creative.vercel.app`;
   Modal.setAppElement("#root");
   const router = createBrowserRouter(
     createRoutesFromElements(

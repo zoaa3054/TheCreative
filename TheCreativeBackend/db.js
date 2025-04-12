@@ -4,7 +4,8 @@ let dbConnection;
 
 module.exports = {
     connectToDb : (cb)=>{
-        MongoClient.connect('mongodb://localhost:27017/TheCreative')
+        const uri = "mongodb+srv://atlas-sample-dataset-load-67fabeda3322325ac06915ec:n3qS2MC6FA6Ep4lG@cluster0.5plqdk3.mongodb.net/?appName=Cluster0";
+        MongoClient.connect(uri)
         .then((client)=>{
             dbConnection = client.db();
             return cb();
