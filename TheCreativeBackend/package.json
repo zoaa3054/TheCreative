@@ -2,7 +2,7 @@
   "name": "thecreativebackend",
   "version": "1.0.0",
   "description": "The official course website for Mr. Alaa Mohey",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "server": "nodemon server"
   },
