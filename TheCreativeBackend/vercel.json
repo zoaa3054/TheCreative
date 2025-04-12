@@ -1,9 +1,8 @@
 {
     "version": 2,
-    "installCommand": "npm install",
     "routes": [
       {
-        "src": "/express-api/(.*)",
+        "src": "/(.*)",
         "dest": "/api/server.js"
       }
     ]
