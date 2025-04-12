@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 const { getTerm } = require('../utils.js');
 const { hash, compare } = require('../bcryptHash.js');
 const { createUserJWT, checkUserJWT, createAdminJWT, checkAdminJWT, checkBothJWTs } = require('../jsonWebToken.js');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const serverless = require('serverless-http');
 
 // init server and middleware
@@ -25,14 +25,6 @@ server.use((req, res, next)=>{
     console.log(req.get('Origin'),req.url);
     next();
 })
-
-// Load SSL certificate and private key
-const options = {
-    // key: fs.readFileSync("localhost-key.pem"),
-    // cert: fs.readFileSync("localhost.pem"),
-    key: fs.readFileSync("192.168.1.17-key.pem"),
-    cert: fs.readFileSync("192.168.1.17.pem"),
-};
 
 // connect to db
 let db;
