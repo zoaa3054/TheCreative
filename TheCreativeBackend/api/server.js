@@ -41,6 +41,9 @@ connectToDb((error)=>{
         db = getDb();
 
         // routes
+        server.get('/', (req, res) => {
+            res.send("Hello creative");
+          });
         // GET some user with its username and password for login
         server.post('/login', (req, res)=>{
             let body = req.body;
