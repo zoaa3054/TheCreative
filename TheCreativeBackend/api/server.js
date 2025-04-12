@@ -405,7 +405,7 @@ const initializeServer = () => {
         else res.status(422).json({error: "Sent data is unprocessable"});
     });
 
-    server.post('/add/admin', async(req, res)=>{
+    server.post('/add/admin',checkAdminJWT, async(req, res)=>{
         const body = req.body;
 
         // check if the admin exists
@@ -427,7 +427,7 @@ const initializeServer = () => {
                     await db.collection('logs')
                     .insertOne({
                         text: `An admin was added with username: ${body.username}`,
-                        admin: "",
+                        admin: req.username,
                         method: 'ADD',
                         date: Date.now()
                     })
