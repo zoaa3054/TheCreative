@@ -9,7 +9,7 @@ const { getTerm } = require('../utils.js');
 const { hash, compare } = require('../bcryptHash.js');
 const { createUserJWT, checkUserJWT, createAdminJWT, checkAdminJWT, checkBothJWTs } = require('../jsonWebToken.js');
 // const cookieParser = require('cookie-parser');
-const serverless = require('serverless-http');
+// const serverless = require('serverless-http');
 
 // init server and middleware
 const server = express();
@@ -776,8 +776,10 @@ connectToDb((error)=>{
         });
 
 
-        // Start the serverless handler
-        module.exports.handler = serverless(server);
+        // Export the function for Vercel to invoke
+        module.exports = (req, res)=>{
+            server(req, res); // Pass the request and response to Express for routing
+        };
     }
     else console.log(error);
 });
