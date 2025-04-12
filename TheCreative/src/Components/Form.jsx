@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled, { keyframes } from "styled-components";
 import { State } from "country-state-city";
 import Select from "react-select/base";
+import Spinner from "./Spinner";
 
 const slideLift = keyframes`
     from{
@@ -60,9 +61,12 @@ const pop = keyframes`
 
 
 const Form = ({ usedForm, setUsedForm, backEnd })=>{
-    const [position, setPosition] = useState(usedForm == 'signup'?0:-25);
+    const [position, setPosition] = useState(usedForm == 'signup'?1:-25);
     const [formVariables, setFormVariables] = useState({studentPhone: '+20', parentPhone: '+20', city: State.getStatesOfCountry('EG')[0].name, grade: "3"});
     const [error, setError] = useState({});
+    const [numberOfLoginAttmpts, setNumberOfLoginAttmpts] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const navigator = useNavigate();
 
     const notifyError = (message)=>{
         toast.error(message);
@@ -83,7 +87,7 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                 city: State.getStatesOfCountry('EG')[0].name,
                 grade: "3"
             });
-            setPosition(0);
+            setPosition(1);
         }
         setUsedForm(newForm);
     }
@@ -152,27 +156,69 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
 
     const signup = async(e)=>{
         e.preventDefault();
-        
+        setIsLoading(true);
         if (checkSignupInput()){
-            await fetch(`${backEnd}/user/signup`, {
+            await fetch(`${backEnd}/signup`, {
                 method:"POST",
-                credentials: "include",
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                // credentials: "include",
                 body: JSON.stringify(formVariables)
             })
             .then((res)=>{
-                if (res.status == 200){
+                if (res.status == 201){
                     notifySuccess("Welcome to TheCreative in math");
-                    // route to home page
+                    // navibage to home page
+                    navigator('/home');
                 } 
                 else if (res.status == 409) notifyError("User already exists");
-                else notifyError("Something went wrong, Couldn't add user, Please contact the systems administrators")
+                else notifyError("Something went wrong, Please contact the systems administrators")
+                return res.json();
             })
+            .then((data)=>console.log(data))
+            .catch((error)=>console.log(error));
         }
+        setIsLoading(false);
     }
 
-    const login = (e)=>{
+    const login = async(e)=>{
         e.preventDefault();
-        console.log(formVariables);
+        setIsLoading(true);
+
+        await fetch(`${backEnd}/login`, {
+            headers: {
+                'Content-Type': 'Application/json'
+            },
+            method:"POST",
+            body: JSON.stringify({
+                username: formVariables.username,
+                password: formVariables.password
+            })
+        })
+        .then((res)=>{
+            
+            if (res.status == 404){
+                if (numberOfLoginAttmpts > 5){
+                    notifyError("It appears that this user is not registerd in the system, Please Signup first!");
+                    changeForm('signup');
+                    setNumberOfLoginAttmpts(0);
+                }else{
+                    notifyError("Wrong username or password");
+                    setError({...error, username: "Wrong username or password", password: "Wrong username or password"});
+                    setNumberOfLoginAttmpts(prev=>prev+1);
+                }
+            }
+            else if (res.status == 500 || res.status == 422) notifyError("Something went wrong, please contact system administrator.");
+            return res.json();
+        })
+        .then((data)=>{
+            console.log(data);
+            if (data.person && data.person == 'user') navigator('/home');
+            else if (data.person && data.person == 'admin') navigator('/admin/home');
+        })
+        .catch((error)=>console.log(error));
+        setIsLoading(false);
     }
     
     const changeFormVariable = (variable)=>{
@@ -181,14 +227,6 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
 
         setFormVariables({...formVariables, [name]: value});
     }
-    const customStyles = {
-        control: (base, state) => ({
-            ...base,
-            background: "#a4a4a46a",
-            cursor: "pointer"
-        })
-        
-    };
 
     return(
         <Container position={position} onSubmit={(e)=>usedForm == 'signup'?signup(e):login(e)}>
@@ -226,7 +264,10 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                     <input style={{backgroundColor:"#a4a4a46a", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                 
                 </SignupInputs>
-                <SignupButton type="submit">Create an account</SignupButton>
+                <div style={{display:"flex", alignItems: "baseline"}}>
+                    <SignupButton type="submit">Create an account</SignupButton>
+                    {isLoading?<Spinner size={15}/>:<></>}
+                </div>
                 <Separator><span>or</span></Separator>
                 <SignupFooter>I am already a member! <Link onClick={()=>changeForm('login')}>Login</Link></SignupFooter>
             </>
@@ -236,12 +277,15 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                 <LoginTitle>Login</LoginTitle>
                 <LoginInputs>
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: "none", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                    <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
         
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: "none", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                    <input style={{backgroundColor:"#a4a4a46a", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                 </LoginInputs>
-                <LoginButton type="submit">Login</LoginButton>
+                <div style={{display:"flex", alignItems: "baseline"}}>
+                    <LoginButton type="submit">Login</LoginButton>
+                    {isLoading?<Spinner size={15}/>:<></>}
+                </div>
                 <Separator><span>or</span></Separator>
                 <LoginFooter>I am new! <Link onClick={()=>changeForm('signup')}>Signup</Link></LoginFooter>
             </>
@@ -252,23 +296,30 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
 export default Form;
 
 const Container = styled.form`
-    padding: 3rem;
-    z-index: 1;
+    padding: 1.5rem;
     background-color: white;
     color: #000000a4;
     display: flex;
     flex-direction: column;
     align-items: start;
-    width: 20rem;
-    height: ${({position})=>position==0?32:18}rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: fit-content;
+    justify-content: center;
+    height: fit-content;
     transform: translateX(${({position})=>position}rem);
     transition: transform 1s ease-in-out, height 1s ease-in-out;
+    @media (max-width: 1500px) {
+        transform: translateX(-25rem);
+    }
+    
 `;
 
 const SignupTitle = styled.h2`
   font-weight: normal;
   font-family: Arial, Helvetica, sans-serif;
-  animation: ${slideDown} 1s ease-in-out;  
+  animation: ${slideDown} 1s ease-in-out; 
+  
 `;
 
 const LoginTitle = styled.h2`
@@ -283,6 +334,11 @@ const SignupInputs = styled.div`
     gap: 1rem;
     align-items: center;
     animation: ${slideLift} 1s ease-in-out;
+    @media (max-width: 300px) {
+        overflow-y: scroll;
+        grid-template-columns: auto;
+    }
+    
 `;
 
 const LoginInputs = styled.div`
@@ -291,6 +347,11 @@ const LoginInputs = styled.div`
     gap: 1rem;
     align-items: center;
     animation: ${slideLift} 1s ease-in-out;
+
+    @media (max-width: 300px) {
+        overflow-y: scroll;
+        grid-template-columns: auto;
+    }
 `;
 
 const SignupButton = styled.button `
@@ -298,6 +359,7 @@ const SignupButton = styled.button `
     color: white;
     padding: 1rem;
     margin-top: 1rem;
+    margin-right: 1rem;
     border-radius: 2rem;
     cursor: pointer;
     animation: ${pop} 1s ease-in-out;
@@ -313,6 +375,7 @@ const LoginButton = styled.button `
     color: white;
     padding: 1rem;
     margin-top: 1rem;
+    margin-right: 1rem;
     border-radius: 2rem;
     cursor: pointer;
     animation: ${pop} 1s ease-in-out;

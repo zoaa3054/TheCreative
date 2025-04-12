@@ -32,7 +32,7 @@ const RegisterPage = ({ backEnd })=>{
     );
 
     useEffect(()=>{
-        fetchTipsList();
+        // fetchTipsList();
         if (usedForm == 'signup'){
             setLeftOpacity(1);
             setRightOpacity(0);
@@ -53,18 +53,18 @@ const RegisterPage = ({ backEnd })=>{
             <FormWrapper>
                 <LeftWelcomeText leftOpacity={leftOpacity} tipsList={tipsList}/>
                 <Form usedForm={usedForm} setUsedForm={setUsedForm} backEnd={backEnd}/>
-                <RightWelcomeText style={{transform:"translateX(50rem)"}} tipsList={tipsList} rightOpacity={rightOpacity}/>
+                <RightWelcomeText style={{transform:"translateX(50rem)"}} rightOpacity={rightOpacity} tipsList={tipsList}/>
             </FormWrapper>
         
         </Container>);
 }
 
-const GetATip = ({tipsList})=>{
+const GetATip = ({ tipsList })=>{
     
     let randomIndex = getRandomInt(0, tipsList.length-1)
     return <h4 style={{fontWeight:"normal", fontFamily: "Arial, Helvetica, sans-serif"}}>{tipsList[randomIndex]}</h4>
 }
-const LeftWelcomeText = ({leftOpacity, tipsList})=>{
+const LeftWelcomeText = ({ leftOpacity, tipsList })=>{
     return(
         <LeftText leftOpacity={leftOpacity}>
             {leftOpacity==0?<GetATip tipsList={tipsList}/>:<GetATip tipsList={tipsList}/>}
@@ -72,7 +72,7 @@ const LeftWelcomeText = ({leftOpacity, tipsList})=>{
     )
 }
 
-const RightWelcomeText = ({rightOpacity, tipsList})=>{
+const RightWelcomeText = ({ rightOpacity, tipsList })=>{
     return(
         <RightText rightOpacity = {rightOpacity}>            
             {rightOpacity==0?<GetATip tipsList={tipsList}/>:<GetATip tipsList={tipsList}/>}
@@ -83,27 +83,35 @@ export default RegisterPage;
 
 const Container = styled.div`
     height: 100dvh;
+    width: 100vw;
     background-image: url(${backgroundImage}); 
     background-size: cover;  
     background-repeat: no-repeat; 
     background-position: center; 
     background-attachment: fixed;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    
 `;
 
 const FormWrapper = styled.div`
-    width: 50rem;
+    width: 50vw;
     height: fit-content;
     border: 1px solid black;
     display: flex;
     align-items: end;
-    overflow: hidden;
+    /* overflow: visible; */
     transition: height 1s ease-in-out;
     background-color: #01060a44;
-    
+    @media (max-width: 400px) {
+        transform: translateX(-5rem);
+    }
+    @media (max-height: 390px) {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 `;
 
 const LeftText = styled.div`
@@ -119,6 +127,9 @@ const LeftText = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     animation: ${pop} 1s ease-in-out;
     transition: opacity 0.5s ease-in-out;
+    @media (max-width: 1170px) {
+        opacity: 0;
+    }
 `;
 
 const RightText = styled.div`
@@ -135,5 +146,7 @@ const RightText = styled.div`
     transform: translateX(-25rem);
     animation: ${pop} 1s ease-in-out;
     transition: opacity 0.5s ease-in-out;
-
+    @media (max-width: 1170px) {
+        opacity: 0;
+    }
 `;

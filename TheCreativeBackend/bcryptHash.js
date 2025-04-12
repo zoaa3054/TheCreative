@@ -9,7 +9,6 @@ module.exports = {
             return hash;
         } catch (err) {
             console.error(err);
-            throw err;
         }
         
     },
@@ -19,7 +18,6 @@ module.exports = {
             return result;
         }catch(err){
             console.error(err);
-            throw err
         }
         
     }

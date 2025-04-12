@@ -6,9 +6,11 @@ import StudentHomePageLayout from './Layouts/StudentHomePageLayout';
 import AdminHomePageLayout from './Layouts/AdminHomePageLayout';
 import WelcomePage from './Pages/WelcomePage';
 import RegisterPage from './Pages/RegisterPage';
+import StudentHomePage from './Pages/StudentHomePage';
+import AdminHomePage from './Pages/AdminHomePage';
 
 function App() {
-  const backEnd = `https://localhost:8081`;
+  const backEnd = `https://192.168.1.17:8081`;
   
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -18,10 +20,10 @@ function App() {
         </Route>
         <Route path='/register' element={<RegisterPage backEnd={backEnd}/>}/>
         <Route path='/home' element={<StudentHomePageLayout/>}>
-          
+          <Route index element={<StudentHomePage/>}/>
         </Route>
         <Route path='/admin/home' element={<AdminHomePageLayout/>}>
-          
+          <Route index element={<AdminHomePage/>}/>
         </Route>
         <Route path='*' element={<EmptyPage/>}/>
       </>

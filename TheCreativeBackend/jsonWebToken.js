@@ -1,20 +1,37 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const USER_JWT_SECRET = process.env.USER_JWT_SECRET;
+const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET;
 
 
 module.exports = {
-    createJWT: (username)=>{
-        return jwt.sign({username}, SECRET_KEY, {expiresIn: "5h"});
+    createUserJWT: (username)=>{
+        return jwt.sign({username}, USER_JWT_SECRET, {expiresIn: "5h"});
     },
 
-    checkJWT: (req, res, next)=>{
-        const token = req.cookies.authToken;
+    checkUserJWT: (req, res, next)=>{
+        const token = req.cookies.theCreativeAuthToken;
 
         if (!token) return res.status(401).json({error: "Unauthorized"});
 
-        jwt.verify(token, SECRET_KEY, (error, supposedUsername)=>{
+        jwt.verify(token, USER_JWT_SECRET, (error, supposedUsername)=>{
+            if(error) return res.status(403).json({error: "Forbidden"});
+            req.username = supposedUsername.username;
+            
+            next();
+        });
+    },
+    createAdminJWT: (username)=>{
+        return jwt.sign({username}, ADMIN_JWT_SECRET, {expiresIn: "5h"});
+    },
+
+    checkAdminJWT: (req, res, next)=>{
+        const token = req.cookies.theCreativeAuthToken;
+
+        if (!token) return res.status(401).json({error: "Unauthorized"});
+
+        jwt.verify(token, ADMIN_JWT_SECRET, (error, supposedUsername)=>{
             if(error) return res.status(403).json({error: "Forbidden"});
             req.username = supposedUsername.username;
             
