@@ -3,13 +3,13 @@ const cors = require('cors');
 const fs = require("fs");
 const https = require("https");
 const http = require("http");
-const { connectToDb, getDb } = require('api/db.js');
+const { connectToDb, getDb } = require('../db.js');
 const { ObjectId } = require('mongodb');
-const { getTerm } = require('api/utils.js');
-const { hash, compare } = require('api/bcryptHash.js');
-const { createUserJWT, checkUserJWT, createAdminJWT, checkAdminJWT, checkBothJWTs } = require('api/jsonWebToken.js');
+const { getTerm } = require('../utils.js');
+const { hash, compare } = require('../bcryptHash.js');
+const { createUserJWT, checkUserJWT, createAdminJWT, checkAdminJWT, checkBothJWTs } = require('../jsonWebToken.js');
 const cookieParser = require('cookie-parser');
-
+const serverless = require('serverless-http');
 
 // init server and middleware
 const server = express();
