@@ -23,7 +23,7 @@ const initializeServer = () => {
     }));
   
     server.use((req, res, next) => {
-      console.log(req.get('Origin'), req.url);
+      console.log(req.url);
       next();
     });
   
