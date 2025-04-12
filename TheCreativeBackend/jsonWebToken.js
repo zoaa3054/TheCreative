@@ -11,9 +11,10 @@ module.exports = {
     },
 
     checkUserJWT: (req, res, next)=>{
-        const token = req.cookies.theCreativeAuthToken;
-
-        if (!token) return res.status(401).json({error: "Unauthorized"});
+        const authHeader = req.headers["authorization"];
+        if (!authHeader || !authHeader.startsWith("Bearer "))
+            return res.status(401).json({error: "Unauthorized"});
+        const token = authHeader.split(" ")[1];
 
         jwt.verify(token, USER_JWT_SECRET, (error, supposedUsername)=>{
             if(error) return res.status(403).json({error: "Forbidden"});
@@ -27,13 +28,39 @@ module.exports = {
     },
 
     checkAdminJWT: (req, res, next)=>{
-        const token = req.cookies.theCreativeAuthToken;
+        const authHeader = req.headers["authorization"];
 
-        if (!token) return res.status(401).json({error: "Unauthorized"});
+        if (!authHeader || !authHeader.startsWith("Bearer "))
+            return res.status(401).json({error: "Unauthorized"});
+
+        const token = authHeader.split(" ")[1];
 
         jwt.verify(token, ADMIN_JWT_SECRET, (error, supposedUsername)=>{
             if(error) return res.status(403).json({error: "Forbidden"});
             req.username = supposedUsername.username;
+            
+            next();
+        });
+    },
+
+    checkBothJWTs: (req, res, next)=>{
+        const authHeader = req.headers["authorization"];
+        let isAdmin = true;
+        if (!authHeader || !authHeader.startsWith("Bearer "))
+            return res.status(401).json({error: "Unauthorized"});
+
+        const token = authHeader.split(" ")[1];
+
+        jwt.verify(token, ADMIN_JWT_SECRET, (error, supposedAdminUsername)=>{
+            if(error){
+                jwt.verify(token, USER_JWT_SECRET, (error, supposedStudentUsername)=>{
+                    if(error) return res.status(403).json({error: "Forbidden"});
+                    req.username = supposedStudentUsername.username;
+                    console.log(req.username);
+                    isAdmin = false;
+                });
+            } 
+            if (isAdmin) req.username = supposedAdminUsername.username;
             
             next();
         });

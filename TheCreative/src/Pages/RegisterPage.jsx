@@ -20,7 +20,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const RegisterPage = ({ backEnd })=>{
+const RegisterPage = ({ backend })=>{
     const locate = useLocation();
     const { desiredForm } = locate.state || {};
     const [usedForm, setUsedForm] = useState(desiredForm);
@@ -44,7 +44,7 @@ const RegisterPage = ({ backEnd })=>{
     }, [usedForm]);
 
     const fetchTipsList = async()=>{
-        await fetch(backEnd)
+        await fetch(backend)
         .then(res=>res.status == 200?res.json():(()=>{throw Error("Error fetching tips list")}))
         .then(list=>setTipsList(list));
     }
@@ -52,7 +52,7 @@ const RegisterPage = ({ backEnd })=>{
         <Container>
             <FormWrapper>
                 <LeftWelcomeText leftOpacity={leftOpacity} tipsList={tipsList}/>
-                <Form usedForm={usedForm} setUsedForm={setUsedForm} backEnd={backEnd}/>
+                <Form usedForm={usedForm} setUsedForm={setUsedForm} backend={backend}/>
                 <RightWelcomeText style={{transform:"translateX(50rem)"}} rightOpacity={rightOpacity} tipsList={tipsList}/>
             </FormWrapper>
         

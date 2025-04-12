@@ -6,25 +6,27 @@ import StudentHomePageLayout from './Layouts/StudentHomePageLayout';
 import AdminHomePageLayout from './Layouts/AdminHomePageLayout';
 import WelcomePage from './Pages/WelcomePage';
 import RegisterPage from './Pages/RegisterPage';
-import StudentHomePage from './Pages/StudentHomePage';
-import AdminHomePage from './Pages/AdminHomePage';
+import Modal from "react-modal";
+import LecturePage from './Pages/LecturePage';
+import StudentPage from './Pages/StudentPage';
+import EditLecturePage from './Pages/EditLecturePage';
 
 function App() {
-  const backEnd = `https://192.168.1.17:8081`;
-  
+  // const backend = `https://192.168.1.17:8081`;
+  const backend = `http://localhost:8081`;
+  Modal.setAppElement("#root");
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path='/' element={<WelcomePageLayout/>}>
           <Route index element={<WelcomePage/>}/>
         </Route>
-        <Route path='/register' element={<RegisterPage backEnd={backEnd}/>}/>
-        <Route path='/home' element={<StudentHomePageLayout/>}>
-          <Route index element={<StudentHomePage/>}/>
-        </Route>
-        <Route path='/admin/home' element={<AdminHomePageLayout/>}>
-          <Route index element={<AdminHomePage/>}/>
-        </Route>
+        <Route path='/register' element={<RegisterPage backend={backend}/>}/>
+        <Route path='/home' element={<StudentHomePageLayout backend={backend}/>}/>
+        <Route path='/lecture/:id' element={<LecturePage/>}/>
+        <Route path='/edit/lecture/:id' element={<EditLecturePage/>}/>
+        <Route path='/student/:id' element={<StudentPage/>}/>
+        <Route path='/admin/home' element={<AdminHomePageLayout backend={backend}/>}/>
         <Route path='*' element={<EmptyPage/>}/>
       </>
       

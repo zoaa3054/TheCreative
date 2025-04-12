@@ -6,3 +6,25 @@ body, html {
     overflow: hidden;
 
 }
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Scrollbar Track */
+  ::-webkit-scrollbar-track {
+    background: transparent; 
+    border-radius: 10px;
+  }
+  
+  /* Scrollbar Thumb */
+  ::-webkit-scrollbar-thumb {
+    background: #000000; 
+    border-radius: 10px;
+  }
+  
+  /* Scrollbar Thumb on Hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

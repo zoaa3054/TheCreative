@@ -60,9 +60,9 @@ const pop = keyframes`
 `;
 
 
-const Form = ({ usedForm, setUsedForm, backEnd })=>{
+const Form = ({ usedForm, setUsedForm, backend })=>{
     const [position, setPosition] = useState(usedForm == 'signup'?1:-25);
-    const [formVariables, setFormVariables] = useState({studentPhone: '+20', parentPhone: '+20', city: State.getStatesOfCountry('EG')[0].name, grade: "3"});
+    const [formVariables, setFormVariables] = useState({studentPhone: '+20', parentPhone: '+20', city: State.getStatesOfCountry('EG')[0].name, grade: "M3"});
     const [error, setError] = useState({});
     const [numberOfLoginAttmpts, setNumberOfLoginAttmpts] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +85,7 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                 studentPhone: '+20', 
                 parentPhone: '+20', 
                 city: State.getStatesOfCountry('EG')[0].name,
-                grade: "3"
+                grade: "M3"
             });
             setPosition(1);
         }
@@ -158,16 +158,17 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
         e.preventDefault();
         setIsLoading(true);
         if (checkSignupInput()){
-            await fetch(`${backEnd}/signup`, {
+            await fetch(`${backend}/signup`, {
                 method:"POST",
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                // credentials: "include",
                 body: JSON.stringify(formVariables)
             })
             .then((res)=>{
                 if (res.status == 201){
+                    const token =  res.headers.get('authorization').split(" ")[1];
+                    sessionStorage.setItem("theCreativeAuthToken", token);
                     notifySuccess("Welcome to TheCreative in math");
                     // navibage to home page
                     navigator('/home');
@@ -186,9 +187,10 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
         e.preventDefault();
         setIsLoading(true);
 
-        await fetch(`${backEnd}/login`, {
+        await fetch(`${backend}/login`, {
             headers: {
-                'Content-Type': 'Application/json'
+                'Content-Type': 'Application/json',
+                
             },
             method:"POST",
             body: JSON.stringify({
@@ -197,7 +199,6 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
             })
         })
         .then((res)=>{
-            
             if (res.status == 404){
                 if (numberOfLoginAttmpts > 5){
                     notifyError("It appears that this user is not registerd in the system, Please Signup first!");
@@ -210,12 +211,22 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                 }
             }
             else if (res.status == 500 || res.status == 422) notifyError("Something went wrong, please contact system administrator.");
+            else if (res.status == 200){
+                const token =  res.headers.get('authorization').split(" ")[1];
+                sessionStorage.setItem("theCreativeAuthToken", token);
+            }
             return res.json();
         })
         .then((data)=>{
             console.log(data);
-            if (data.person && data.person == 'user') navigator('/home');
-            else if (data.person && data.person == 'admin') navigator('/admin/home');
+            if (data.person && data.person == 'user') {
+                navigator('/home');
+                notifySuccess(`Welcome back mate :)`);
+            }
+            else if (data.person && data.person == 'admin') {
+                navigator('/admin/home');
+                notifySuccess(`Welcome back mate :)`);
+            }
         })
         .catch((error)=>console.log(error));
         setIsLoading(false);
@@ -237,7 +248,7 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
                 <SignupInputs>
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
                     <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
-                
+                    
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="studentPhone">STUDENT PHONE</label>
                     <input style={{backgroundColor:"#a4a4a46a", border: error['studentPhone']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
                 
@@ -255,9 +266,9 @@ const Form = ({ usedForm, setUsedForm, backEnd })=>{
 
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="grade">GRADE</label>
                     <select name="grade" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.grade} onChange={changeFormVariable} placeholder="Grade" required>
-                        <option value="3">Middle 3</option>
-                        <option value="4">Senior 1</option>
-                        <option value="5">Senior 2</option>
+                        <option value="M3">Middle 3</option>
+                        <option value="S1">Senior 1</option>
+                        <option value="S2">Senior 2</option>
                     </select>
                 
                     <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
