@@ -249,7 +249,7 @@ const EditLecturePage = () =>{
 
             <div>
             <label htmlFor="cost">Cost:</label>
-            <input type="number" name="cost" min="0" placeholder="Enter cost" value={formVariables.cost?formVariables.cost:""} onChange={handleChange} required/>
+            <input type="number" name="cost" min="0" placeholder="Enter cost" value={formVariables.cost == undefined || formVariables.cost == null?"":formVariables.cost} onChange={handleChange} required/>
             </div>
 
             <div>
@@ -277,21 +277,23 @@ export default EditLecturePage;
 
 const Container = styled.form`
     height: 100vh;
-    /* width: 100%; */
+    width: 100%;
     padding: 1rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
     color: ${({theme})=>theme=='light'?"black":"white"};
     background-color: ${({theme})=>theme=='light'?"whitesmoke":"#181818"};
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: scroll;
 
     div{
         display: grid;
         grid-template-columns: 1fr 1fr;
-        
+        max-width: 98%;
         input, select{
            padding: 1rem;
+           
         }
 
         select{
@@ -300,6 +302,18 @@ const Container = styled.form`
 
         &:nth-child(4){
             display: flex;
+        }
+
+        &:nth-child(8){
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:nth-child(11){
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
             
     }
@@ -313,7 +327,7 @@ const Button = styled.button`
     cursor: pointer;
     background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"white"};
     color: ${({theme})=>theme=='light'?"white":"black"};
-
+    margin-bottom: 70px;
     &:hover{
         background-color: ${({theme})=>theme=='light'?"#00ab7b":"black"};
         color: white;
@@ -324,8 +338,7 @@ const Button = styled.button`
 
 
 const Preveiw = styled.div`
-    width: 100%;
-    align-self: center;
+    width: fit-content;
 `;
 
 
@@ -361,6 +374,6 @@ const FormButton = styled.button`
 `
 
 const videoOptions = {
-    width: window.innerWidth<=500?"360rem":"500rem",
+    width: window.innerWidth<=500?"300rem":"500rem",
     height: "250rem"
   };

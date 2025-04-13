@@ -129,20 +129,23 @@ const Container = styled.div`
 const SideBar = styled.div`
     height: 100vh;
     width: ${({isOpen})=>{
-        if(isOpen && window.innerWidth<=500)
-            return "40%";
-        if(isOpen && window.innerWidth<=890)
-            return "48%";
-        else if (isOpen)
-            return "15%";
+        // if(isOpen && window.innerWidth<=500)
+        //     return "40%";
+        // if(isOpen && window.innerWidth<=890)
+        //     return "48%";
+        if (isOpen)
+            return "fit-content";
         else 
-        return "0%";
+            return "0%";
     }};
-    overflow: hidden;
+    overflow-y: scroll;
     background-color:${({theme})=>theme=="light"?"white":"black"} ;
     display: flex;
     flex-direction: column;
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
+    overflow: visible;
+    white-space: nowrap;
+
 `;
 
 const RightSpace = styled.div`
@@ -199,14 +202,18 @@ const Body = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
 `;
 
 const Tail = styled.div`
     height: 10vh;
-    width: 100%;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    overflow: visible;
+    white-space: nowrap;
 `;
 
 const Logo = styled.img`

@@ -255,6 +255,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                         <th>Date</th>
                         <th>Duration</th>
                         <th>Cost</th>
+                        <th>#Purchases</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -268,6 +269,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                         <td>{timeStampToDate(item.date)}</td>
                         <td>{(item.size/3600).toFixed(2)}hr</td>
                         <td style={{color: boughtLectures.includes(item._id)&&"#05aa05", fontWeight:"bold"}}>{boughtLectures.includes(item._id)?"PAYED":`${item.cost} LE`}</td>
+                        <td>{item.numOfPurchases}</td>
                         </tr>
                     ))}
                     </tbody>

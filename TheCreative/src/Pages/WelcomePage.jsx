@@ -19,7 +19,7 @@ const Container = styled.div`
     color: white;
     display: flex;
     align-items: center;
-    justify-content: ${window.innerHeight<=500?"start":"center"};
+    justify-content: ${window.innerHeight<=800?"start":"center"};
     flex-direction: column;
     background-image: url(${({backgroundLogo})=>backgroundLogo});
     background-position: center;
@@ -64,7 +64,7 @@ const Describtion = styled.h6`
     font-size: 1rem;
     display: ${window.innerHeight<=500&&"none"};
     border-right: 1px solid white;
-    width: ${window.innerWidth<=500?"21.8rem":"26.5rem"};
+    width: ${window.innerWidth<=500?"17.5rem":"26.5rem"};
     white-space: nowrap;
     overflow: hidden;
     animation: ${typing} 2.5s steps(57), ${cursor} 0.4s step-end infinite alternate;

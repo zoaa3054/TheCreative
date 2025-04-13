@@ -353,6 +353,9 @@ const SignupInputs = styled.div`
         grid-template-columns: auto;
     }
     
+    input{
+        ${window.innerWidth<=500 && 'width: 8rem'};
+    }
 `;
 
 const LoginInputs = styled.div`
@@ -365,6 +368,10 @@ const LoginInputs = styled.div`
     @media (max-width: 300px) {
         overflow-y: scroll;
         grid-template-columns: auto;
+    }
+
+    input{
+        ${window.innerWidth<=500 && 'width: 8rem'};
     }
 `;
 

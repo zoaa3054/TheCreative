@@ -18,22 +18,22 @@ const initializeServer = () => {
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
     server.use(cors({
-    //   origin: 'https://the-creative-in-math.vercel.app',
-      origin: true,
+      origin: 'https://the-creative-in-math.vercel.app',
+    //   origin: true,
       exposedHeaders: ["Authorization"]
     }));
 
-    // server.use((req, res, next) => {
-    //     const allowedOrigin = 'https://the-creative-in-math.vercel.app';
-    //     const origin = req.headers.origin;
+    server.use((req, res, next) => {
+        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
+        const origin = req.headers.origin;
       
-    //     if (!origin || origin !== allowedOrigin) {
-    //         console.log(origin);
-    //         return res.status(403).json({ error: 'Origin not allowed' });
-    //     }
+        if (!origin || origin !== allowedOrigin) {
+            console.log(origin);
+            return res.status(403).json({ error: 'Origin not allowed' });
+        }
       
-    //     next();
-    // });
+        next();
+    });
   
     server.use((req, res, next) => {
       console.log(req.url);
@@ -506,7 +506,11 @@ const initializeServer = () => {
                     date: Date.now(),
                     mark: ''
                 }}})
-                .then((_)=>res.status(201).json({mssg: "Lecture bought Successfuly"}))
+                .then((_)=>{
+                    db.collection('lectures')
+                    .updateOne({_id: new ObjectId(req.body.lectureId)}, {$inc: {numOfPurchases: 1}})
+                    .then((_)=>res.status(201).json({mssg: "Lecture bought Successfuly"}))
+                })
                 .catch((error)=>{
                     console.error(error);
                     res.status(500).json({error: "Couldn't add lecture to the dashboard"});
@@ -636,7 +640,8 @@ const initializeServer = () => {
                             text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} was added`,
                             admin: req.username,
                             method: 'ADD',
-                            date: Date.now()
+                            date: Date.now(),
+                            numOfPurchases: 0
                         })
                         .then((_)=>res.status(201).json({mssg: "Lecture added successfuly"}))
                     })

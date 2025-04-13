@@ -82,7 +82,7 @@ const Settings = ({backend, theme}) => {
                   <input type="text" name="paymentNumber" pattern="^\+20\d{10}$" value={formVariables.paymentNumber?formVariables.paymentNumber:contacts.paymentNumber} onChange={handleChange} />
               </>
           ) : (
-            <p>Payment number:{contacts.paymentNumber}</p>
+            <p>Payment number: {contacts.paymentNumber?contacts.paymentNumber:"NA"}</p>
           )}
         </Info>
         <Info>
@@ -92,7 +92,7 @@ const Settings = ({backend, theme}) => {
                   <input type="text" name="problemsReportNumber" pattern="^\+20\d{10}$" value={formVariables.problemsReportNumber?formVariables.problemsReportNumber:contacts.problemsReportNumber} onChange={handleChange} />
               </>
           ) : (
-            <p>Problems report number: {contacts.problemsReportNumber}</p>
+            <p>Problems report number: {contacts.problemsReportNumber?contacts.problemsReportNumber:"NA"}</p>
           )}
         </Info>
         <Info>
@@ -102,7 +102,7 @@ const Settings = ({backend, theme}) => {
                   <input type="text" name="faqNumber" pattern="^\+20\d{10}$" value={formVariables.faqNumber?formVariables.faqNumber:contacts.faqNumber} onChange={handleChange} />
               </>
           ) : (
-            <p>FAQ number: {contacts.faqNumber}</p>
+            <p>FAQ number: {contacts.faqNumber?contacts.faqNumber:"NA"}</p>
           )}
         </Info>
         <Info>
@@ -112,7 +112,7 @@ const Settings = ({backend, theme}) => {
                   <input type="text" name="sendingMessagesNumber" pattern="^\+20\d{10}$" value={formVariables.sendingMessagesNumber?formVariables.sendingMessagesNumber:contacts.sendingMessagesNumber} onChange={handleChange} />
               </>
           ) : (
-            <p>Sending messages number: {contacts.sendingMessagesNumber}</p>
+            <p>Sending messages number: {contacts.sendingMessagesNumber?contacts.sendingMessagesNumber:"NA"}</p>
           )}
         </Info>
         

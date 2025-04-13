@@ -197,7 +197,7 @@ const AddLecture = ({backend, theme}) =>{
 
             <div>
             <label htmlFor="cost">Cost:</label>
-            <input type="number" name="cost" min="0" placeholder="Enter cost" value={formVariables.cost?formVariables.cost:""} onChange={handleChange} required/>
+            <input type="number" name="cost" min="0" step="1" placeholder="Enter cost" value={formVariables.cost == undefined || formVariables.cost == null?"":formVariables.cost} onChange={handleChange} required/>
             </div>
 
             {/* <div> */}
@@ -212,7 +212,8 @@ export default AddLecture;
 const Container = styled.form`
     width: 98%;
     height: 100%;
-    padding-top: 1rem;
+    padding: 1rem;
+    margin-left: 1rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -224,7 +225,8 @@ const Container = styled.form`
         grid-template-columns: 1fr 1fr;
         
         input, select{
-           padding: 1rem;
+            padding: 1rem;
+
         }
 
         select{
@@ -233,6 +235,18 @@ const Container = styled.form`
 
         &:nth-child(4){
             display: flex;
+        }
+
+        &:nth-child(8){
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:nth-child(11){
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
             
     }
@@ -247,7 +261,7 @@ const Button = styled.button`
     cursor: pointer;
     background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"white"};
     color: ${({theme})=>theme=='light'?"white":"black"};
-    /* margin-bottom: 100px; */
+    /* margin-bottom: 50px; */
 
     &:hover{
         background-color: ${({theme})=>theme=='light'?"#00ab7b":"black"};
@@ -259,11 +273,13 @@ const Button = styled.button`
 
 
 const Preveiw = styled.div`
-    width: 100%;
-    align-self: center;
+    /* width: 100%; */
+    /* align-self: center; */
+    /* padding: 1rem; */
+    width: fit-content;
 `;
 
 const videoOptions = {
-    width: window.innerWidth<=500?"360rem":"500rem",
+    width: window.innerWidth<=500?"300rem":"500rem",
     height: "250rem"
   };
