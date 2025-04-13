@@ -150,7 +150,7 @@ const StudentHomePageLayout = ({ backend })=>{
                     </Component>
                 </Body>
                 <Tail>
-                    <Links onClick={()=>window.open(`https://wa.me/${FAQNumber}?text=`)}>Ask a question</Links>
+                    <Links onClick={()=>window.open(`https://wa.me/${FAQNumber}?text=`)} style={{marginBottom:"5px"}}>Ask a question</Links>
                     <Links onClick={()=>window.open(`https://wa.me/${problemsReportNumber}?text=`)}>Report an error</Links>
                 </Tail>
             </SideBar>
