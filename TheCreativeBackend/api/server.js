@@ -29,8 +29,8 @@ const initializeServer = () => {
         const origin = req.headers.referer;
       
         if (!origin || !origin.includes(allowedOrigin)) {
-
-          return res.status(403).json({ error: origin });
+            console.log(origin);
+            return res.status(403).json({ error: 'Origin not allowed' });
         }
       
         next();
