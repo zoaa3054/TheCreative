@@ -17,11 +17,11 @@ const initializeServer = () => {
   
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
-    server.use(cors({
-      origin: 'https://the-creative-in-math.vercel.app',  // Replace with your frontend URL
-      credentials: true,
-      exposedHeaders: ["Authorization"]
-    }));
+    // server.use(cors({
+    //   origin: 'https://the-creative-in-math.vercel.app',  // Replace with your frontend URL
+    //   credentials: true,
+    //   exposedHeaders: ["Authorization"]
+    // }));
 
     server.use((req, res, next) => {
         const allowedOrigin = 'https://the-creative-in-math.vercel.app';
