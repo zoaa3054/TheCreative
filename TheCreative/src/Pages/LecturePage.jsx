@@ -99,19 +99,19 @@ const LecturePage = ()=>{
                 {stage==2&&
                 <>
                     <Video link={lecture.hwLink?lecture.hwLink:""}/>
-                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>Description</h2>
+                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.hwDescribtion?"Description":""}</h2>
                     <p style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.hwDescribtion}</p>
                 </>}
 
                 {stage==3&&
                 <>
                     <Video link={lecture.explainationLink}/>
-                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>Description</h2>
+                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.explainDescribtion?"Description":""}</h2>
                     <p style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.explainDescribtion}</p>
                 </>}
                 {stage==4&&
                 <>
-                    {lecture.hw==''?
+                    {!lecture.hw?
                         <>
                             <img src={noContent} alt="" style={{width:"100%", height:"50%", alignSelf:"center"}}/>
                             <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>ENJOY, NO HW TODAY </h2>
@@ -145,10 +145,8 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: end;
     height: 100vh;
-    background-image: ${({backgroundImage})=>backgroundImage&&`url(${backgroundImage})`};
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: ${({theme})=>theme=='whitesmoke'?"":"#181818"};
+    
 `;
 
 const Content = styled.div`
