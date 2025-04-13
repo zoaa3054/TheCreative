@@ -150,8 +150,8 @@ const StudentHomePageLayout = ({ backend })=>{
                     </Component>
                 </Body>
                 <Tail>
-                    <Links onClick={()=>window.open(`https://wa.me/${FAQNumber}?text=`)}>Ask a question</Links>
-                    <Links onClick={()=>window.open(`https://wa.me/${problemsReportNumber}?text=`)}>Report an error</Links>
+                    <Links onClick={()=>window.open(`https://wa.me/${FAQNumber}?text=`)} style={{overflow:"visible", width:"fit-content", textWrap:"nowrap"}}>Ask a question</Links>
+                    <Links onClick={()=>window.open(`https://wa.me/${problemsReportNumber}?text=`)} style={{overflow:"visible", width:"fit-content", textWrap:"nowrap"}}>Report an error</Links>
                 </Tail>
             </SideBar>
             <RightSpace theme={theme} isSideBarOpen={isSideBarOpen}>

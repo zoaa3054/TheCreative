@@ -85,7 +85,7 @@ const LecturePage = ()=>{
             <Content theme={theme} backgroundImage={backgroundImage}>
                 {stage==1&&
                 <>
-                    {lecture.examId==''?
+                    {!lecture.examId?
                         <>
                             <img src={noContent} alt="" style={{width:"100%", height:"50%", alignSelf:"center"}}/>
                             <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>ENJOY, NO EXAM TODAY </h2>

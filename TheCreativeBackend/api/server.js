@@ -631,6 +631,7 @@ const initializeServer = () => {
                 console.log(result)
                 if (result) res.status(409).json({error: "Lecture already exists"});
                 else{
+                    req.body.numOfPurchases = 0;
                     await db.collection('lectures')
                     .insertOne(req.body)
                     .then(async (_)=>{
@@ -640,8 +641,7 @@ const initializeServer = () => {
                             text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} was added`,
                             admin: req.username,
                             method: 'ADD',
-                            date: Date.now(),
-                            numOfPurchases: 0
+                            date: Date.now()
                         })
                         .then((_)=>res.status(201).json({mssg: "Lecture added successfuly"}))
                     })
