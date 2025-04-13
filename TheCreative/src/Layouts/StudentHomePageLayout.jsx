@@ -263,8 +263,8 @@ const Tail = styled.div`
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow: hidden;
-    white-space: break-spaces;
+    white-space: normal;
+    word-wrap: break-word;
 `;
 
 const Logo = styled.img`
