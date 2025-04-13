@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import sideBarIcon from "../assets/sideBarIcon.png";
+import sideBarIcon from "../assets/sidebarIcon.png";
 import { useState } from "react";
 import Modal from "react-modal";
 import facebookIcon from "../assets/facebookIcon.png";
