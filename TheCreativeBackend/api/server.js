@@ -16,7 +16,9 @@ const initializeServer = () => {
     const server = express();
   
     server.use(bodyParser.json());
+    server.use(express.json());
     server.use(bodyParser.urlencoded({ extended: true }));
+    server.use(express.urlencoded({ extended: true }));
     server.use(cors({
       origin: true,  // Replace with your frontend URL
       exposedHeaders: ["Authorization"]
