@@ -190,8 +190,8 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
         await fetch(`${backend}/login`, {
             headers: {
                 'Content-Type': 'application/json',
-                
             },
+            credentials: 'include',
             method:"POST",
             body: JSON.stringify({
                 username: formVariables.username,
