@@ -189,7 +189,7 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
 
         await fetch(`${backend}/login`, {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 
             },
             method:"POST",

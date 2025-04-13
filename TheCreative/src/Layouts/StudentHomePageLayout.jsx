@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 import walletLogo from "../assets/wallet.png";
 import lightModeLogo from "../assets/lightMode.png";
 import darkModeLogo from "../assets/darkMode.png";
-import sideBarIcon from "../assets/sideBarIcon.png";
+import sideBarIcon from "../assets/sidebarIcon.png";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StudentContentOutlet from "../Outlets/StudentContentOutlet";

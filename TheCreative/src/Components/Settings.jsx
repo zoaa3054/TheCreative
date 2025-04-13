@@ -98,8 +98,8 @@ const Settings = ({backend, theme}) => {
         <Info>
         {isEditing ? (
               <>
-                  <label htmlFor=" faqNumber" style={{marginRight:"1rem"}}>FAQ number: </label>
-                  <input type="text" name=" sendingMessagesNumber" pattern="^\+20\d{10}$" value={formVariables.faqNumber?formVariables.faqNumber:contacts.faqNumber} onChange={handleChange} />
+                  <label htmlFor="faqNumber" style={{marginRight:"1rem"}}>FAQ number: </label>
+                  <input type="text" name="faqNumber" pattern="^\+20\d{10}$" value={formVariables.faqNumber?formVariables.faqNumber:contacts.faqNumber} onChange={handleChange} />
               </>
           ) : (
             <p>FAQ number: {contacts.faqNumber}</p>
