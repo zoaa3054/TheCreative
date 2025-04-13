@@ -20,7 +20,7 @@ const initializeServer = () => {
     // server.use(bodyParser.urlencoded({ extended: true }));
     server.use(express.urlencoded({ extended: true }));
     server.use(cors({
-      origin: 'https://the-creative-in-math.vercel.app/',  // Replace with your frontend URL
+      origin: 'https://the-creative-in-math.vercel.app',  // Replace with your frontend URL
       exposedHeaders: ["Authorization"]
     }));
   
