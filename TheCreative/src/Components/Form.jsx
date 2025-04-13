@@ -191,7 +191,7 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
+            // credentials: 'include',
             method:"POST",
             body: JSON.stringify({
                 username: formVariables.username,
