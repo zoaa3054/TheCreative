@@ -25,7 +25,7 @@ const initializeServer = () => {
     // }));
 
     server.use((req, res, next) => {
-        const allowedOrigin = 'https://the-creative-in-math.vercel.app/';
+        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
         const origin = req.headers.origin;
       
         if (!origin || !origin.includes(allowedOrigin)) {
