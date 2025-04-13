@@ -19,10 +19,21 @@ const initializeServer = () => {
     server.use(express.json());
     // server.use(bodyParser.urlencoded({ extended: true }));
     server.use(express.urlencoded({ extended: true }));
-    server.use(cors({
-      origin: 'https://the-creative-in-math.vercel.app',  // Replace with your frontend URL
-      exposedHeaders: ["Authorization"]
-    }));
+    // server.use(cors({
+    //   origin: 'https://the-creative-in-math.vercel.app',  // Replace with your frontend URL
+    //   exposedHeaders: ["Authorization"]
+    // }));
+
+    server.use((req, res, next) => {
+        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
+        const origin = req.headers.origin;
+      
+        if (origin || origin !== allowedOrigin) {
+          return res.status(403).json({ error: 'Origin not allowed' });
+        }
+      
+        next();
+    });
   
     server.use((req, res, next) => {
       console.log(req.url);
