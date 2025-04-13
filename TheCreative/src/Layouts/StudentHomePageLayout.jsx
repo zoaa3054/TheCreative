@@ -225,7 +225,7 @@ const NavBar = styled.div`
     /* position: fixed; */
     height: 5rem;
     width: 100%;
-    background-image: ${({theme})=>theme=="light"?"linear-gradient(159deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 100%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
+    background-image: ${({theme})=>theme=="light"?"linear-gradient(180deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 100%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
     display: flex;
     justify-content: space-between;
     align-items: start;
