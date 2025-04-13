@@ -26,10 +26,10 @@ const initializeServer = () => {
 
     server.use((req, res, next) => {
         const allowedOrigin = 'https://the-creative-in-math.vercel.app/';
-        const origin = req.headers.referer;
+        const origin = req.headers.origin;
       
         if (!origin || !origin.includes(allowedOrigin)) {
-            console.log(origin);
+            console.log(req.headers.origin);
             return res.status(403).json({ error: 'Origin not allowed' });
         }
       
