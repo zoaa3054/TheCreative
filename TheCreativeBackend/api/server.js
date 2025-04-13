@@ -25,17 +25,17 @@ const initializeServer = () => {
       exposedHeaders: ["Authorization"]
     }));
 
-    // server.use((req, res, next) => {
-    //     const allowedOrigin = 'https://the-creative-in-math.vercel.app';
-    //     const origin = req.headers.origin;
+    server.use((req, res, next) => {
+        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
+        const origin = req.headers.origin;
       
-    //     if (!origin || !origin.includes(allowedOrigin)) {
-    //         console.log(req.headers.origin);
-    //         return res.status(403).json({ error: 'Origin not allowed' });
-    //     }
+        if (origin && origin !== allowedOrigin) {
+            console.log(origin);
+            return res.status(403).json({ error: 'Origin not allowed' });
+        }
       
-    //     next();
-    // });
+        next();
+    });
   
     server.use((req, res, next) => {
       console.log(req.url);
@@ -800,7 +800,7 @@ let serverReady = (async () => {
         }
         db = getDb();
         const server = initializeServer();
-        console.log("Connected to DB and server ready.");
+        // console.log("Connected to DB and server ready.");
         resolve(server);
       });
     });
