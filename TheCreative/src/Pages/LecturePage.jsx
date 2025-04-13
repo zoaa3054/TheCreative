@@ -15,12 +15,10 @@ const LecturePage = ()=>{
     const [lecture, setLecture] = useState({});
     const [stage, setStage] = useState(1);
     const [isControllerOpen, setIsControllerOpen] = useState(true);
-    const [backgroundImage, setBackgroundImage] = useState('');
     const navigate = useNavigate();
 
     useEffect(()=>{
         fetchLecture();
-        getBackgroundImage();
     }, []);
 
     const notifySuccess = (mssg)=>{
@@ -47,23 +45,7 @@ const LecturePage = ()=>{
         .catch(error=>console.log(error));
     }
 
-    const getBackgroundImage = async()=>{
-        fetch(`${backend}/user/backgroundImage`, {
-            method:"GET",
-            headers:{
-                'Content-Type': 'Application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem("theCreativeAuthToken")}`
-            }
-        }) // API that returns raw image data
-        .then((result) => {
-            if (result.status == 200) return result.json();
-            else throw Error("Couldn't fetch background image");
-        }) 
-        .then((data) => {
-            setBackgroundImage(data.backgroundImage);
-        })
-        .catch((error) => console.error("Error fetching image:", error));
-    }
+    
 
     const incrementStage = ()=>{
         setStage((prev)=>prev+1);
@@ -80,9 +62,9 @@ const LecturePage = ()=>{
     }
 
     return(
-        <Container backgroundImage={backgroundImage}>
+        <Container>
         {Object.keys(lecture).length!= 0?<>
-            <Content theme={theme} backgroundImage={backgroundImage}>
+            <Content theme={theme}>
                 {stage==1&&
                 <>
                     {!lecture.examId?
@@ -145,7 +127,6 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: end;
     height: 100vh;
-    background-color: ${({theme})=>theme=='light'?"whitesmoke":"#181818"};
     
 `;
 
@@ -160,7 +141,8 @@ const Content = styled.div`
     }};
     height: 100%;
     overflow-y: scroll;
-    ${({backgroundImage})=>!backgroundImage&&`background-color: ${({theme})=>theme=='light'?'white':'#181818'}`};
+    background-color: ${({theme})=>theme=='light'?"whitesmoke":"#181818"};
+
     
 `;
 
