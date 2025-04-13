@@ -145,7 +145,7 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: end;
     height: 100vh;
-    background-color: ${({theme})=>theme=='whitesmoke'?"":"#181818"};
+    background-color: ${({theme})=>theme=='light'?"whitesmoke":"#181818"};
     
 `;
 
