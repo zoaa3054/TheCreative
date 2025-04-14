@@ -28,15 +28,7 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
-    useEffect(() => {
-        
-        getNotificationsToken()
-        .then((supposedNotificationsToken)=>{
-            if(!localStorage.getItem('TheCreativeNotificationsToken') || !supposedNotificationsToken ||
-            supposedNotificationsToken != JSON.parse(localStorage.getItem('TheCreativeNotificationsToken'))) setNotifSwitch(false);
-        })
-        
-      }, []);
+   
 
     const logout = ()=>{
         sessionStorage.removeItem("theCreativeAuthToken");
@@ -181,7 +173,6 @@ const StudentHomePageLayout = ({ backend })=>{
 
     const toggleNotifications = async()=>{
         if(notifSwitch){
-            localStorage.removeItem('TheCreativeNotificationsToken');
             deleteNotificationsToken();
             setNotifSwitch(false);
         }
