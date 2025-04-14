@@ -10,11 +10,18 @@ import Modal from "react-modal";
 import LecturePage from './Pages/LecturePage';
 import StudentPage from './Pages/StudentPage';
 import EditLecturePage from './Pages/EditLecturePage';
+import { useEffect } from 'react';
 
 function App() {
   // const backend = `https://192.168.1.17:8081`;
   const backend = `https://the-creative.vercel.app`;
 
+  useEffect(()=>{
+    addEventListener('load', async()=>{
+      let sw =  await navigator.serviceWorker.register('../sw.js');
+      console.log(sw);
+    })
+  }, []);
   Modal.setAppElement("#root");
   const router = createBrowserRouter(
     createRoutesFromElements(
