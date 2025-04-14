@@ -406,7 +406,8 @@ const initializeServer = () => {
                         cash: 0,
                         dashboard: [],
                         boughtLectures: [],
-                        password: await hash(body.password)
+                        password: await hash(body.password),
+                        date: Date.now()
                     });
                 
                     db.collection('users')
