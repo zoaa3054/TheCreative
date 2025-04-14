@@ -9,17 +9,12 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx">
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
       addEventListener('load', async()=>{
           let sw =  await navigator.serviceWorker.register('./sw.js');
           console.log(sw);
         })
     </script>
-    <!-- <script>
-      addEventListener('load', async()=>{
-          let sw =  await navigator.serviceWorker.register('./sw.js');
-          console.log(sw);
-        })
-    </script> -->
   </body>
 </html>
