@@ -3,6 +3,7 @@ const cors = require('cors');
 const { connectToDb, getDb } = require('../db.js');
 const { ObjectId } = require('mongodb');
 const { hash, compare } = require('../bcryptHash.js');
+const { sendNotification } = require('../messaging.js');
 const bodyParser = require('body-parser');
 const {
   createUserJWT, checkUserJWT,
@@ -18,22 +19,22 @@ const initializeServer = () => {
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
     server.use(cors({
-      origin: 'https://the-creative-in-math.vercel.app',
-    //   origin: true,
+    //   origin: 'https://the-creative-in-math.vercel.app',
+      origin: true,
       exposedHeaders: ["Authorization"]
     }));
 
-    server.use((req, res, next) => {
-        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
-        const origin = req.headers.origin;
+    // server.use((req, res, next) => {
+    //     const allowedOrigin = 'https://the-creative-in-math.vercel.app';
+    //     const origin = req.headers.origin;
       
-        if (!origin || origin !== allowedOrigin) {
-            console.log(origin);
-            return res.status(403).json({ error: 'Origin not allowed' });
-        }
+    //     if (!origin || origin !== allowedOrigin) {
+    //         console.log(origin);
+    //         return res.status(403).json({ error: 'Origin not allowed' });
+    //     }
       
-        next();
-    });
+    //     next();
+    // });
   
     server.use((req, res, next) => {
       console.log(req.url);
@@ -378,6 +379,18 @@ const initializeServer = () => {
         })
     });
 
+    server.get('/notifications/token', checkUserJWT, (req, res)=>{
+        db.collection('users')
+        .findOne({username: req.username}, {projection: {token: 1}})
+        .then((result)=>{
+            if(result) res.status(200).json(result);
+            else res.status(404).json({error: "notificationsToken not found"})
+        })
+        .catch((error)=>{
+            console.log(error);
+            res.status(500).json({error: "Could not fetch notificationsToken"})
+        })
+    });
 
 
     // POST (add) some user in signup
@@ -643,7 +656,17 @@ const initializeServer = () => {
                             method: 'ADD',
                             date: Date.now()
                         })
-                        .then((_)=>res.status(201).json({mssg: "Lecture added successfuly"}))
+                        .then(async(_)=>{
+                            await db.collection('users')
+                            .find({grade: req.body.grade}, {projection: {token: 1}})
+                            .toArray()
+                            .then((tokensArray)=>{
+                                tokensArray.forEach((item)=>{
+                                    sendNotification(item.token, `Lecture ${req.body.number} ${req.body.field} Unit ${req.body.unit} is online now.`)
+                                })
+                                res.status(201).json({mssg: "Lecture added successfuly"});
+                            })
+                        })
                     })
                     .catch((error)=>{
                         console.error(error);
@@ -705,6 +728,21 @@ const initializeServer = () => {
         }
         else res.status(422).json({error: "Sent data is unprocessable"});
 
+    })
+
+    server.post('/notifications/token', checkUserJWT, (req, res)=>{
+        const notificationsToken = req.body.token;
+        if (!notificationsToken){
+            res.status(422).json({error: "Sent data is unprocessable"});
+            return;
+        }
+        db.collection('users')
+        .updateOne({username: req.username}, {$set: {token: notificationsToken}})
+        .then((_)=>res.status(200).json({mssg: 'notificationsToken set successfuly'}))
+        .catch((error)=>{
+            console.log(error);
+            res.status(500).json({error: "Could not set notificationsToken"})
+        })
     })
 
     // deleting a user account
@@ -787,6 +825,19 @@ const initializeServer = () => {
             })
         }
         else res.status(422).json({error: "Sent data is unprocessable"});
+    });
+
+    server.delete('/delete/notifications/token', checkUserJWT, (req, res)=>{
+        db.collection('users')
+        .updateOne({username: req.username}, {$unset: {token: ''}})
+        .then((_)=>{
+            res.status(200).json({mssg: "Notifications token deleted successfuly"});
+            
+        })
+        .catch((error)=>{
+            console.error(error);
+            res.status(500).json({error: "Couldn't delete notifications token"});
+        })
     });
 
     return server;

@@ -5,9 +5,12 @@ import walletLogo from "../assets/wallet.png";
 import lightModeLogo from "../assets/lightMode.png";
 import darkModeLogo from "../assets/darkMode.png";
 import sideBarIcon from "../assets/sidebarIcon.png";
+import enableNotificationsIcon from "../assets/enableNotifications.png";
+import disableNotificationsIcon from "../assets/disableNotifications.png";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StudentContentOutlet from "../Outlets/StudentContentOutlet";
+import { messaging, getToken, onMessage } from './firebase';
 
 const StudentHomePageLayout = ({ backend })=>{
     const [selectedComponent, setSelectedComponent] = useState('dashboard');
@@ -18,6 +21,7 @@ const StudentHomePageLayout = ({ backend })=>{
     const [buyingAlert, setBuyingAlert] = useState(0);
     const [FAQNumber, setFAQNumber] = useState('+201557792361');
     const [problemsReportNumber, setProblemsReportNumber] = useState('+201557792361');
+    const [notifSwitch, setNotifSwitch] = useState(false);
 
     useEffect(()=>{
         getWallet();
@@ -25,9 +29,73 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
+    useEffect(() => {
+        getNotificationsToken()
+        .then((supposedNotificationsToken)=>{
+            if(!localStorage.getItem('TheCreativeNotificationsToken') || !supposedNotificationsToken ||
+            supposedNotificationsToken != localStorage.getItem('TheCreativeNotificationsToken')) setNotifSwitch(false);
+        })
+        
+      }, []);
+
     const logout = ()=>{
         sessionStorage.removeItem("theCreativeAuthToken");
         navigate('/');
+    }
+
+    const sendTokenToBackend = async(currentToken) => {
+        await fetch(`${backend}/notifications/token`,{
+            method:"POST",
+            headers:{
+                'Content-Type': 'Application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('theCreativeAuthToken')}`
+            },
+            body: JSON.stringify({token: currentToken})
+        })
+        .then((result)=>{
+            if(result.status==200) console.log("Token sent successfuly");
+            else throw Error("Something went wrong");
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+
+    const getNotificationsToken = async()=>{
+        let supposedToken;
+        await fetch(`${backend}/notifications/token`,{
+            method:"GET",
+            headers:{
+                'Content-Type': 'Application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('theCreativeAuthToken')}`
+            }
+        })
+        .then((result)=>{
+            if(result.status==200) return result.json();
+            else throw Error("Something went wrong");
+        })
+        .then(data=>supposedToken = data.token)
+        .catch((error)=>{
+            console.log(error);
+        })
+        return supposedToken;
+    }
+
+    const deleteNotificationsToken = async()=>{
+        await fetch(`${backend}/delete/notifications/token`,{
+            method:"DELETE",
+            headers:{
+                'Content-Type': 'Application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('theCreativeAuthToken')}`
+            }
+        })
+        .then((result)=>{
+            if(result.status==200) console.log("Notifications token deleted successfuly");
+            else throw Error("Something went wrong");
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
     }
 
     const getWallet = async()=>{
@@ -111,6 +179,36 @@ const StudentHomePageLayout = ({ backend })=>{
         }
     }
 
+    const toggleNotifications = async()=>{
+        if(notifSwitch){
+            localStorage.removeItem('TheCreativeNotificationsToken');
+            deleteNotificationsToken();
+            setNotifSwitch(false);
+        }
+        else{
+            const permission = await Notification.requestPermission();
+
+            if (permission === 'granted') {
+                setNotifSwitch(true);
+                getToken(messaging, {
+                  vapidKey: 'BDMIZD99UDlzrUkAtJI9ODBt7l6nZCsSQU1ePwNQvDS0iMFlQc0bXP32T290joS-Nt8GfzbASfnc_BkwHIcJTNs',
+                })
+                .then((currentToken) => {
+                  if (currentToken) {
+                    console.log('FCM Token:', currentToken);
+                    sendTokenToBackend(currentToken);
+                  }
+                })
+                .catch(err => {
+                    console.error('Token error:', err);
+                    notifyError("Something went wrong couldn't enable notifications!");
+                });
+            } else {
+                console.warn('Notifications not allowed');
+            }
+        }
+    }
+
     return(
         <Container>
             <SideBar theme={theme} isOpen={isSideBarOpen}>
@@ -161,6 +259,11 @@ const StudentHomePageLayout = ({ backend })=>{
                     </NavBarIcons>
                     <NavBarIcons>
                         <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
+                            <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
+                            {notifSwitch?
+                                <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>
+                                :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>    
+                            }
                         <Wallet>
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
