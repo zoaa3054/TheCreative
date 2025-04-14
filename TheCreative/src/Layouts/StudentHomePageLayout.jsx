@@ -28,7 +28,9 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
-   
+    useEffect(()=>{
+        notificationPermissionPrompt();
+    }, [])
 
     const logout = ()=>{
         sessionStorage.removeItem("theCreativeAuthToken");
@@ -171,6 +173,25 @@ const StudentHomePageLayout = ({ backend })=>{
         }
     }
 
+    const notificationPermissionPrompt = async()=>{
+        const permission = await Notification.requestPermission();
+        if (permission == 'granted'){
+            let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
+            let sw = await navigator.serviceWorker.ready;
+            let push = await sw.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: serverPublicKey
+            })
+            
+            sendTokenToBackend(push);
+            setNotifSwitch(true);
+        }
+        else{
+            console.log("couldn't enable notifications");
+            notifyError("Something went wrong, couldn't enable notifications");
+        }
+    }
+
     function urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -179,29 +200,13 @@ const StudentHomePageLayout = ({ backend })=>{
         return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
       }
 
-    const toggleNotifications = async()=>{
+    const toggleNotifications = ()=>{
         if(notifSwitch){
             deleteNotificationsToken();
             setNotifSwitch(false);
         }
         else{
-            const permission = await Notification.requestPermission();
-            if (permission == 'granted'){
-                let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
-                let sw = await navigator.serviceWorker.ready;
-                let push = await sw.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: serverPublicKey
-                })
-
-                sendTokenToBackend(push);
-                setNotifSwitch(true);
-                
-            }
-            else{
-                console.log("couldn't enable notifications");
-                notifyError("Something went wrong, couldn't enable notifications");
-            }
+            notificationPermissionPrompt();
         }
     }
 
