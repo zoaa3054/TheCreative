@@ -189,11 +189,13 @@ const StudentHomePageLayout = ({ backend })=>{
         }
         else{
             let serverPublicKey = process.env.PUSH_PUBLIC_KEY;
+            alert(serverPublicKey);
             let sw = await navigator.serviceWorker.ready;
             let push = await sw.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: serverPublicKey
             })
+            alert(push);
 
             if(push) {
                 sendTokenToBackend(push);
