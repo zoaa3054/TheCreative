@@ -10,7 +10,6 @@ import disableNotificationsIcon from "../assets/disableNotifications.png";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StudentContentOutlet from "../Outlets/StudentContentOutlet";
-import { messaging, getToken, onMessage } from './firebase';
 
 const StudentHomePageLayout = ({ backend })=>{
     const [selectedComponent, setSelectedComponent] = useState('dashboard');
@@ -30,10 +29,13 @@ const StudentHomePageLayout = ({ backend })=>{
     }, [buyingAlert]);
 
     useEffect(() => {
+        addEventListener('load', async()=>{
+            await navigator.serviceWorker.register('../../public/sw.js')
+        })
         getNotificationsToken()
         .then((supposedNotificationsToken)=>{
             if(!localStorage.getItem('TheCreativeNotificationsToken') || !supposedNotificationsToken ||
-            supposedNotificationsToken != localStorage.getItem('TheCreativeNotificationsToken')) setNotifSwitch(false);
+            supposedNotificationsToken != JSON.parse(localStorage.getItem('TheCreativeNotificationsToken'))) setNotifSwitch(false);
         })
         
       }, []);
@@ -186,25 +188,20 @@ const StudentHomePageLayout = ({ backend })=>{
             setNotifSwitch(false);
         }
         else{
-            const permission = await Notification.requestPermission();
+            let serverPublicKey = process.env.PUSH_PUBLIC_KEY;
+            let sw = await navigator.serviceWorker.ready;
+            let push = await sw.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: serverPublicKey
+            })
 
-            if (permission === 'granted') {
+            if(push) {
+                sendTokenToBackend(push);
                 setNotifSwitch(true);
-                getToken(messaging, {
-                  vapidKey: 'BDMIZD99UDlzrUkAtJI9ODBt7l6nZCsSQU1ePwNQvDS0iMFlQc0bXP32T290joS-Nt8GfzbASfnc_BkwHIcJTNs',
-                })
-                .then((currentToken) => {
-                  if (currentToken) {
-                    console.log('FCM Token:', currentToken);
-                    sendTokenToBackend(currentToken);
-                  }
-                })
-                .catch(err => {
-                    console.error('Token error:', err);
-                    notifyError("Something went wrong couldn't enable notifications!");
-                });
-            } else {
-                console.warn('Notifications not allowed');
+            }
+            else{
+                console.log("couldn't enable notifications");
+                notifyError("Something went wrong, couldn't enable notifications");
             }
         }
     }

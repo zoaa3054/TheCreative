@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
     "serverless-http": "^3.2.0",
-    "thecreativebackend": "file:"
+    "thecreativebackend": "file:",
+    "web-push": "^3.6.7"
   }
 }

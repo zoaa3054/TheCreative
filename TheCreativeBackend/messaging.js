@@ -1,22 +1,10 @@
+const webPush = require('web-push');
+
 module.exports = {
     sendNotification: async (token, notifBody) => {
-        const FCM_SERVER_KEY = 'AIzaSyB4OL5u9dJMi0VwBIqNht1mdju5Pz4m5qk';
-      
-        await fetch('https://fcm.googleapis.com/fcm/send',{
-            method:"POST",
-            headers: {
-                Authorization: `key=${FCM_SERVER_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({
-                to: token,
-                notification: {
-                    title: 'New Lecture',
-                    body: notifBody,
-                }
-            })
-        });
-      
+
+        webPush.setVapidDetails('mailto:easymath85@gmail.com', process.env.PUSH_PUBLIC_KEY, process.env.PUSH_PRIVATE_KEY);
+        webPush.sendNotification(token, notifBody)
         console.log('Notification sent');
-      }
+    }
 }
