@@ -663,6 +663,7 @@ const initializeServer = () => {
                             .toArray()
                             .then((tokensArray)=>{
                                 tokensArray.forEach((item)=>{
+                                    console.log(item);
                                     const payload = JSON.stringify({
                                         title: "New Lecture",
                                         body: `Lecture ${req.body.number} ${req.body.field} Unit ${req.body.unit} is online now.`
