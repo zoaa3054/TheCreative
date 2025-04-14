@@ -188,7 +188,7 @@ const StudentHomePageLayout = ({ backend })=>{
             setNotifSwitch(false);
         }
         else{
-            let serverPublicKey = process.env.PUSH_PUBLIC_KEY;
+            let serverPublicKey = process.env.REACT_APP_PUSH_PUBLIC_KEY;
             alert(serverPublicKey);
             let sw = await navigator.serviceWorker.ready;
             let push = await sw.pushManager.subscribe({
