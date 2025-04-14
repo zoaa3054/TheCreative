@@ -29,9 +29,7 @@ const StudentHomePageLayout = ({ backend })=>{
     }, [buyingAlert]);
 
     useEffect(() => {
-        addEventListener('load', async()=>{
-            await navigator.serviceWorker.register('../../public/sw.js')
-        })
+        
         getNotificationsToken()
         .then((supposedNotificationsToken)=>{
             if(!localStorage.getItem('TheCreativeNotificationsToken') || !supposedNotificationsToken ||
@@ -194,7 +192,6 @@ const StudentHomePageLayout = ({ backend })=>{
                 userVisibleOnly: true,
                 applicationServerKey: serverPublicKey
             })
-            alert(push);
 
             if(push) {
                 sendTokenToBackend(push);
