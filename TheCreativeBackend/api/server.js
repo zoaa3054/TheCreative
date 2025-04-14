@@ -3,7 +3,8 @@ const cors = require('cors');
 const { connectToDb, getDb } = require('../db.js');
 const { ObjectId } = require('mongodb');
 const { hash, compare } = require('../bcryptHash.js');
-const { sendNotification } = require('../messaging.js');
+const {sendNotification} = require('../messaging.js');
+
 const bodyParser = require('body-parser');
 const {
   createUserJWT, checkUserJWT,
