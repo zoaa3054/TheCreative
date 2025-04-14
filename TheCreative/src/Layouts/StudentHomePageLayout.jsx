@@ -171,6 +171,14 @@ const StudentHomePageLayout = ({ backend })=>{
         }
     }
 
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      
+        const rawData = window.atob(base64);
+        return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+      }
+
     const toggleNotifications = async()=>{
         if(notifSwitch){
             deleteNotificationsToken();
@@ -179,7 +187,7 @@ const StudentHomePageLayout = ({ backend })=>{
         else{
             const permission = await Notification.requestPermission();
             if (permission == 'granted'){
-                let serverPublicKey = 'BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04';
+                let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
                 let sw = await navigator.serviceWorker.ready;
                 let push = await sw.pushManager.subscribe({
                     userVisibleOnly: true,
