@@ -177,7 +177,7 @@ const StudentHomePageLayout = ({ backend })=>{
             setNotifSwitch(false);
         }
         else{
-            const permission = Notification.requestPermission();
+            const permission = await Notification.requestPermission();
             if (permission == 'granted'){
                 let serverPublicKey = 'BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04';
                 let sw = await navigator.serviceWorker.ready;
