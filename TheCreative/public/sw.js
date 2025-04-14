@@ -1,8 +1,9 @@
 self.addEventListener('push', (e) => {
-  const data = e.data
-console.log(data);
+  const data = e.data.json(); // Safely get JSON data if present
+
   self.registration.showNotification("New Lecture", {
-    body: data.body || 'You have a new notification!',
+    title: data.title,
+    body: data.body,
     icon: '/icons/icon-192x192.png', // optional
   });
 });
