@@ -22,7 +22,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     const [sortDirection, setSortDirection] = useState(-1);
     const [termFilter, setTermFilter] = useState('');
     const [gradeFilter, setGradeFilter] = useState('');
-    const [fieldFilter, setFieldFilter] = useState(filterCriteriaList.Field[0]);
+    const [fieldFilter, setFieldFilter] = useState('All');
     const [sortCriteria, setSortCriteria] = useState(sortCriteriaList[0]);
     const [lectures, setLectures] = useState([]);
     const [boughtLectures, setBoughtLectures] = useState([]);
@@ -64,7 +64,6 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     const getAllLectures = async()=>{
         const filterObject = getFilterList();
         const filterObjectEncoded = encodeURIComponent(JSON.stringify(filterObject));
-        console.log("filter: ", filterObject);
 
         await fetch(`${backend}/lectures?filterBy=${filterObjectEncoded}&sortBy=${sortCriteria}&sortDirection=${sortDirection}`, {
             method:"GET",
@@ -160,7 +159,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
         let outputList = {};
         outputList.term = termFilter;
         outputList.grade = gradeFilter;
-        outputList.field = fieldFilter;
+        if (fieldFilter && fieldFilter != "All")
+            outputList.field = fieldFilter;
         
         return outputList;
     }
@@ -211,6 +211,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 <FilterControl>
                     <Select title="filter by field" theme={theme} value={fieldFilter} onChange={(event)=>setFieldFilter(event.target.value)}>
                         <option value="" disabled>Field</option>
+                        <option value="All" >All</option>
                         {filterCriteriaList.Field.map((field, key)=>(
                             <option value={field} key={key}>
                                 {field}
@@ -273,8 +274,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                     {lectures.map((item, index) => (
                         <tr key={index} onClick={()=>goToLecture(item)} >
                         <td><NewLabel isNew={checkModernity(item.date)}>{item.number}</NewLabel></td>
-                        <td>{item.unit==0?"ALL":(item.unit==-1?item.specialMonth:item.unit)}</td>
-                        <td>{item.field}</td>
+                        <td>{item.unit==0?"ALL":(item.unit==-1?item.specialMonth + " Revision":item.unit)}</td>
+                        <td>{item.unit==-1?item.specialMonth+" Revision":item.field}</td>
                         <td>{item.grade}</td>
                         <td>{item.term}</td>
                         <td>{timeStampToDate(item.date)}</td>
@@ -297,8 +298,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 <Button disabled={isSubmiting} onClick={()=>setBuyFormOpen(false)} style={{alignSelf:"end"}} theme={theme}>X</Button>
                 <h2>You are about to buy: </h2>
                 <h4>Lecture: {lectureAboutToBeBought.number}</h4>
-                <h4>Unit: {lectureAboutToBeBought.unit==0?"ALL":lectureAboutToBeBought.unit}</h4>
-                <h4>Field: {lectureAboutToBeBought.field}</h4>
+                <h4>Unit: {lectureAboutToBeBought.unit==0?"ALL":lectureAboutToBeBought.unit==-1?lectureAboutToBeBought.specialMonth+" Revision":lectureAboutToBeBought.unit}</h4>
+                {lectureAboutToBeBought.unit!=-1&&<h4>Field: {lectureAboutToBeBought.field}</h4>}
                 <h4>Grade: {lectureAboutToBeBought.grade}</h4>
                 <h4>Term: {lectureAboutToBeBought.term}</h4>
                 <h3>Click Confirm to complete the purchase.</h3>

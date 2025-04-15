@@ -53,6 +53,7 @@ const EditLecturePage = () =>{
         .then(data=>{
             setFormVariables(data);
             if(data.unit==0) setIsRevision(true);
+            else if(data.unit==-1) setIsCustomized(true);
         })
         .catch(error=>console.log(error));
         setIsLoading(false);
@@ -150,6 +151,21 @@ const EditLecturePage = () =>{
         }
       };
 
+      
+    const handleCustomizedChange = (e)=>{
+        setIsCustomized(e.target.checked);
+        if(e.target.checked) {
+            setFormVariables({...formVariables, ['unit']: -1, ['field']: ""});
+        }
+        else setFormVariables({...formVariables, ['unit']: 0});
+    }
+
+    const handleRevisionChange = (e)=>{
+        setIsRevision(e.target.checked);
+        if(e.target.checked) setFormVariables({...formVariables, ['unit']: 0});
+    }
+
+
     const handleChange = (entry)=>{
         setReload(prev=>prev+1);
         setExplainationError(null);
@@ -189,7 +205,7 @@ const EditLecturePage = () =>{
 
             <div>
             <label htmlFor="field">Field:</label>
-            <select name="field" value={formVariables.field?formVariables.field:""} onChange={handleChange} required>
+            <select name="field" disabled={isCustomized} value={formVariables.field?formVariables.field:""} onChange={handleChange} required>
                 <option value="" disabled>Choose field</option>
                 <option value="Algebra">Algebra</option>
                 <option value="Geometry">Geometry</option>
@@ -199,23 +215,10 @@ const EditLecturePage = () =>{
 
             <div>
                 <label htmlFor="isRevision">Final Revision</label>
-                <input type="checkbox" value={isRevision} disabled={isCustomized} onChange={()=>
-                    setIsRevision((prev)=>{
-                        prev = !prev;
-                        if(prev) setFormVariables({...formVariables, ['unit']: 0});
-                        return prev;
-                    })
-                } checked={isRevision}/>
+                <input type="checkbox" checked={isRevision} value={isRevision} disabled={isCustomized} onChange={handleRevisionChange }/>
 
                 <label htmlFor="isCustomized">Customized Units</label>
-                <input type="checkbox" value={isCustomized} disabled={isRevision} onChange={()=>
-                    setIsCustomized((prev)=>{
-                        prev = !prev;
-                        if(prev) setFormVariables({...formVariables, ['unit']: -1});
-                        else setFormVariables({...formVariables, ['unit']: 0});
-                        return prev;
-                    })
-                }/>
+                <input type="checkbox" checked={isCustomized} value={isCustomized} disabled={isRevision} onChange={handleCustomizedChange}/>
             </div>
 
             <div>
