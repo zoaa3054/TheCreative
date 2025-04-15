@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
+import Loader from "./Loader";
+import Spinner from "./Spinner";
 
 const Admins = ( { backend, theme, isSideBarOpen } )=>{
     const [sortDirection, setSortDirection] = useState(1);
@@ -20,6 +22,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
     const [formVariables, setFormVariables] = useState({});
     const [error, setError] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
 
     const navigate = useNavigate();
    
@@ -63,6 +66,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
     }
 
     const deleteAdmin = async()=>{
+        setIsUploading(true);
         await fetch(`${backend}/delete/admin/account`, {
             method:"DELETE",
             headers: {
@@ -82,9 +86,11 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             console.log(error);
             notifyError("Could't delete account");
         })
+        setIsUploading(false);
     }
 
     const addAdmin = async()=>{
+        setIsUploading(true);
         if (checkInputVariables()){
             await fetch(`${backend}/add/admin`, {
                 method:"POST",
@@ -105,7 +111,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             })
             .catch((error)=>console.log(error));
         }
-        setIsLoading(false);
+        setIsUploading(false);
     }
 
     const checkInputVariables = ()=>{
@@ -190,7 +196,8 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 </SortControl>
             </ControlBar>
             
-            {admins.length>0 && 
+            {isLoading?
+            <Loader/>:admins.length>0 && 
             <TableWrapper>
                 <StyledTable theme={theme}>
                     <thead>
@@ -219,7 +226,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 </StyledTable>
             </TableWrapper>
             }
-            {admins.length==0 && <img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
+            {admins.length==0 && !isLoading &&<img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
             <Modal
                 isOpen={isDeleting}
                 onRequestClose={()=>setIsDeleting(false)}
@@ -227,7 +234,9 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             >              
                 <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the account of {adminAboutToBeDeleted.username}, are you sure?</p>
-                <FormButton onClick={deleteAdmin} style={{justifySelf:"center"}} theme={theme}>Delete</FormButton>
+                <FormButton onClick={deleteAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
+                    {isUploading?<Spinner size={15}/>:"Delete"}    
+                </FormButton>
             </Modal>
             <Modal
                 isOpen={isAddingAdmin}
@@ -242,7 +251,9 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 
                 <label style={{marginTop:"1rem", marginBottom:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
                 <input style={{backgroundColor:"#a4a4a46a", marginBottom:"1rem", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
-                <FormButton onClick={addAdmin} style={{justifySelf:"center"}} theme={theme}>Add</FormButton>
+                <FormButton onClick={addAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
+                    {isUploading?<Spinner size={15}/>:"Add"}    
+                </FormButton>
             </Modal>
         </Container>
     );

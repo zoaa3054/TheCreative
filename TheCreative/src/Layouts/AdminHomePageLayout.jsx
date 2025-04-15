@@ -123,9 +123,10 @@ const Container = styled.div`
 
 const SideBar = styled.div`
     height: 100vh;
+    flex-shrink: 0;
     width: ${({isOpen})=>{
         if (isOpen)
-            return "16rem";
+            return "13rem";
         else 
         return "0%";
     }};
@@ -135,12 +136,17 @@ const SideBar = styled.div`
     flex-direction: column;
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
 
+    @media (max-width: 450px) {
+        ${({isOpen})=>isOpen&&"width: 8rem;"}
+    }
+
 `;
 
 const RightSpace = styled.div`
     overflow-x: hidden;
     height: 100%;
     flex-grow: 1;
+    flex-basis: 0;
     background-color: ${({theme})=>theme=="light"?"aliceblue":"#181818"};
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
     overflow-y: scroll;
@@ -196,7 +202,7 @@ const Body = styled.div`
 `;
 
 const Tail = styled.div`
-     width: 100%;
+    width: 100%;
     flex-grow: 1;
     justify-content: end;
     display: flex;

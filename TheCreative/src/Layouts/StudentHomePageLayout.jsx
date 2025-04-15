@@ -292,6 +292,7 @@ const Container = styled.div`
 
 const SideBar = styled.div`
     height: 100vh;
+    flex-shrink: 0;
     width: ${({isOpen})=>{
         if (isOpen)
             return "13rem";
@@ -303,6 +304,10 @@ const SideBar = styled.div`
     display: flex;
     flex-direction: column;
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
+
+    @media (max-width: 450px) {
+        ${({isOpen})=>isOpen&&"width: 7rem;"}
+    }
 `;
 
 const RightSpace = styled.div`
@@ -372,7 +377,7 @@ const Tail = styled.div`
     padding: 1rem;
     white-space: normal;
     word-wrap: break-word;
-    align-items: center;
+    align-items: start;
     padding-bottom: 5rem;
 `;
 

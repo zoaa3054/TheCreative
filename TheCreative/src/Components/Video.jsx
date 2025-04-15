@@ -2,7 +2,7 @@ import YouTube from "react-youtube";
 import { useState, useEffect } from "react";
 import noContent from "../assets/noContent.svg";
 
-const Video = ({ link }) => {
+const Video = ({ link, theme, describtion }) => {
   const [videoURL, setVideoURL] = useState("");
   const [videoID, setVideoID] = useState(null);
 
@@ -33,15 +33,17 @@ const Video = ({ link }) => {
 
 
   return (
-    <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center"}}>
+    <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center", height: "100%"}}>
       {videoID ? (
-        <div style={{ marginTop: "20px", width:"100%", height:"100%"}}>
+        <div style={{ marginTop: "20px", width:"100%", height:"100%", textAlign:"start"}}>
           <YouTube videoId={videoID} opts={videoOptions}/>
+          <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
+          <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion}</p>
         </div>
       ):
       <>
-      <img src={noContent} alt="" style={{width:"50%", height:"50%", alignSelf:"center"}}/>
-      <h2>ENJOY, NO VIDEO HERE TODAY </h2>
+      <img src={noContent} alt="" style={{width:"100%", height:"50%", alignSelf:"center"}}/>
+      <h2 style={{color:theme=="light"?"black":"white"}}>ENJOY, NO VIDEO HERE TODAY </h2>
       </>
       }
     </div>

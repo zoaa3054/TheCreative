@@ -3,12 +3,14 @@ import styled from "styled-components";
 import { State } from "country-state-city";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import Spinner from "./Spinner";
 
 const Profile = ({backend, theme, isAdmin}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({});
   const [admin, setAdmin] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   useEffect(()=>{
     if (isAdmin) getAdmin();
@@ -60,6 +62,7 @@ const Profile = ({backend, theme, isAdmin}) => {
   }
 
   const editUserInfo = async()=>{
+    setIsSubmiting(true);
     await fetch(`${backend}/edit/user/info`,{
         method:"POST",
         headers:{
@@ -78,10 +81,12 @@ const Profile = ({backend, theme, isAdmin}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsSubmiting(false);
   }
 
 
   const editAdminInfo = async()=>{
+    setIsSubmiting(true);
     await fetch(`${backend}/edit/admin/info`,{
         method:"POST",
         headers:{
@@ -100,6 +105,7 @@ const Profile = ({backend, theme, isAdmin}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsSubmiting(false);
   }
 
   const handleChange = (e) => {
@@ -182,8 +188,8 @@ const Profile = ({backend, theme, isAdmin}) => {
               </>
           )}
         </Info>
-      <Button type="submit">
-        {isEditing ? "Save" : "Edit Profile"}
+      <Button type="submit" disabled={isSubmiting}>
+        {isSubmiting?<Spinner size={15}/>:isEditing ? "Save" : "Edit Profile"}
       </Button>
     </ProfileContainer>
   );

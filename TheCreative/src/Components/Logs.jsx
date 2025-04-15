@@ -2,11 +2,11 @@ import styled, { keyframes } from "styled-components";
 import ascSortIcon from "../assets/ascSortIcon.png";
 import descSortIcon from "../assets/descSortIcon.png";
 import noDataFound from "../assets/noDataFound.svg";
-
 import Modal from "react-modal";
 import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const methodFilterList = ['ADD', 'DELETE', 'UPDATE'];
 
@@ -61,7 +61,7 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
             notifyError("There something wrong with the system please logout and login again.");
             console.log(error);
         });
-        setIsLoading(true);
+        setIsLoading(false);
 
     }
 
@@ -170,7 +170,7 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
                 </StyledTable>
             </TableWrapper>
             }
-            {logs.length==0 && <img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
+            {logs.length==0 && !isLoading && <img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
         </Container>
     );
 };

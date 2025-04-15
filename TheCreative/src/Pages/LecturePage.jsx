@@ -88,18 +88,13 @@ const LecturePage = ()=>{
                     }
                 </>}
                 {stage==2&&
-                <>
-                    <Video link={lecture.hwLink?lecture.hwLink:""}/>
-                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.hwDescribtion?"Description":""}</h2>
-                    <p style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.hwDescribtion}</p>
-                </>}
+                    <Video link={lecture.hwLink?lecture.hwLink:""} theme={theme} describtion={lecture.hwDescribtion}/>
+                    
+                }
 
                 {stage==3&&
-                <>
-                    <Video link={lecture.explainationLink}/>
-                    <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.explainDescribtion?"Description":""}</h2>
-                    <p style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif'}}>{lecture.explainDescribtion}</p>
-                </>}
+                    <Video link={lecture.explainationLink} theme={theme} describtion={lecture.explainDescribtion}/>
+                }
                 {stage==4&&
                 <>
                     {!lecture.hw?
@@ -118,8 +113,9 @@ const LecturePage = ()=>{
                     <Buttons>
                         <Button onClick={decrementStage} disabled={stage==1}>Back</Button>
                         <Button onClick={incrementStage} disabled={stage==4}>Next</Button>
-                        <Button onClick={submit} style={{opacity:stage==4?"1":"0", display:isAdmin&&"none"}}>Submit</Button>
-                        {isSubmitting&&<Spinner size={15}/>}
+                        <Button onClick={submit} style={{opacity:stage==4?"1":"0", display:isAdmin&&"none"}}>
+                        {isSubmitting?<Spinner size={15}/>:"Submit"}
+                    </Button>
                     </Buttons>
                 </div>
             </Controller></>
@@ -142,31 +138,27 @@ const Container = styled.div`
 
 const Content = styled.div`
     padding: 1rem;
-    width: ${({isOpen})=>{
-        if (isOpen && window.innerWidth<=500) return "5%";
-        if (isOpen && window.innerWidth<=890) return "60%";
-        if (isOpen) return "80%";
-        if (!isOpen && window.innerWidth<=500) return "95%";
-        else return "99%";
-    }};
+    flex-grow: 1;
     height: 100%;
     overflow-y: scroll;
-    background-color: ${({theme})=>theme=='light'?"whitesmoke":"#181818"};
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    background-color: ${({theme})=>theme=='light'?"white":"#181818"};
 
     
 `;
 
 const Controller = styled.div`
+    flex-shrink: 0;
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     width: ${({isOpen})=>{
-        if (isOpen && window.innerWidth<=500) return "95%";
-        if (isOpen && window.innerWidth<=890) return "40%";
-        if (isOpen) return "20%";
-        if (!isOpen && window.innerWidth<=500) return "5%";
-        else return "1%";
+        if (isOpen) return "12rem";
+        else return "1rem";
     }};
     height: 100%;
     overflow: hidden;

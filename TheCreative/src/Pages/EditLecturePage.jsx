@@ -23,7 +23,7 @@ const EditLecturePage = () =>{
     const navigate = useNavigate();
     const [isCustomized, setIsCustomized] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isUploading, setIsUploading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(()=>{
         fetchLecture();
@@ -199,7 +199,7 @@ const EditLecturePage = () =>{
 
             <div>
                 <label htmlFor="isRevision">Final Revision</label>
-                <input type="checkbox" value={isRevision} onChange={()=>
+                <input type="checkbox" value={isRevision} disabled={isCustomized} onChange={()=>
                     setIsRevision((prev)=>{
                         prev = !prev;
                         if(prev) setFormVariables({...formVariables, ['unit']: 0});
@@ -208,10 +208,11 @@ const EditLecturePage = () =>{
                 } checked={isRevision}/>
 
                 <label htmlFor="isCustomized">Customized Units</label>
-                <input type="checkbox" value={isCustomized} onChange={()=>
+                <input type="checkbox" value={isCustomized} disabled={isRevision} onChange={()=>
                     setIsCustomized((prev)=>{
                         prev = !prev;
                         if(prev) setFormVariables({...formVariables, ['unit']: -1});
+                        else setFormVariables({...formVariables, ['unit']: 0});
                         return prev;
                     })
                 }/>
@@ -276,9 +277,8 @@ const EditLecturePage = () =>{
             </div>
 
             <div>
-                <Button type="submit">
-                    Submit
-                {isUploading&&<Spinner size={15}/>}    
+                <Button type="submit" disabled={isUploading}>
+                {isUploading?<Spinner size={15}/>:"Submit"}    
                 </Button>
                 <Button onClick={(e)=>{
                     setIsDeleting(true);
@@ -293,9 +293,8 @@ const EditLecturePage = () =>{
             >              
                 <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the lecture, are you sure?</p>
-                <FormButton onClick={deleteLecture} style={{justifySelf:"center"}} theme={theme}>
-                    Delete
-                    {isUploading&&<Spinner size={15}/>}    
+                <FormButton onClick={deleteLecture} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
+                    {isUploading?<Spinner size={15}/>:"Delete"}    
                 </FormButton>
             </Modal>
         </Container>

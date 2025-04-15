@@ -7,6 +7,8 @@ import deleteIcon from "../assets/deleteIcon.png";
 import goBackIcon from "../assets/goBackIcon.png";
 import noContent from "../assets/emptyDashboard.svg";
 import Modal from "react-modal";
+import Loader from "../Components/Loader";
+import Spinner from "../Components/Spinner";
 
 const StudentPage = ()=>{
     const { id } = useParams();
@@ -18,8 +20,12 @@ const StudentPage = ()=>{
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const navigate = useNavigate();
+    const [isSubmiting, setIsSubmiting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(()=>{
+        setIsLoading(true);
         getStudent();
     }, [editedAlert]);
 
@@ -51,9 +57,11 @@ const StudentPage = ()=>{
             console.log(error);
             notifyError("Could't fetch user");
         })
+        setIsLoading(false);
     }
 
     const editWallet = async(e)=>{
+        setIsSubmiting(true);
         e.preventDefault();
         await fetch(`${backend}/edit/wallet`, {
             method:"POST",
@@ -75,9 +83,11 @@ const StudentPage = ()=>{
             console.log(error);
             notifyError("Could't edit user's wallet");
         })
+        setIsSubmiting(false);
     }
 
     const deleteAccount = async()=>{
+        setIsSubmiting(true);
         await fetch(`${backend}/delete/user/account`, {
             method:"DELETE",
             headers: {
@@ -98,6 +108,7 @@ const StudentPage = ()=>{
             console.log(error);
             notifyError("Could't delete account");
         })
+        setIsSubmiting(false);
     }
 
     const timeStampToDate = (timeStamp)=>{
@@ -107,6 +118,7 @@ const StudentPage = ()=>{
 
     return(
         <Container theme={theme}>
+            {isLoading?<Loader/>:
             <Content>
                 <p style={{fontWeight:"bold"}}>Username: {user.username}</p>
                 <p>Grade: {user.grade}</p>
@@ -150,7 +162,7 @@ const StudentPage = ()=>{
                     <h2 style={{color:theme=='light'?"black":"white", fontFamily:'sans-serif', textAlign: 'center'}}>NO DATA</h2>
                 </>}
             </DashboardWrapper>
-            </Content>
+            </Content>}
             <Controller theme={theme}>
                 <Button onClick={()=>setIsEditing(true)}><img src={addToWalletIcon}alt=""/></Button>
                 <Button onClick={()=>setIsDeleting(true)}><img src={deleteIcon}alt=""/></Button>
@@ -165,7 +177,7 @@ const StudentPage = ()=>{
                 <p style={{fontSize:"larg"}}>Enter the amount of money you want to charge/discharge the wallet of {user.username} with</p>
                 <form onSubmit={editWallet} style={{width: "100%", display: "flex", justifyContent:"center"}}>
                     <input type="number" placeholder="Enter the amount " style={{borderRadius:"20px", padding: "1rem"}} value={walletEditAmount} onChange={(tag)=>setWalletEditAmount(tag.target.value)} required/>
-                    <FormButton type="submit" style={{justifySelf:"center"}} theme={theme}>Add</FormButton>
+                    <FormButton type="submit" disabled={isSubmiting} style={{justifySelf:"center"}} theme={theme}>{isSubmiting?<Spinner size={15}/>:"Add"}</FormButton>
                 </form>
             </Modal>
             <Modal
@@ -175,7 +187,7 @@ const StudentPage = ()=>{
             >              
                 <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the account of {user.username}, are you sure?</p>
-                    <FormButton onClick={deleteAccount} style={{justifySelf:"center"}} theme={theme}>Delete</FormButton>
+                <FormButton onClick={deleteAccount} style={{justifySelf:"center"}} disabled={isSubmiting} theme={theme}>{isSubmiting?<Spinner size={15}/>:"Delete"}</FormButton>
             </Modal>
         </Container>
     )
@@ -187,7 +199,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     height: 100vh;
-    background-image: ${({theme})=>theme=="light"?"linear-gradient(159deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 100%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
+    background-image: ${({theme})=>theme=="light"?"linear-gradient(160deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 40%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
     color: white;
     font-family: 'Trebuchet MS', sans-serif;  
 `;

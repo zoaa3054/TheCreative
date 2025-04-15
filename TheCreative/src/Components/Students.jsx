@@ -165,7 +165,7 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
                 </StyledTable>
             </TableWrapper>
             }
-            {students.length==0 && <img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
+            {students.length==0 && !isLoading &&<img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
         </Container>
     );
 };

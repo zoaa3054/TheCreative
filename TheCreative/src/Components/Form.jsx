@@ -242,10 +242,10 @@ const Form = ({ setUsedForm, backend })=>{
                                 <i className='bx bxs-lock-alt'></i>
                                 <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
-                            <button onClick={signup}>
-                                Sign up
+                            <button onClick={signup} disabled={isLoading}>
+                                {isLoading?<Spinner size={15}/>:"Sign up"}
                             </button>
-                            {isLoading?<Spinner size={15}/>:<></>}
+                           
 
                             <p>
                                 <span>
@@ -272,10 +272,9 @@ const Form = ({ setUsedForm, backend })=>{
                                 <i className='bx bxs-lock-alt'></i>
                                 <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
-                            <button onClick={login}>
-                                login
+                            <button onClick={login} disabled={isLoading}>
+                                {isLoading?<Spinner size={15}/>:"login"}
                             </button>
-                            {isLoading?<Spinner size={15}/>:<></>}
                             <p>
                                 <span>
                                     Don't have an account?

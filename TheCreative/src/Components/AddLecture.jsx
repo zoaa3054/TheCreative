@@ -2,6 +2,7 @@ import styled from "styled-components";
 import YouTube from "react-youtube";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import Spinner from "./Spinner";
 
 const AddLecture = ({backend, theme}) =>{
     const [formVariables, setFormVariables] = useState({});
@@ -13,7 +14,8 @@ const AddLecture = ({backend, theme}) =>{
     const [reload, setReload] = useState(0);
     const [isRevision, setIsRevision] = useState(false);
     const [isCustomized, setIsCustomized] = useState(false);
-
+    const [isSubmiting, setIsSubmiting] = useState(false);
+    
     const notifySuccess = (mssg) =>{
         toast.success(mssg);
     }
@@ -25,6 +27,7 @@ const AddLecture = ({backend, theme}) =>{
 
     const addLecture = async(e)=>{
         e.preventDefault();
+        setIsSubmiting(true);
         if (explainationError){
             notifyError("Please resolve the error in the explaination video link");
             return;
@@ -59,6 +62,7 @@ const AddLecture = ({backend, theme}) =>{
             console.log(error);
             notifyError("Something went wrong, couldn't add lecture, please logout then login again");
         })
+        setIsSubmiting(false);
     }
 
     const addExplainVideoSize = (entry)=>{
@@ -136,7 +140,7 @@ const AddLecture = ({backend, theme}) =>{
 
             <div>
                 <label htmlFor="isRevision">Final Revision</label>
-                <input type="checkbox" value={isRevision} onChange={()=>
+                <input type="checkbox" disabled={isCustomized} value={isRevision} onChange={()=>
                     setIsRevision((prev)=>{
                         prev = !prev;
                         if(prev) setFormVariables({...formVariables, ['unit']: 0});
@@ -145,7 +149,7 @@ const AddLecture = ({backend, theme}) =>{
                 }/>
 
                 <label htmlFor="isCustomized">Customized Units</label>
-                <input type="checkbox" value={isCustomized} onChange={()=>
+                <input type="checkbox" disabled={isRevision} value={isCustomized} onChange={()=>
                     setIsCustomized((prev)=>{
                         prev = !prev;
                         if(prev) setFormVariables({...formVariables, ['unit']: -1});
@@ -213,7 +217,7 @@ const AddLecture = ({backend, theme}) =>{
             </div>
 
             {/* <div> */}
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={isSubmiting}>{isSubmiting?<Spinner size={15}/>:"Submit"}</Button>
             {/* </div> */}
         </Container>
     );

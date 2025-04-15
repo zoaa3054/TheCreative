@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import Spinner from "./Spinner";
 
 const Settings = ({backend, theme}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [contacts, setContacts] = useState({});
   const [formVariables, setFormVariables] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   useEffect(()=>{
     setIsLoading(true);
@@ -39,6 +41,7 @@ const Settings = ({backend, theme}) => {
 
 
   const editContacts = async()=>{
+    setIsSubmiting(true);
     await fetch(`${backend}/edit/contacts`,{
         method:"POST",
         headers:{
@@ -57,6 +60,7 @@ const Settings = ({backend, theme}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsSubmiting(false);
   }
 
 
@@ -121,8 +125,8 @@ const Settings = ({backend, theme}) => {
           )}
         </Info>
         
-      <Button type="submit">
-        {isEditing ? "Save" : "Edit Profile"}
+      <Button type="submit" disabled={isSubmiting}>
+        {isSubmiting?<Spinner size={15}/>:isEditing ? "Save" : "Edit Profile"}
       </Button>
     </ProfileContainer>
   );
