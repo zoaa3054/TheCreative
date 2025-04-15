@@ -153,6 +153,7 @@ const AddLecture = ({backend, theme}) =>{
                     setIsCustomized((prev)=>{
                         prev = !prev;
                         if(prev) setFormVariables({...formVariables, ['unit']: -1});
+                        if(prev) setFormVariables({...formVariables, ['unit']: 0});
                         return prev;
                     })
                 }/>
