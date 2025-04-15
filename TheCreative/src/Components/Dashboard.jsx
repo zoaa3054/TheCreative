@@ -52,6 +52,7 @@ const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
                             <th>Grade</th>
                             <th>Term</th>
                             <th>Date</th>
+                            <th>Description</th>
                             <th>Mark</th>
                         </tr>
                         </thead>
@@ -59,11 +60,12 @@ const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
                         {dashboard.map((item, index) => (
                             <tr key={index}>
                             <td>{item.number}</td>
-                            <td>{item.unit}</td>
+                            <td>{item.unit==0?"ALL":(item.unit==-1?"SOME":item.unit)}</td>
                             <td>{item.field}</td>
                             <td>{item.grade}</td>
                             <td>{item.term}</td>
                             <td>{timeStampToDate(item.date)}</td>
+                            <td>{item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
                             <td>{item.mark}</td>
                             </tr>
                         ))}

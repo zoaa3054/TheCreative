@@ -1,72 +1,38 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import styled, { keyframes } from "styled-components";
 import { State } from "country-state-city";
-import Select from "react-select/base";
 import Spinner from "./Spinner";
-
-const slideLift = keyframes`
-    from{
-        transform: translate(50%, 0%);
-        opacity: 0;
-    }
-    to{
-        transform: translate(0%, 0%);
-        opacity: 1;
-    }
-`;
-
-const slideRight = keyframes`
-    from{
-        transform: translateX(25rem);
-    }
-    to{
-        transform: translateX(0rem);
-    }
-`;
-
-const slideUp = keyframes`
-    from{
-        transform: translate(0%, 50%);
-        opacity: 0;
-    }
-    to{
-        transform: translate(0%, 0%);
-        opacity: 1;
-    }
-`;
-
-const slideDown = keyframes`
-    from{
-        transform: translate(0%, -50%);
-        opacity: 0;
-    }
-    to{
-        transform: translate(0%, 0%);
-        opacity: 1;
-    }
-`;
-
-const pop = keyframes`
-    from{
-        scale: 0;
-        opacity: 0;
-    }
-    to{
-        scale: 1;
-        opacity: 1;
-    }
-`;
+import './FormStyle.css';
 
 
-const Form = ({ usedForm, setUsedForm, backend })=>{
-    const [position, setPosition] = useState(usedForm == 'signup'?1:-25);
-    const [formVariables, setFormVariables] = useState({studentPhone: '+20', parentPhone: '+20', city: State.getStatesOfCountry('EG')[0].name, grade: "M3"});
+const Form = ({ setUsedForm, backend })=>{
+    const [formVariables, setFormVariables] = useState({city: State.getStatesOfCountry('EG')[0].name, grade: "M3"});
     const [error, setError] = useState({});
     const [numberOfLoginAttmpts, setNumberOfLoginAttmpts] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const navigator = useNavigate();
+
+    useEffect(()=>{
+        let container = document.getElementById('container')
+        if (container){
+            setTimeout(() => {
+                container.classList.add('sign-in')
+            }, 200)
+        }
+    }, [])
+    const toggle = (form) => {
+        if (form == 'login'){
+            container.classList.remove('sign-up');
+            container.classList.add('sign-in');
+        }
+        else{
+            container.classList.remove('sign-in');
+            container.classList.add('sign-up'); 
+        }
+        changeForm(form)
+    }
+    
 
     const notifyError = (message)=>{
         toast.error(message);
@@ -78,16 +44,12 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
     const changeForm = (newForm)=>{
         if (newForm == 'login'){
             setFormVariables({});
-            setPosition(-25);
         }
         else{
             setFormVariables({
-                studentPhone: '+20', 
-                parentPhone: '+20', 
                 city: State.getStatesOfCountry('EG')[0].name,
                 grade: "M3"
             });
-            setPosition(1);
         }
         setUsedForm(newForm);
     }
@@ -155,7 +117,6 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
     }
 
     const signup = async(e)=>{
-        e.preventDefault();
         setIsLoading(true);
         if (checkSignupInput()){
             await fetch(`${backend}/signup`, {
@@ -184,7 +145,6 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
     }
 
     const login = async(e)=>{
-        e.preventDefault();
         setIsLoading(true);
 
         await fetch(`${backend}/login`, {
@@ -224,11 +184,9 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
             console.log(data);
             if (data.person && data.person == 'user') {
                 navigator('/home');
-                notifySuccess(`Welcome back mate :)`);
             }
             else if (data.person && data.person == 'admin') {
                 navigator('/admin/home');
-                notifySuccess(`Welcome back mate :)`);
             }
         })
         .catch((error)=>console.log(error));
@@ -243,199 +201,129 @@ const Form = ({ usedForm, setUsedForm, backend })=>{
     }
 
     return(
-        <Container position={position} onSubmit={(e)=>usedForm == 'signup'?signup(e):login(e)}>
-            {usedForm == 'signup'?
-            <>
-                {/* Signup Form  */}
-                <SignupTitle>Create an account</SignupTitle>
-                <SignupInputs>
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
-                    
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="studentPhone">STUDENT PHONE</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['studentPhone']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
-                
-                
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="parentPhone">PARENT PHONE</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['parentPhone']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
-                
-                
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="city">CITY</label>
-                    <select name="city" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.city} onChange={changeFormVariable} placeholder="City" required>
-                        {State.getStatesOfCountry('EG').map((state, key)=>(
-                            <option key={key}>{state.name}</option>
-                        ))}
-                    </select>
+        <div id="container" className="container">
+            {/* <!-- FORM SECTION --> */}
+            <div className="row">
+                {/* <!-- SIGN UP --> */}
+                <div className="col align-items-center flex-col sign-up">
+                    <div className="form-wrapper align-items-center">
+                        <div className="form sign-up">
+                            <div className="input-group">
+                                <i className='bx bxs-user'></i>
+                                <input style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bx-mail-send'></i>
+                                <input style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bxs-lock-alt'></i>
+                                <input style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bxs-lock-alt'></i>
+                                <select name="city" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.city} onChange={changeFormVariable} placeholder="City" required>
+                                    {State.getStatesOfCountry('EG').map((state, key)=>(
+                                        <option key={key}>{state.name}</option>
+                                    ))}
+                                </select>						
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bxs-lock-alt'></i>
+                                <select name="grade" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.grade} onChange={changeFormVariable} placeholder="Grade" required>
+                                    <option value="M1">Middle 1</option>
+                                    <option value="M2">Middle 2</option>
+                                    <option value="M3">Middle 3</option>
+                                    <option value="S1">Senior 1</option>
+                                    <option value="S2">Senior 2</option>
+                                </select>						
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bxs-lock-alt'></i>
+                                <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                            </div>
+                            <button onClick={signup}>
+                                Sign up
+                            </button>
+                            {isLoading?<Spinner size={15}/>:<></>}
 
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="grade">GRADE</label>
-                    <select name="grade" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.grade} onChange={changeFormVariable} placeholder="Grade" required>
-                        <option value="M3">Middle 3</option>
-                        <option value="S1">Senior 1</option>
-                        <option value="S2">Senior 2</option>
-                    </select>
+                            <p>
+                                <span>
+                                    Already have an account?
+                                </span>
+                                <Link onClick={()=>toggle('login')} className="pointer">
+                                    Log in here
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
                 
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
-                
-                </SignupInputs>
-                <div style={{display:"flex", alignItems: "baseline"}}>
-                    <SignupButton type="submit">Create an account</SignupButton>
-                    {isLoading?<Spinner size={15}/>:<></>}
                 </div>
-                <Separator><span>or</span></Separator>
-                <SignupFooter>I am already a member! <Link onClick={()=>changeForm('login')}>Login</Link></SignupFooter>
-            </>
-            :
-            <>
-                {/* Login Form */}
-                <LoginTitle>Login</LoginTitle>
-                <LoginInputs>
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                {/* <!-- END SIGN UP --> */}
+                {/* <!-- SIGN IN --> */}
+                <div className="col align-items-center flex-col sign-in">
+                    <div className="form-wrapper align-items-center">
+                        <div className="form sign-in">
+                            <div className="input-group">
+                                <i className='bx bxs-user'></i>
+                                <input style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                            </div>
+                            <div className="input-group">
+                                <i className='bx bxs-lock-alt'></i>
+                                <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                            </div>
+                            <button onClick={login}>
+                                login
+                            </button>
+                            {isLoading?<Spinner size={15}/>:<></>}
+                            <p>
+                                <span>
+                                    Don't have an account?
+                                </span>
+                                <Link onClick={()=>toggle('signup')} className="pointer">
+                                    Sign up here
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
+                    <div className="form-wrapper">
+            
+                    </div>
+                </div>
+                {/* <!-- END SIGN IN --> */}
+            </div>
+            {/* <!-- END FORM SECTION --> */}
+            {/* <!-- CONTENT SECTION --> */}
+            <div className="row content-row">
+                {/* <!-- SIGN IN CONTENT --> */}
+                <div className="col align-items-center flex-col">
+                    <div className="text sign-in">
+                        <h2>
+                            Welcome
+                        </h2>
         
-                    <label style={{marginRight:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
-                    <input style={{backgroundColor:"#a4a4a46a", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
-                </LoginInputs>
-                <div style={{display:"flex", alignItems: "baseline"}}>
-                    <LoginButton type="submit">Login</LoginButton>
-                    {isLoading?<Spinner size={15}/>:<></>}
+                    </div>
+                    <div className="img sign-in">
+            
+                    </div>
                 </div>
-                <Separator><span>or</span></Separator>
-                <LoginFooter>I am new! <Link onClick={()=>changeForm('signup')}>Signup</Link></LoginFooter>
-            </>
-            }
-        </Container>
+                {/* <!-- END SIGN IN CONTENT --> */}
+                {/* <!-- SIGN UP CONTENT --> */}
+                <div className="col align-items-center flex-col">
+                    <div className="img sign-up">
+                    
+                    </div>
+                    <div className="text sign-up">
+                        <h2>
+                            Join with us
+                        </h2>
+        
+                    </div>
+                </div>
+                {/* <!-- END SIGN UP CONTENT --> */}
+            </div>
+            {/* <!-- END CONTENT SECTION --> */}
+        </div>
     );
 };
 export default Form;
-
-const Container = styled.form`
-    padding: 1.5rem;
-    background-color: white;
-    color: #000000a4;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    width: fit-content;
-    justify-content: center;
-    height: fit-content;
-    transform: translateX(${({position})=>position}rem);
-    transition: transform 1s ease-in-out, height 1s ease-in-out;
-    @media (max-width: 1500px) {
-        transform: translateX(-25rem);
-    }
-    
-`;
-
-const SignupTitle = styled.h2`
-  font-weight: normal;
-  font-family: Arial, Helvetica, sans-serif;
-  animation: ${slideDown} 1s ease-in-out; 
-  
-`;
-
-const LoginTitle = styled.h2`
-  font-weight: normal;
-  font-family: Arial, Helvetica, sans-serif;
-  animation: ${slideDown} 1s ease-in-out;  
-`;
-
-const SignupInputs = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    align-items: center;
-    animation: ${slideLift} 1s ease-in-out;
-    @media (max-width: 300px) {
-        overflow-y: scroll;
-        grid-template-columns: auto;
-    }
-    
-    input{
-        ${window.innerWidth<=500 && 'width: 8rem'};
-    }
-`;
-
-const LoginInputs = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    align-items: center;
-    animation: ${slideLift} 1s ease-in-out;
-
-    @media (max-width: 300px) {
-        overflow-y: scroll;
-        grid-template-columns: auto;
-    }
-
-    input{
-        ${window.innerWidth<=500 && 'width: 8rem'};
-    }
-`;
-
-const SignupButton = styled.button `
-    background-color: black;
-    color: white;
-    padding: 1rem;
-    margin-top: 1rem;
-    margin-right: 1rem;
-    border-radius: 2rem;
-    cursor: pointer;
-    animation: ${pop} 1s ease-in-out;
-
-    &:hover{
-        color: black;
-        background-color: white;
-    }
-`;
-
-const LoginButton = styled.button `
-    background-color: black;
-    color: white;
-    padding: 1rem;
-    margin-top: 1rem;
-    margin-right: 1rem;
-    border-radius: 2rem;
-    cursor: pointer;
-    animation: ${pop} 1s ease-in-out;
-
-    &:hover{
-        color: black;
-        background-color: white;
-    }
-`;
-
-const Separator = styled.div`
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    width: 100%;
-    margin: 10px 0;
-    font-family: "Arial, Helvetica, sans-serif";
-    animation: ${slideUp} 1s ease-in-out;
-
-    &::before {
-        content: "";
-        height: 1px;
-        background: #ccc;
-        margin-right: 0.5rem;
-    }  
-    &::after {
-        content: "";
-        height: 1px;
-        background: #ccc;
-        margin-left: 0.5rem;
-    }  
-`;
-
-const SignupFooter = styled.p`
-    font-family: Arial, Helvetica, sans-serif;
-    animation: ${slideUp} 1s ease-in-out;
-`;
-
-const LoginFooter = styled.p`
-    font-family: Arial, Helvetica, sans-serif;
-    animation: ${slideUp} 1s ease-in-out;
-`;

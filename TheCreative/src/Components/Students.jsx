@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const gradesList = ['M3','S1','S2'];
+const gradesList = ['M1', 'M2', 'M3', 'S1', 'S2'];
 
 
 const Students = ( { backend, theme, isSideBarOpen } )=>{

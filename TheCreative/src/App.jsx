@@ -4,9 +4,7 @@ import EmptyPage from "./Pages/EmptyPage";
 import WelcomePageLayout from './Layouts/WelcomePageLayout';
 import StudentHomePageLayout from './Layouts/StudentHomePageLayout';
 import AdminHomePageLayout from './Layouts/AdminHomePageLayout';
-import WelcomePage from './Pages/WelcomePage';
 import RegisterPage from './Pages/RegisterPage';
-import Modal from "react-modal";
 import LecturePage from './Pages/LecturePage';
 import StudentPage from './Pages/StudentPage';
 import EditLecturePage from './Pages/EditLecturePage';
@@ -22,13 +20,11 @@ function App() {
       console.log(sw);
     })
   }, []);
-  Modal.setAppElement("#root");
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path='/' element={<WelcomePageLayout/>}>
-          <Route index element={<WelcomePage/>}/>
-        </Route>
+        <Route path='/' element={<WelcomePageLayout/>}/>
         <Route path='/register' element={<RegisterPage backend={backend}/>}/>
         <Route path='/home' element={<StudentHomePageLayout backend={backend}/>}/>
         <Route path='/lecture/:id' element={<LecturePage/>}/>

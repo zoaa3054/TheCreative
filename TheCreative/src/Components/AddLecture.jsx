@@ -12,6 +12,7 @@ const AddLecture = ({backend, theme}) =>{
     const [HWError, setHWError] = useState(null);
     const [reload, setReload] = useState(0);
     const [isRevision, setIsRevision] = useState(false);
+    const [isCustomized, setIsCustomized] = useState(false);
 
     const notifySuccess = (mssg) =>{
         toast.success(mssg);
@@ -106,6 +107,8 @@ const AddLecture = ({backend, theme}) =>{
             <label htmlFor="grade">Grade:</label>
             <select name="grade" value={formVariables.grade?formVariables.grade:""} onChange={handleChange} required>
                 <option value="" disabled>Choose grade</option>
+                <option value="M1">Middle 1</option>
+                <option value="M2">Middle 2</option>
                 <option value="M3">Middle 3</option>
                 <option value="S1">Senior 1</option>
                 <option value="S2">Senior 2</option>
@@ -140,11 +143,20 @@ const AddLecture = ({backend, theme}) =>{
                         return prev;
                     })
                 }/>
+
+                <label htmlFor="isCustomized">Customized Units</label>
+                <input type="checkbox" value={isCustomized} onChange={()=>
+                    setIsCustomized((prev)=>{
+                        prev = !prev;
+                        if(prev) setFormVariables({...formVariables, ['unit']: -1});
+                        return prev;
+                    })
+                }/>
             </div>
 
             <div>
             <label htmlFor="unit">Unit:</label>
-            <input type="number" disabled={isRevision} name="unit" min="1" placeholder="Enter unit" value={formVariables.unit?formVariables.unit:""} onChange={handleChange} required/>
+            <input type="number" disabled={isRevision || isCustomized} name="unit" min="1" placeholder="Enter unit" value={formVariables.unit?formVariables.unit:""} onChange={handleChange} required/>
             </div>
 
             <div>
@@ -235,6 +247,8 @@ const Container = styled.form`
 
         &:nth-child(4){
             display: flex;
+            flex-direction: row;
+            gap: 1rem;
         }
 
         &:nth-child(8){

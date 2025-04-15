@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 
 const filterCriteriaList = {
     Term: ['T1','T2'],
-    Grade: ['M3','S1','S2'],
+    Grade: ['M1','M2','M3','S1','S2'],
     Field: ['Algebra','Geometry','Trigonometry']
 }
 
@@ -255,6 +255,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                         <th>Date</th>
                         <th>Duration</th>
                         <th>Cost</th>
+                        <th>Description</th>
                         <th>#Purchases</th>
                     </tr>
                     </thead>
@@ -262,13 +263,14 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                     {lectures.map((item, index) => (
                         <tr key={index} onClick={()=>goToLecture(item)} >
                         <td><NewLabel isNew={checkModernity(item.date)}>{item.number}</NewLabel></td>
-                        <td>{item.unit==0?"ALL":item.unit}</td>
+                        <td>{item.unit==0?"ALL":(item.unit==-1?"SOME":item.unit)}</td>
                         <td>{item.field}</td>
                         <td>{item.grade}</td>
                         <td>{item.term}</td>
                         <td>{timeStampToDate(item.date)}</td>
                         <td>{(item.size/3600).toFixed(2)}hr</td>
                         <td style={{color: boughtLectures.includes(item._id)&&"#05aa05", fontWeight:"bold"}}>{boughtLectures.includes(item._id)?"PAYED":`${item.cost} LE`}</td>
+                        <td>{item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
                         <td>{item.numOfPurchases}</td>
                         </tr>
                     ))}
@@ -379,7 +381,8 @@ const buyFormStyle = {
         height: "fit-content",
         display: "flex", 
         flexDirection: "column",
-        borderRadius: "25px"
+        borderRadius: "25px",
+        overflow: "scroll"
     }
 }
 

@@ -142,6 +142,8 @@ const Profile = ({backend, theme, isAdmin}) => {
               <>
                   <label htmlFor="grade" style={{marginRight:"1rem"}}>Grade: </label>
                   <select name="grade" style={{backgroundColor:"transparent", borderRadius:"20px", padding:"0.5rem", cursor:"pointer", color: theme=='light'?"black":"white"}} value={user.grade} onChange={handleChange}>
+                      <option value="M1">M1</option>
+                      <option value="M2">M2</option>
                       <option value='M3'>M3</option>
                       <option value='S1'>S1</option>
                       <option value='S2'>S2</option>

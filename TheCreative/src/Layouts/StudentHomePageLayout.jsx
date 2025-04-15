@@ -294,11 +294,10 @@ const SideBar = styled.div`
     height: 100vh;
     width: ${({isOpen})=>{
         if (isOpen)
-            return "max-content";
+            return "13rem";
         else 
         return "0%";
     }};
-    overflow-x: visible;
     overflow-y: scroll;
     background-color:${({theme})=>theme=="light"?"white":"black"} ;
     display: flex;
@@ -341,6 +340,7 @@ const Head = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f5f5f582;
     p{
         cursor:pointer; 
         font-family: URW Chancery L, cursive;
@@ -372,24 +372,24 @@ const Tail = styled.div`
     padding: 1rem;
     white-space: normal;
     word-wrap: break-word;
+    align-items: center;
+    padding-bottom: 5rem;
 `;
 
 const Logo = styled.img`
     cursor: pointer;
-    /* border-radius: 50%; */
-    width: 4rem;
-    height: 2.5rem;
+    width: 6rem;
+    height: 4.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-
 `;
 
 const Component = styled.div`
     color: ${({theme})=>theme=="light"?"#181818":"white"};
     font-weight: normal;
     cursor: pointer;
-    width: fit-content;
+    width: 100%;
     padding: 1rem;
     margin: 0;
     white-space: nowrap;

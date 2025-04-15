@@ -46,12 +46,7 @@ const StudentHomePageLayout = ({ backend })=>{
             <SideBar theme={theme} isOpen={isSideBarOpen}>
                 <Head theme={theme}>
                     <Logo src={logo} alt=""/>
-                    <p style={{cursor:"pointer", 
-                        fontFamily:"URW Chancery L, cursive", 
-                        fontWeight:"bold", 
-                        color: theme=="light"?"#181818":"white",
-                        display: window.innerWidth<400?"none":""
-                        }}>TheCreative</p>
+                    <p>TheCreative</p>
                 </Head>
                 <Body>
                     <Component theme={theme}
@@ -129,50 +124,32 @@ const Container = styled.div`
 const SideBar = styled.div`
     height: 100vh;
     width: ${({isOpen})=>{
-        // if(isOpen && window.innerWidth<=500)
-        //     return "40%";
-        // if(isOpen && window.innerWidth<=890)
-        //     return "48%";
         if (isOpen)
-            return "fit-content";
+            return "16rem";
         else 
-            return "0%";
+        return "0%";
     }};
     overflow-y: scroll;
     background-color:${({theme})=>theme=="light"?"white":"black"} ;
     display: flex;
     flex-direction: column;
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
-    overflow: visible;
-    white-space: nowrap;
 
 `;
 
 const RightSpace = styled.div`
     overflow-x: hidden;
     height: 100%;
-    
-    width: ${({isOpen})=>{
-        if(isOpen && window.innerWidth<=500)
-            return "60%";
-        if(isOpen && window.innerWidth<=890)
-            return "52%";
-        else if (isOpen)
-            return "85%";
-        
-        else 
-        return "100%";
-    }};
+    flex-grow: 1;
     background-color: ${({theme})=>theme=="light"?"aliceblue":"#181818"};
     transition: background-color 0.5s ease-in-out, width 0.5s ease;
-    overflow-y: visible;
+    overflow-y: scroll;
 `;
 
 const NavBar = styled.div`
-    /* position: fixed; */
     height: 5rem;
     width: 100%;
-    background-image: ${({theme})=>theme=="light"?"linear-gradient(159deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 100%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
+    background-image: ${({theme})=>theme=="light"?"linear-gradient(180deg, rgba(0,71,171,1) 0%, rgba(28,169,201,1) 100%)":"radial-gradient(circle, rgba(24,24,24,1) 0%, rgba(0,0,0,1) 100%)"};
     display: flex;
     justify-content: space-between;
     align-items: start;
@@ -189,39 +166,53 @@ const NavBarIcons = styled.div`
 `;
 
 const Head = styled.div`
-    height: 12vh;
+    height: 11vh;
     width: 100%;
     border-bottom: 0.5px solid ${({theme})=>theme=="light"?"black":"white"};;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f5f5f582;
+    p{
+        cursor:pointer; 
+        font-family: URW Chancery L, cursive;
+        font-weight: bold;
+        color: ${({theme})=>theme=="light"?"#181818": "white"};
+        display: flex;
+        @media (max-width: 690px) {
+            display: none;
+        }
+    }
 `;
 
 const Body = styled.div`
-    height: 80vh;
+    height: fit-content;
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    @media(max-width: 500px){
+        width: fit-content;
+    }
 `;
 
 const Tail = styled.div`
-    height: 10vh;
-    width: fit-content;
+     width: 100%;
+    flex-grow: 1;
+    justify-content: end;
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    overflow: visible;
-    white-space: nowrap;
+    white-space: normal;
+    word-wrap: break-word;
 `;
 
 const Logo = styled.img`
-    cursor: pointer;
-    /* border-radius: 50%; */
-    width: 4rem;
-    height: 2.5rem;
-    margin-right: 0.5rem;
+   cursor: pointer;
+    width: 6rem;
+    height: 4.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Component = styled.p`
@@ -231,9 +222,8 @@ const Component = styled.p`
     width: 100%;
     padding: 1rem;
     margin: 0;
-    /* white-space: nowrap; */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: visible;
 
     &:hover{
         background-color: #dbd9d99a;
