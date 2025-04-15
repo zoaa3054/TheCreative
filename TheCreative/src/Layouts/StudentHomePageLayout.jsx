@@ -29,7 +29,11 @@ const StudentHomePageLayout = ({ backend })=>{
     }, [buyingAlert]);
 
     useEffect(()=>{
-        notificationPermissionPrompt();
+        // notificationPermissionPrompt();
+        getNotificationsToken()
+        .then((token)=>{
+            if(token) setNotifSwitch(true);
+        })
     }, [])
 
     const logout = ()=>{
@@ -174,21 +178,25 @@ const StudentHomePageLayout = ({ backend })=>{
     }
 
     const notificationPermissionPrompt = async()=>{
-        const permission = await Notification.requestPermission();
-        if (permission == 'granted'){
-            let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
-            let sw = await navigator.serviceWorker.ready;
-            let push = await sw.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: serverPublicKey
+        if ('Notification' in window){
+            Notification.requestPermission()
+            .then(async(permission)=>{
+                if(permission == 'granted'){
+                    let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
+                    let sw = await navigator.serviceWorker.ready;
+                    let push = await sw.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: serverPublicKey
+                    })
+                    
+                    sendTokenToBackend(push);
+                    setNotifSwitch(true);
+                }
+                else{
+                    console.log("couldn't enable notifications");
+                    notifyError("Something went wrong, couldn't enable notifications");
+                }
             })
-            
-            sendTokenToBackend(push);
-            setNotifSwitch(true);
-        }
-        else{
-            console.log("couldn't enable notifications");
-            notifyError("Something went wrong, couldn't enable notifications");
         }
     }
 
