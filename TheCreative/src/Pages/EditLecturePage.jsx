@@ -277,7 +277,7 @@ const EditLecturePage = () =>{
             </div>
 
             <div>
-                <Button type="submit" disabled={isUploading}>
+                <Button type="submit" theme={theme} disabled={isUploading}>
                 {isUploading?<Spinner size={15}/>:"Submit"}    
                 </Button>
                 <Button onClick={(e)=>{
@@ -359,7 +359,7 @@ const Button = styled.button`
     color: ${({theme})=>theme=='light'?"white":"black"};
     margin-bottom: 70px;
     &:hover{
-        background-color: ${({theme})=>theme=='light'?"#00ab7b":"black"};
+        background-color: rgba(28,169,201,1);
         color: white;
         
     }

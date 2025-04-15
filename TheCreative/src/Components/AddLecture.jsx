@@ -52,6 +52,8 @@ const AddLecture = ({backend, theme}) =>{
             if(result.status == 201) {
                 notifySuccess("Lecture added successfuly!");
                 setFormVariables({});
+                setIsRevision(false);
+                setIsCustomized(false);
             }
             else if(result.status == 409) {
                 notifyError("Lecture already exists");
@@ -218,7 +220,7 @@ const AddLecture = ({backend, theme}) =>{
             </div>
 
             {/* <div> */}
-                <Button type="submit" disabled={isSubmiting}>{isSubmiting?<Spinner size={15}/>:"Submit"}</Button>
+                <Button type="submit" theme={theme} disabled={isSubmiting}>{isSubmiting?<Spinner size={15}/>:"Submit"}</Button>
             {/* </div> */}
         </Container>
     );
@@ -283,7 +285,7 @@ const Button = styled.button`
     /* margin-bottom: 50px; */
 
     &:hover{
-        background-color: ${({theme})=>theme=='light'?"#00ab7b":"black"};
+        background-color: rgba(28,169,201,1);
         color: white;
         
     }
