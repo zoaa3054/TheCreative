@@ -8,6 +8,7 @@ import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import Spinner from "./Spinner";
 
 const filterCriteriaList = {
     Term: ['T1','T2'],
@@ -29,6 +30,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     const [buyFormOpen, setBuyFormOpen] = useState(false);
     const [lectureAboutToBeBought, setLectureAboutToBeBought] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmiting, setIsSubmiting] = useState(true);
 
     const notifyError = (mssg) =>{
         toast.error(mssg);
@@ -126,6 +128,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     }
 
     const buyLecture = async(lectureId)=>{
+        setIsSubmiting(true);
         await fetch(`${backend}/user/buy/lecture`, {
             method:"POST",
             headers: {
@@ -150,6 +153,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
             // navigate(0); // for reloading the page to update the wallet
         })
         .catch(error=>console.log(error));
+        setIsSubmiting(false);
     }
 
     const getFilterList = ()=>{
@@ -290,7 +294,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 onRequestClose={()=>setBuyFormOpen(false)}
                 style={buyFormStyle}
             >
-                <Button onClick={()=>setBuyFormOpen(false)} style={{alignSelf:"end"}} theme={theme}>X</Button>
+                <Button disabled={isSubmiting} onClick={()=>setBuyFormOpen(false)} style={{alignSelf:"end"}} theme={theme}>X</Button>
                 <h2>You are about to buy: </h2>
                 <h4>Lecture: {lectureAboutToBeBought.number}</h4>
                 <h4>Unit: {lectureAboutToBeBought.unit==0?"ALL":lectureAboutToBeBought.unit}</h4>
@@ -298,7 +302,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 <h4>Grade: {lectureAboutToBeBought.grade}</h4>
                 <h4>Term: {lectureAboutToBeBought.term}</h4>
                 <h3>Click Confirm to complete the purchase.</h3>
-                <Button onClick={()=>buyLecture(lectureAboutToBeBought._id)} style={{justifySelf:"center"}} theme={theme}>Confirm</Button>
+                <Button disabled={isSubmiting} onClick={()=>buyLecture(lectureAboutToBeBought._id)} style={{justifySelf:"center"}} theme={theme}>{isSubmiting?<Spinner size={15}/>:"Confirm"}</Button>
             </Modal>
         </Container>
     );
@@ -393,7 +397,7 @@ const buyFormStyle = {
 }
 
 const Button = styled.button`
-    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"black"};
+    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"rgba(28,169,201,1)"};
     border-radius: 25px;
     padding: 1rem;
     color: white;

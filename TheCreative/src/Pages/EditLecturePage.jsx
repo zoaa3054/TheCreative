@@ -291,7 +291,7 @@ const EditLecturePage = () =>{
                 onRequestClose={()=>setIsDeleting(false)}
                 style={deleteConfermationStyle}
             >              
-                <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton onClick={()=>setIsDeleting(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the lecture, are you sure?</p>
                 <FormButton onClick={deleteLecture} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Delete"}    
@@ -387,7 +387,7 @@ const deleteConfermationStyle = {
 }
 
 const FormButton = styled.button`
-    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"black"};
+    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"rgba(28,169,201,1)"};
     border-radius: 25px;
     padding: 1rem;
     color: white;

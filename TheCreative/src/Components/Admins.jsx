@@ -232,7 +232,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 onRequestClose={()=>setIsDeleting(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton onClick={()=>setIsDeleting(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the account of {adminAboutToBeDeleted.username}, are you sure?</p>
                 <FormButton onClick={deleteAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Delete"}    
@@ -243,14 +243,14 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 onRequestClose={()=>setIsAddingAdmin(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsAddingAdmin(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton onClick={()=>setIsAddingAdmin(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"1.5rem"}}>Add Admin</p>
                 
                 <label style={{marginTop:"1rem", marginBottom:"1rem",fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
                 <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
                 
                 <label style={{marginTop:"1rem", marginBottom:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
-                <input style={{backgroundColor:"#a4a4a46a", marginBottom:"1rem", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                <input style={{backgroundColor:"#a4a4a46a", marginBottom:"1rem", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" minLength='8' value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                 <FormButton onClick={addAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Add"}    
                 </FormButton>
@@ -426,7 +426,7 @@ const StyledTable = styled.table`
 `;
 
 const FormButton = styled.button`
-    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"black"};
+    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"rgba(28,169,201,1)"};
     border-radius: 25px;
     padding: 1rem;
     color: white;

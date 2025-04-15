@@ -173,7 +173,7 @@ const StudentPage = ()=>{
                 onRequestClose={()=>setIsEditing(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsEditing(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton onClick={()=>setIsEditing(false)} disabled={isSubmiting} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>Enter the amount of money you want to charge/discharge the wallet of {user.username} with</p>
                 <form onSubmit={editWallet} style={{width: "100%", display: "flex", justifyContent:"center"}}>
                     <input type="number" placeholder="Enter the amount " style={{borderRadius:"20px", padding: "1rem"}} value={walletEditAmount} onChange={(tag)=>setWalletEditAmount(tag.target.value)} required/>
@@ -185,7 +185,7 @@ const StudentPage = ()=>{
                 onRequestClose={()=>setIsDeleting(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton onClick={()=>setIsDeleting(false)} disabled={isSubmiting} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the account of {user.username}, are you sure?</p>
                 <FormButton onClick={deleteAccount} style={{justifySelf:"center"}} disabled={isSubmiting} theme={theme}>{isSubmiting?<Spinner size={15}/>:"Delete"}</FormButton>
             </Modal>
@@ -302,7 +302,7 @@ const editWalletFormStyle = {
 }
 
 const FormButton = styled.button`
-    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"black"};
+    background-color: ${({theme})=>theme=='light'?"rgba(0,71,171,1)":"rgba(28,169,201,1)"};
     border-radius: 25px;
     padding: 1rem;
     color: white;
