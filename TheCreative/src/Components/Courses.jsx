@@ -269,7 +269,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                     {lectures.map((item, index) => (
                         <tr key={index} onClick={()=>goToLecture(item)} >
                         <td><NewLabel isNew={checkModernity(item.date)}>{item.number}</NewLabel></td>
-                        <td>{item.unit==0?"ALL":(item.unit==-1?"SOME":item.unit)}</td>
+                        <td>{item.unit==0?"ALL":(item.unit==-1?item.specialMonth:item.unit)}</td>
                         <td>{item.field}</td>
                         <td>{item.grade}</td>
                         <td>{item.term}</td>

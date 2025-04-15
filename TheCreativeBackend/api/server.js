@@ -4,7 +4,7 @@ const { connectToDb, getDb } = require('../db.js');
 const { ObjectId } = require('mongodb');
 const { hash, compare } = require('../bcryptHash.js');
 const {sendNotification} = require('../messaging.js');
-
+const {getCurrentMonth} = require('../utils.js');
 const bodyParser = require('body-parser');
 const {
   createUserJWT, checkUserJWT,
@@ -648,6 +648,8 @@ const initializeServer = () => {
                 if (result) res.status(409).json({error: "Lecture already exists"});
                 else{
                     req.body.numOfPurchases = 0;
+                    if(req.body.unit == -1)
+                        req.body.specialMonth = getCurrentMonth();
                     await db.collection('lectures')
                     .insertOne(req.body)
                     .then(async (_)=>{

@@ -68,7 +68,7 @@ const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
                         {dashboard.map((item, index) => (
                             <tr key={index}>
                             <td>{item.number}</td>
-                            <td>{item.unit==0?"ALL":(item.unit==-1?"SOME":item.unit)}</td>
+                            <td>{item.unit==0?"ALL":(item.unit==-1?item.specialMonth:item.unit)}</td>
                             <td>{item.field}</td>
                             <td>{item.grade}</td>
                             <td>{item.term}</td>
