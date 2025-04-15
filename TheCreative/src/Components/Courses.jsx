@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const filterCriteriaList = {
     Term: ['T1','T2'],
@@ -27,6 +28,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     const navigate = useNavigate();
     const [buyFormOpen, setBuyFormOpen] = useState(false);
     const [lectureAboutToBeBought, setLectureAboutToBeBought] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const notifyError = (mssg) =>{
         toast.error(mssg);
@@ -46,11 +48,12 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
             });
         }else{
             setGradeFilter(filterCriteriaList.Grade[0]);
+            
         }
     }, []);
     
     useEffect(()=>{
-
+        setIsLoading(true);
         getAllLectures();
         if (!isAdmin) getBoughtLectures();
         
@@ -79,6 +82,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
             notifyError("There something wrong with the system please logout and login again.");
             console.log(error);
         });
+        setIsLoading(false);
+
     }
 
     
@@ -242,7 +247,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 </SortControl>
             </ControlBar>
             
-            {lectures.length>0 && 
+            {isLoading?
+            <Loader/>:lectures.length>0 && 
             <TableWrapper>
                 <StyledTable theme={theme}>
                     <thead>
@@ -270,7 +276,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                         <td>{timeStampToDate(item.date)}</td>
                         <td>{(item.size/3600).toFixed(2)}hr</td>
                         <td style={{color: boughtLectures.includes(item._id)&&"#05aa05", fontWeight:"bold"}}>{boughtLectures.includes(item._id)?"PAYED":`${item.cost} LE`}</td>
-                        <td>{item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
+                        <td>{item.explainDescribtion&&item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
                         <td>{item.numOfPurchases}</td>
                         </tr>
                     ))}
@@ -278,7 +284,7 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                 </StyledTable>
             </TableWrapper>
             }
-            {lectures.length==0 && <img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
+            {lectures.length==0 && !isLoading &&<img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
             <Modal
                 isOpen={buyFormOpen}
                 onRequestClose={()=>setBuyFormOpen(false)}

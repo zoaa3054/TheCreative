@@ -6,6 +6,7 @@ import { State } from "country-state-city";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const gradesList = ['M1', 'M2', 'M3', 'S1', 'S2'];
 
@@ -18,7 +19,8 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
     const [viewedStudents, setViewedStudents] = useState([]);
     const [filterON, setFilterON] = useState(false);
     const navigate = useNavigate();
-   
+    const [isLoading, setIsLoading] = useState(true);
+
     const notifyError = (mssg) =>{
         toast.error(mssg);
     }
@@ -28,7 +30,7 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
     }
     
     useEffect(()=>{
-
+        setIsLoading(true);
         getAllStudnets();
         
     }, [sortDirection, gradeFilter, cityFilter, filterON]);
@@ -57,6 +59,7 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
             notifyError("There something wrong with the system please logout and login again.")
             console.log(error);
         });
+        setIsLoading(false);
     }
 
 
@@ -131,7 +134,8 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
                 </SortControl>
             </ControlBar>
             
-            {students.length>0 && 
+            {isLoading?
+            <Loader/>:students.length>0 && 
             <TableWrapper>
                 <StyledTable theme={theme}>
                     <thead>

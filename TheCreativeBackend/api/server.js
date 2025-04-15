@@ -518,6 +518,7 @@ const initializeServer = () => {
                     field: lecture.field,
                     grade: lecture.grade,
                     term: lecture.term,
+                    description: lecture.explainDescribtion,
                     date: Date.now(),
                     mark: ''
                 }}})

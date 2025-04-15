@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { State } from "country-state-city";
 import { toast } from "react-toastify";
-
+import Loader from "./Loader";
 
 const Profile = ({backend, theme, isAdmin}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({});
   const [admin, setAdmin] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(()=>{
     if (isAdmin) getAdmin();
@@ -34,6 +35,7 @@ const Profile = ({backend, theme, isAdmin}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsLoading(false);
   }
 
 
@@ -53,6 +55,8 @@ const Profile = ({backend, theme, isAdmin}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsLoading(false);
+
   }
 
   const editUserInfo = async()=>{
@@ -112,6 +116,8 @@ const Profile = ({backend, theme, isAdmin}) => {
   }
 
   return (
+    isLoading?
+      <Loader/>:
     <ProfileContainer theme={theme} onSubmit={handleButtonClick}>
       <Info>
           <h3>Username: {isAdmin?admin.username:user.username}</h3>

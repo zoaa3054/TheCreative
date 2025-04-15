@@ -19,6 +19,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
     const [adminAboutToBeDeleted, setAdminAboutToBeDeleted] = useState({});
     const [formVariables, setFormVariables] = useState({});
     const [error, setError] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
    
@@ -31,7 +32,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
     }
     
     useEffect(()=>{
-
+        setIsLoading(true);
         getAllAdmins();
         
     }, [sortDirection, isDeleting, isAddingAdmin]);
@@ -57,6 +58,8 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             notifyError("There something wrong with the system please logout and login again.")
             console.log(error);
         });
+        setIsLoading(false);
+
     }
 
     const deleteAdmin = async()=>{

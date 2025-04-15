@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-
+import Loader from "./Loader";
 
 const Settings = ({backend, theme}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [contacts, setContacts] = useState({});
   const [formVariables, setFormVariables] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(()=>{
+    setIsLoading(true);
     getContacts();
   }, [isEditing]);
 
@@ -32,6 +34,7 @@ const Settings = ({backend, theme}) => {
     .catch((error)=>{
         console.log(error);
     })
+    setIsLoading(false);
   }
 
 
@@ -69,6 +72,8 @@ const Settings = ({backend, theme}) => {
   }
 
   return (
+    isLoading?
+        <Loader/>:
     <ProfileContainer theme={theme} onSubmit={handleButtonClick}>
         <center>
           <h2>

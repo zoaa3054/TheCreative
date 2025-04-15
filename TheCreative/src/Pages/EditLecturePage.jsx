@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
+import Spinner from "../Components/Spinner";
+import Loader from "../Components/Loader";
 
 const EditLecturePage = () =>{
     const location = useLocation();
@@ -20,7 +22,9 @@ const EditLecturePage = () =>{
     const [isRevision, setIsRevision] = useState(false);
     const navigate = useNavigate();
     const [isCustomized, setIsCustomized] = useState(false);
-    
+    const [isLoading, setIsLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(true);
+
     useEffect(()=>{
         fetchLecture();
     },[]);
@@ -51,10 +55,12 @@ const EditLecturePage = () =>{
             if(data.unit==0) setIsRevision(true);
         })
         .catch(error=>console.log(error));
+        setIsLoading(false);
     }
 
     const editLecture = async(e)=>{
         e.preventDefault();
+        setIsUploading(true);
         if (explainationError){
             notifyError("Please resolve the error in the explaination video link");
             return;
@@ -86,9 +92,11 @@ const EditLecturePage = () =>{
             console.log(error);
             notifyError("Something went wrong, couldn't edit lecture");
         })
+        setIsUploading(false);
     }
 
     const deleteLecture = async()=>{
+        setIsUploading(true);
         await fetch(`${backend}/delete/lecture`, {
             method:"DELETE",
             headers: {
@@ -111,6 +119,7 @@ const EditLecturePage = () =>{
             console.log(error);
             notifyError("Something went wrong, couldn't delete lecture");
         })
+        setIsUploading(false);
     }
 
     const addExplainVideoSize = (entry)=>{
@@ -154,6 +163,8 @@ const EditLecturePage = () =>{
     }
 
     return(
+        isLoading?
+            <Loader/>:
         <Container theme={theme} onSubmit={editLecture}>
             <div>
             <label htmlFor="grade">Grade:</label>
@@ -265,7 +276,10 @@ const EditLecturePage = () =>{
             </div>
 
             <div>
-                <Button type="submit">Submit</Button>
+                <Button type="submit">
+                    Submit
+                {isUploading&&<Spinner size={15}/>}    
+                </Button>
                 <Button onClick={(e)=>{
                     setIsDeleting(true);
                     e.preventDefault();
@@ -279,7 +293,10 @@ const EditLecturePage = () =>{
             >              
                 <FormButton onClick={()=>setIsDeleting(false)} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the lecture, are you sure?</p>
-                <FormButton onClick={deleteLecture} style={{justifySelf:"center"}} theme={theme}>Delete</FormButton>
+                <FormButton onClick={deleteLecture} style={{justifySelf:"center"}} theme={theme}>
+                    Delete
+                    {isUploading&&<Spinner size={15}/>}    
+                </FormButton>
             </Modal>
         </Container>
     );

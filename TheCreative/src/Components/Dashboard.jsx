@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import noContent from "../assets/emptyDashboard.svg";
+import Loader from "./Loader";
 
 const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
     const [dashboard, setDashboard] = useState([]);
-    
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
-        console.log(studentDashboard);
         if (!isAdmin) getDashboard();
         else if (isAdmin && studentDashboard) setDashboard(studentDashboard);
         else setDashboard([]);
@@ -37,11 +37,19 @@ const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
             notifyError("There something wrong with the system please logout and login again.");
 
         });
+        setIsLoading(false);
     }
 
     return(
         <Container theme={theme}>
-            {dashboard.length>0?
+            <center style={{color: theme=='light'?"black":"white", marginBottom:"1rem"}}>
+                <h2>
+                    Dashboard
+                </h2>
+            </center>
+            {isLoading?
+            <Loader/>
+            :dashboard.length>0?
                 <TableContainer theme={theme}>
                     <StyledTable>
                         <thead>
@@ -65,7 +73,7 @@ const Dashboard = ({theme, backend, isAdmin, studentDashboard})=>{
                             <td>{item.grade}</td>
                             <td>{item.term}</td>
                             <td>{timeStampToDate(item.date)}</td>
-                            <td>{item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
+                            <td>{item.description&&item.description.length > 20?item.description.slice(0, 20)+'...':item.description}</td>
                             <td>{item.mark}</td>
                             </tr>
                         ))}
@@ -90,7 +98,7 @@ const Container = styled.div`
     background-color: ${({theme})=>theme=="light"?"#0e59c268":"#18181870"};
     transition: background-color 0.5s;
     padding: 1rem;
-    
+    text-align: center;
 `;
 
 

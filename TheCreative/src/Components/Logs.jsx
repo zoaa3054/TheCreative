@@ -18,6 +18,7 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
     const [logs, setLogs] = useState([]);
     const [adminList, setAdminList] = useState([]);
     const [filterON, setFilterON] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     
 
     const notifyError = (mssg) =>{
@@ -33,6 +34,7 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
     }, []);
     
     useEffect(()=>{
+        setIsLoading(true);
         getLogs();
     }, [methodFilter, adminFilter, sortDirection, filterON]);
 
@@ -59,6 +61,8 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
             notifyError("There something wrong with the system please logout and login again.");
             console.log(error);
         });
+        setIsLoading(true);
+
     }
 
     
@@ -141,7 +145,8 @@ const Logs = ( { backend, theme, isSideBarOpen} )=>{
                 </SortControl>
             </ControlBar>
             
-            {logs.length>0 && 
+            {isLoading?
+            <Loader/>:logs.length>0 && 
             <TableWrapper>
                 <StyledTable theme={theme}>
                     <thead>

@@ -59,7 +59,7 @@ const WelcomePageLayout = ()=>{
             height: "100vh",
             }}>
              <Video autoPlay muted loop playsInline useRef={videoRef}>
-                <source src="https://cdn.pixabay.com/video/2022/04/09/113368-697718069_large.mp4" type="video/mp4" />
+                <source src="https://cdn.pixabay.com/video/2022/04/09/113385-697718118_large.mp4" type="video/mp4" />
             </Video>
             <SideBar sideBarSwitch={sideBarSwitch}>
                 <Icon onClick={()=>setAboutSwitch(true)}>About</Icon>
@@ -132,7 +132,7 @@ const WelcomePageLayout = ()=>{
                 onRequestClose={()=>setVideoTutorial(false)}
                 style={aboutStyle}
             >
-                <ModalButton onClick={()=>setVideoTutorial(false)} style={{alignSelf:"end"}}>X</ModalButton>
+                <ModalButton onClick={()=>setVideoTutorial(false)} style={{alignSelf:"end"}}>X close</ModalButton>
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/0-bSQ14H_PY?si=WMjl4p8IZj-6oUM7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </Modal>
         </div>
@@ -271,6 +271,8 @@ const aboutStyle = {
         flexDirection: "column",
         borderRadius: "25px",
         alignSelf:"center",
+        maxWidth: `${window.innerWidth<=500?"320px":"fit-content"}`,
+        overflow:"scroll"
     }
 }
 
@@ -371,6 +373,15 @@ const Button = styled.button`
     &:hover{
         color: white;
         background-color: transparent;
+    }
+
+    &:nth-child(2){
+        background-color: transparent;
+        color: white;
+        &:hover{
+            background-color: white;
+            color: black;
+        }
     }
 `;
 

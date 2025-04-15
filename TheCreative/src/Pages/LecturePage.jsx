@@ -7,6 +7,8 @@ import NoDataPage from "./NoDataPage";
 import noContent from "../assets/noContent.svg";
 import Card from "../Components/Card";
 import { toast } from "react-toastify";
+import Loader from "../Components/Loader";
+import Spinner from "../Components/Spinner";
 
 const LecturePage = ()=>{
     const location = useLocation();
@@ -16,7 +18,9 @@ const LecturePage = ()=>{
     const [stage, setStage] = useState(1);
     const [isControllerOpen, setIsControllerOpen] = useState(true);
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
     useEffect(()=>{
         fetchLecture();
     }, []);
@@ -43,6 +47,7 @@ const LecturePage = ()=>{
             console.log(data);
         })
         .catch(error=>console.log(error));
+        setIsLoading(false);
     }
 
     
@@ -56,12 +61,16 @@ const LecturePage = ()=>{
     }
 
     const submit = () =>{
+        setIsSubmitting(true);
         // to do
         notifySuccess("Lecture Submited Successfuly");
+        setIsSubmitting(false);
         navigate('/home');
     }
 
     return(
+        isLoading?
+            <Loader/>:
         <Container>
         {Object.keys(lecture).length!= 0?<>
             <Content theme={theme}>
@@ -110,6 +119,7 @@ const LecturePage = ()=>{
                         <Button onClick={decrementStage} disabled={stage==1}>Back</Button>
                         <Button onClick={incrementStage} disabled={stage==4}>Next</Button>
                         <Button onClick={submit} style={{opacity:stage==4?"1":"0", display:isAdmin&&"none"}}>Submit</Button>
+                        {isSubmitting&&<Spinner size={15}/>}
                     </Buttons>
                 </div>
             </Controller></>
