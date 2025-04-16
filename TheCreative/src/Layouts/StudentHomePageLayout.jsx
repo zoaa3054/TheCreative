@@ -198,6 +198,7 @@ const StudentHomePageLayout = ({ backend })=>{
                 }
             })
         }
+        else alert('no notification')
     }
 
     function urlBase64ToUint8Array(base64String) {

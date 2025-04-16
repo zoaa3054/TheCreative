@@ -80,8 +80,8 @@ const Profit = ( { backend, theme, isSideBarOpen } )=>{
                     ))}
                     {!isLoading&&
                         <tr>
-                        <td>Total</td>
-                        <td>{totalAmount}</td>
+                        <td style={{fontWeight:"bolder"}}>Total</td>
+                        <td style={{fontWeight:"bold"}}>{totalAmount}</td>
                         </tr>
                     }
                     </tbody>
