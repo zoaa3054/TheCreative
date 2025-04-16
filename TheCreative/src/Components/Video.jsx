@@ -34,13 +34,20 @@ const Video = ({ link, theme, describtion }) => {
 
   return (
     <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center", height: "100%"}}>
-      {videoID ? (
+      {!videoID ? (
         <div style={{ marginTop: "20px", width:"100%", height:"100%", textAlign:"start"}}>
           <YouTube videoId={videoID} opts={videoOptions}/>
           <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
-          <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion}</p>
+          <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?describtion:""}</p>
         </div>
       ):
+      link?
+      <div style={{width:"100%", height:"100%",  display:"flex", flexDirection:"column", alignItems: "start"}}>
+        <iframe allow="fullscreen" allowfullscreen height="100%" src="https://streamable.com/e/cg87sp?loop=0" width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+        <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
+        <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?describtion:""}</p>
+        
+        </div>:
       <>
       <img src={noContent} alt="" style={{width:"100%", height:"50%", alignSelf:"center"}}/>
       <h2 style={{color:theme=="light"?"black":"white"}}>ENJOY, NO VIDEO HERE TODAY </h2>

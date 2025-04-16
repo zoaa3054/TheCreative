@@ -239,9 +239,9 @@ const EditLecturePage = () =>{
             <Preveiw>
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
-                ) : (
-                    <p style={{ color: "red" }}>{explainationError}</p>
-                )}
+                ) :formVariables.explainationLink?(
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.explainationLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                ):(<></>)}
             </Preveiw>
 
             <div>
@@ -257,9 +257,10 @@ const EditLecturePage = () =>{
             <Preveiw>
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
-                ) : (
-                    <p style={{ color: "red" }}>{HWError}</p>
-                )}
+                ) : formVariables.hwLink?(
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.hwLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+
+                ):(<></>)}
             </Preveiw>
 
             <div>

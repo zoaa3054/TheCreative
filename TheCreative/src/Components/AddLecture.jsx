@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 
 const AddLecture = ({backend, theme}) =>{
@@ -15,7 +15,7 @@ const AddLecture = ({backend, theme}) =>{
     const [isRevision, setIsRevision] = useState(false);
     const [isCustomized, setIsCustomized] = useState(false);
     const [isSubmiting, setIsSubmiting] = useState(false);
-    
+
     const notifySuccess = (mssg) =>{
         toast.success(mssg);
     }
@@ -181,9 +181,9 @@ const AddLecture = ({backend, theme}) =>{
             <Preveiw>
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
-                ) : (
-                    <p style={{ color: "red" }}>{explainationError}</p>
-                )}
+                ) :formVariables.explainationLink?(
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.explainationLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                ):(<></>)}
             </Preveiw>
 
             <div>
@@ -199,9 +199,10 @@ const AddLecture = ({backend, theme}) =>{
             <Preveiw>
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
-                ) : (
-                    <p style={{ color: "red" }}>{HWError}</p>
-                )}
+                ) : formVariables.hwLink?(
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.hwLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+
+                ):(<></>)}
             </Preveiw>
 
             <div>
