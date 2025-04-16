@@ -845,7 +845,7 @@ const initializeServer = () => {
                         //logging the operation
                         await db.collection('logs')
                         .insertOne({
-                            text: `The lecture number ${result.number} in ${result.field} U${result.unit} was deleted`,
+                            text: `The lecture number ${result.number} in ${result.field} U${result.unit} of id: ${req.body._id} was deleted`,
                             admin: req.username,
                             method: 'DELETE',
                             date: Date.now()
