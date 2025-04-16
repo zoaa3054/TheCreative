@@ -20,22 +20,22 @@ const initializeServer = () => {
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
     server.use(cors({
-    //   origin: 'https://the-creative-in-math.vercel.app',
-      origin: true,
+      origin: 'https://the-creative-in-math.vercel.app',
+    //   origin: true,
       exposedHeaders: ["Authorization"]
     }));
 
-    // server.use((req, res, next) => {
-    //     const allowedOrigin = 'https://the-creative-in-math.vercel.app';
-    //     const origin = req.headers.origin;
+    server.use((req, res, next) => {
+        const allowedOrigin = 'https://the-creative-in-math.vercel.app';
+        const origin = req.headers.origin;
       
-    //     if (!origin || origin !== allowedOrigin) {
-    //         console.log(origin);
-    //         return res.status(403).json({ error: 'Origin not allowed' });
-    //     }
+        if (!origin || origin !== allowedOrigin) {
+            console.log(origin);
+            return res.status(403).json({ error: 'Origin not allowed' });
+        }
       
-    //     next();
-    // });
+        next();
+    });
   
     server.use((req, res, next) => {
       console.log(req.url);
@@ -679,7 +679,7 @@ const initializeServer = () => {
                         //logging the operation
                         await db.collection('logs')
                         .insertOne({
-                            text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${result.grade} was added`,
+                            text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${req.body.grade} was added`,
                             admin: req.username,
                             method: 'ADD',
                             date: Date.now()
@@ -748,7 +748,7 @@ const initializeServer = () => {
                 //logging the operation
                 await db.collection('logs')
                 .insertOne({
-                    text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${result.grade} was edited`,
+                    text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${req.body.grade} was edited`,
                     admin: req.username,
                     method: 'UPDATE',
                     date: Date.now()
