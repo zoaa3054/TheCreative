@@ -10,6 +10,7 @@ import Students from "../Components/Students";
 import AddLecture from "../Components/AddLecture";
 import Logs from "../Components/Logs";
 import Admins from "../Components/Admins";
+import Profit from "../Components/Profit";
 
 const AdminContentOutlet = ({ backend, theme, selectedComponent, isSideBarOpen, setBuyingAlert})=>{
     const [settingsChange, setSettingsChange] = useState(0);
@@ -35,6 +36,10 @@ const AdminContentOutlet = ({ backend, theme, selectedComponent, isSideBarOpen, 
 
             }
             {
+                selectedComponent == "profit" &&  <Profit  backend={backend} theme={theme} isSideBarOpen={isSideBarOpen}></Profit>
+
+            }
+            {
                 selectedComponent == "logs" &&  <Logs backend={backend} theme={theme} isSideBarOpen={isSideBarOpen}></Logs>
 
             }
@@ -54,8 +59,7 @@ const AdminContentOutlet = ({ backend, theme, selectedComponent, isSideBarOpen, 
 export default AdminContentOutlet;
 
 const Container = styled.div`
-    /* margin-top: 5rem; */
-    /* height: 100%; */
+    
     width: 100%;
     display: flex;
     flex-direction: column;

@@ -81,6 +81,12 @@ const StudentHomePageLayout = ({ backend })=>{
                     </Component>
                     <Component theme={theme}
                         style={{
+                            fontWeight: selectedComponent=='profit'?"bolder":"normal"}}
+                            onClick={()=>setSelectedComponent('profit')}>
+                                Profit
+                    </Component>
+                    <Component theme={theme}
+                        style={{
                             fontWeight: selectedComponent=='profile'?"bolder":"normal"}}
                             onClick={()=>setSelectedComponent('profile')}>
                                 Profile

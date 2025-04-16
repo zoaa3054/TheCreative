@@ -393,6 +393,20 @@ const initializeServer = () => {
         })
     });
 
+    server.get('/profit', checkAdminJWT, (req, res)=>{
+        db.collection('profit')
+        .find({})
+        .toArray()
+        .then((result)=>{
+            if(result) res.status(200).json(result);
+            else res.status(404).json({error: "Profit not found"})
+        })
+        .catch((error)=>{
+            console.log(error);
+            res.status(500).json({error: "Could not fetch profit"})
+        })
+    });
+
 
     // POST (add) some user in signup
     server.post('/signup', (req, res)=>{
@@ -619,15 +633,23 @@ const initializeServer = () => {
             await db.collection('users')
             .updateOne({username: req.body.username}, {$inc: {cash: parseInt(req.body.amount, 10)}})
             .then(async (_)=>{
-                //logging the operation
-                await db.collection('logs')
-                .insertOne({
-                    text: `The wallet of ${req.body.username} was edited by ${req.body.amount}`,
-                    admin: req.username,
-                    method: 'UPDATE',
-                    date: Date.now()
+                await db.collection('profit')
+                .updateOne({month: getCurrentMonth()}, {$inc: {amount: req.body.amount}})
+                .then(async(result)=>{
+                    if(!result){
+                        await db.collection('profit')
+                        .insertOne({month: getCurrentMonth(), amount: req.body.amount})
+                    }
+                    //logging the operation
+                    await db.collection('logs')
+                    .insertOne({
+                        text: `The wallet of ${req.body.username} was edited by ${req.body.amount}`,
+                        admin: req.username,
+                        method: 'UPDATE',
+                        date: Date.now()
+                    })
+                    .then((_)=>res.status(200).json({mssg: "User wallet is edited successfuly"}))
                 })
-                .then((_)=>res.status(200).json({mssg: "User wallet is edited successfuly"}))
             })
             .catch((error)=>{
                 console.error(error);
