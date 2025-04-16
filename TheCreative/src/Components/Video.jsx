@@ -35,7 +35,6 @@ const Video = ({ link, theme, describtion }) => {
 
   return (
     <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center", height: "100%"}}>
-      <div style={{position:"absolute", left:"0" ,zIndex: "2",width: "100%", height:"5rem", backgroundColor:theme=='light'?"white":"#181818"}}></div>
       {videoID ? (
         <div style={{ marginTop: "20px", width:"100%", height:"100%", textAlign:"start"}}>
           <YouTube videoId={videoID} opts={videoOptions}/>
