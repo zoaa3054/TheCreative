@@ -636,7 +636,7 @@ const initializeServer = () => {
                 await db.collection('profit')
                 .updateOne({month: getCurrentMonth()}, {$inc: {amount: parseInt(req.body.amount)}})
                 .then(async(result)=>{
-                    if(!result){
+                    if(result.modifiedCount == 0){
                         await db.collection('profit')
                         .insertOne({month: getCurrentMonth(), amount: parseInt(req.body.amount)})
                     }
