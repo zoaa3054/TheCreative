@@ -679,7 +679,7 @@ const initializeServer = () => {
                         //logging the operation
                         await db.collection('logs')
                         .insertOne({
-                            text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} was added`,
+                            text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${result.grade} was added`,
                             admin: req.username,
                             method: 'ADD',
                             date: Date.now()
@@ -748,7 +748,7 @@ const initializeServer = () => {
                 //logging the operation
                 await db.collection('logs')
                 .insertOne({
-                    text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} was edited`,
+                    text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${result.grade} was edited`,
                     admin: req.username,
                     method: 'UPDATE',
                     date: Date.now()
@@ -845,7 +845,7 @@ const initializeServer = () => {
                         //logging the operation
                         await db.collection('logs')
                         .insertOne({
-                            text: `The lecture number ${result.number} in ${result.field} U${result.unit} of id: ${req.body._id} was deleted`,
+                            text: `The lecture number ${result.number} in ${result.field} U${result.unit} in ${result.grade} of id: ${req.body._id} was deleted`,
                             admin: req.username,
                             method: 'DELETE',
                             date: Date.now()
