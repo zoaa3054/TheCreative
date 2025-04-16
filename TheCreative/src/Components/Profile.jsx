@@ -21,6 +21,10 @@ const Profile = ({backend, theme, isAdmin}) => {
     toast.success(mssg);
   }
 
+  const notifyError = (mssg)=>{
+    toast.error(mssg);
+  }
+
   const getUser = async()=>{
     await fetch(`${backend}/user/info`,{
         method:"GET",
@@ -133,7 +137,7 @@ const Profile = ({backend, theme, isAdmin}) => {
           {isEditing ? (
               <>
                   <label htmlFor="studentPhone" style={{marginRight:"1rem"}}>Student Phone: </label>
-                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^\+20\d{10}$" onChange={handleChange} />
+                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^\+20\d{10}$" onInvalid={notifyError("Number must be in +201234567891 format")} onChange={handleChange} />
               </>
           ) : (
             <p>Student Phone:{user.studentPhone}</p>
@@ -143,7 +147,7 @@ const Profile = ({backend, theme, isAdmin}) => {
           {isEditing ? (
               <>
                   <label htmlFor="parentPhone" style={{marginRight:"1rem"}}>Parent Phone: </label>
-                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^\+20\d{10}$" onChange={handleChange} />
+                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^\+20\d{10}$" onInvalid={notifyError("Number must be in +201234567891 format")} onChange={handleChange} />
               </>
           ) : (
             <p>Parent Phone: {user.parentPhone}</p>
@@ -184,7 +188,7 @@ const Profile = ({backend, theme, isAdmin}) => {
           {isEditing && (
               <>
                   <label htmlFor="password" style={{marginRight:"1rem"}}>New Password: </label>
-                  <input type="password" name="password" minLength='8' value={isAdmin?admin.password:user.password} onChange={handleChange} required/>
+                  <input type="password" name="password" minLength='8' onInvalid={notifyError("Password must be at least 8 characters")} value={isAdmin?admin.password:user.password} onChange={handleChange} required/>
               </>
           )}
         </Info>

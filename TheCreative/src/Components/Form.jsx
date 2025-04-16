@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 import './FormStyle.css';
 
 
-const Form = ({ setUsedForm, backend })=>{
+const Form = ({usedForm, setUsedForm, backend })=>{
     const [formVariables, setFormVariables] = useState({city: State.getStatesOfCountry('EG')[0].name, grade: "M3"});
     const [error, setError] = useState({});
     const [numberOfLoginAttmpts, setNumberOfLoginAttmpts] = useState(0);
@@ -17,21 +17,29 @@ const Form = ({ setUsedForm, backend })=>{
     useEffect(()=>{
         let container = document.getElementById('container')
         if (container){
-            setTimeout(() => {
-                container.classList.add('sign-in')
+            let timer = setTimeout(() => {
+                if(usedForm == 'login') container.classList.add('sign-in')
+                else if(usedForm == 'signup') container.classList.add('sign-up')
             }, 200)
         }
+        return clearTimeout(timer);
     }, [])
+    
     const toggle = (form) => {
         if (form == 'login'){
+            setFormVariables({});
             container.classList.remove('sign-up');
             container.classList.add('sign-in');
         }
         else{
+            setFormVariables({
+                city: State.getStatesOfCountry('EG')[0].name,
+                grade: "M3"
+            });
             container.classList.remove('sign-in');
             container.classList.add('sign-up'); 
         }
-        changeForm(form)
+        setUsedForm(form);
     }
     
 
@@ -42,110 +50,38 @@ const Form = ({ setUsedForm, backend })=>{
     const notifySuccess = (message)=>{
         toast.success(message);
     }
-    const changeForm = (newForm)=>{
-        if (newForm == 'login'){
-            setFormVariables({});
-        }
-        else{
-            setFormVariables({
-                city: State.getStatesOfCountry('EG')[0].name,
-                grade: "M3"
-            });
-        }
-        setUsedForm(newForm);
-    }
-
-    const checkSignupInput = ()=>{
-        setError({});
-        
-        let allFine = true;
-        let errorText = '';
-
-        for (let index in Object.keys(formVariables)){
-            let name = Object.keys(formVariables)[index];
-            let phone = '';
-            switch(name){
-                case 'username':
-                        if (!/^[^A-Z\s]+$/.test(formVariables[name])){
-                            errorText = "Username can not contain CAPITAL letters or spaces."
-                            setError({...error, [name]:errorText});
-                            notifyError(errorText);
-                            allFine = false;
-                        }
-                    break;
-                case 'password':
-                    if (formVariables[name].length<8){
-                        errorText = "Password must be at least 8 characters";
-                        setError({...error, [name]:errorText});
-                        notifyError(errorText);
-                        allFine = false;
-                    }
-                    break;
-                case 'studentPhone':
-                    phone = formVariables[name];
-                    if (!/^\+20/.test(phone))
-                        phone = '+2' + phone;
-                    if (!/^\+20\d{10}$/.test(phone)){
-                        errorText = "Student number is not correct";
-                        setError({...error, [name]:errorText});
-                        notifyError(errorText);
-                        allFine = false;
-                    }
-                    else setFormVariables({...formVariables, [name]: phone});
-                    break;
-                case 'parentPhone':
-                    phone = formVariables[name];
-                    if (!/^\+20/.test(phone))
-                        phone = '+2' + phone;
-                    if (!/^\+20\d{10}$/.test(phone)){
-                        errorText = "Parent number is not correct";
-                        setError({...error, [name]:errorText});
-                        notifyError(errorText);
-                        allFine = false;
-                    }
-                    else setFormVariables({...formVariables, [name]: phone});
-                    break;
-            }
-        }
-        // check that student and parent phone numbers are not the same
-        if (formVariables['studentPhone'] == formVariables['parentPhone']){
-            errorText = "Parent phone number can not be the same as student phone number";
-            setError({...error, parentPhone: errorText})
-            notifyError(errorText);
-            allFine = false;
-        }
-        return allFine;
-    }
+ 
 
     const signup = async(e)=>{
+        e.preventDefault();
         setIsLoading(true);
-        if (checkSignupInput()){
-            await fetch(`${backend}/signup`, {
-                method:"POST",
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formVariables)
-            })
-            .then((res)=>{
-                if (res.status == 201){
-                    const token =  res.headers.get('authorization').split(" ")[1];
-                    sessionStorage.setItem("theCreativeAuthToken", token);
-                    notifySuccess("Welcome to TheCreative in math");
-                    // navibage to home page
-                    navigator('/home');
-                } 
-                else if (res.status == 409) notifyError("User already exists");
-                else notifyError("Something went wrong, Please contact the systems administrators")
-                return res.json();
-            })
-            .then((data)=>console.log(data))
-            .catch((error)=>console.log(error));
-        }
+        await fetch(`${backend}/signup`, {
+            method:"POST",
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formVariables)
+        })
+        .then((res)=>{
+            if (res.status == 201){
+                const token =  res.headers.get('authorization').split(" ")[1];
+                sessionStorage.setItem("theCreativeAuthToken", token);
+                notifySuccess("Welcome to TheCreative in math");
+                // navibage to home page
+                navigator('/home');
+            } 
+            else if (res.status == 409) notifyError("User already exists");
+            else notifyError("Something went wrong, Please contact the systems administrators")
+            return res.json();
+        })
+        .then((data)=>console.log(data))
+        .catch((error)=>console.log(error));
+        
         setIsLoading(false);
     }
 
     const login = async(e)=>{
+        e.preventDefault();
         setIsLoading(true);
 
         await fetch(`${backend}/login`, {
@@ -163,7 +99,7 @@ const Form = ({ setUsedForm, backend })=>{
             if (res.status == 404){
                 if (numberOfLoginAttmpts > 5){
                     notifyError("It appears that this user is not registerd in the system, Please Signup first!");
-                    changeForm('signup');
+                    toggle('signup');
                     setNumberOfLoginAttmpts(0);
                 }else{
                     notifyError("Wrong username or password");
@@ -198,6 +134,11 @@ const Form = ({ setUsedForm, backend })=>{
         const name = variable.target.name;
         const value = variable.target.value;
 
+        setError((prev)=>{
+            delete prev[name];
+            return prev;
+        })
+
         setFormVariables({...formVariables, [name]: value});
     }
 
@@ -208,18 +149,30 @@ const Form = ({ setUsedForm, backend })=>{
                 {/* <!-- SIGN UP --> */}
                 <div className="col align-items-center flex-col sign-up">
                     <div className="form-wrapper align-items-center" >
-                        <div className="form sign-up" >
+                        <form onSubmit={signup} className="form sign-up" >
                             <div className="input-group">
                                 <i className='bx bxs-user'></i>
-                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^[^A-Z\s]+$" onInvalid={()=>{
+                                    let errorText = "Username can't contain capital characters"
+                                    setError({...error, ['username']:errorText});
+                                    notifyError(errorText);
+                                    }} style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bx-mail-send'></i>
-                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^\+20\d{10}$" onInvalid={()=>{
+                                    let errorText = "Number must be in +201234567891 format"
+                                    setError({...error, ['studentPhone']:errorText});
+                                    notifyError(errorText);
+                                    }}  style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^\+20\d{10}$" onInvalid={()=>{
+                                    let errorText = "Number must be in +201234567891 format"
+                                    setError({...error, ['parentPhone']:errorText});
+                                    notifyError(errorText);
+                                    }}  style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
@@ -241,9 +194,13 @@ const Form = ({ setUsedForm, backend })=>{
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} minLength='8' onInvalid={()=>{
+                                    let errorText = "Password must be at least 8 characters"
+                                    setError({...error, ['password']:errorText});
+                                    notifyError(errorText);
+                                    }}  style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
-                            <button onClick={signup} disabled={isLoading}>
+                            <button type="submit" disabled={isLoading}>
                                 {isLoading?<Spinner size={15}/>:"Sign up"}
                             </button>
                            
@@ -256,7 +213,7 @@ const Form = ({ setUsedForm, backend })=>{
                                     Log in here
                                 </Link>
                             </p>
-                        </div>
+                        </form>
                     </div>
                 
                 </div>
@@ -264,7 +221,7 @@ const Form = ({ setUsedForm, backend })=>{
                 {/* <!-- SIGN IN --> */}
                 <div className="col align-items-center flex-col sign-in">
                     <div className="form-wrapper align-items-center">
-                        <div className="form sign-in">
+                        <form onSubmit={login} className="form sign-in">
                             <div className="input-group">
                                 <i className='bx bxs-user'></i>
                                 <input style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
@@ -273,7 +230,7 @@ const Form = ({ setUsedForm, backend })=>{
                                 <i className='bx bxs-lock-alt'></i>
                                 <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
-                            <button onClick={login} disabled={isLoading}>
+                            <button type="submit" disabled={isLoading}>
                                 {isLoading?<Spinner size={15}/>:"login"}
                             </button>
                             <p>
@@ -284,7 +241,7 @@ const Form = ({ setUsedForm, backend })=>{
                                     Sign up here
                                 </Link>
                             </p>
-                        </div>
+                        </form>
                     </div>
                     <div className="form-wrapper">
             
