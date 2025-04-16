@@ -284,10 +284,10 @@ const StudentHomePageLayout = ({ backend })=>{
                     </NavBarIcons>
                     <NavBarIcons>
                         <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
-                            {notifSwitch?
+                            {/* {notifSwitch?
                                 <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>
                                 :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>    
-                            }
+                            } */}
                         <Wallet>
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
