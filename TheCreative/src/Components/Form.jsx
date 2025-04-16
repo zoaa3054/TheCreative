@@ -12,7 +12,8 @@ const Form = ({ setUsedForm, backend })=>{
     const [numberOfLoginAttmpts, setNumberOfLoginAttmpts] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const navigator = useNavigate();
-
+    const [focus, setFocus] = useState(false);
+    
     useEffect(()=>{
         let container = document.getElementById('container')
         if (container){
@@ -206,23 +207,23 @@ const Form = ({ setUsedForm, backend })=>{
             <div className="row">
                 {/* <!-- SIGN UP --> */}
                 <div className="col align-items-center flex-col sign-up">
-                    <div className="form-wrapper align-items-center">
-                        <div className="form sign-up">
+                    <div className="form-wrapper align-items-center" >
+                        <div className="form sign-up" >
                             <div className="input-group">
                                 <i className='bx bxs-user'></i>
-                                <input style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bx-mail-send'></i>
-                                <input style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <input style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <select name="city" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.city} onChange={changeFormVariable} placeholder="City" required>
+                                <select onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} name="city" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.city} onChange={changeFormVariable} placeholder="City" required>
                                     {State.getStatesOfCountry('EG').map((state, key)=>(
                                         <option key={key}>{state.name}</option>
                                     ))}
@@ -230,7 +231,7 @@ const Form = ({ setUsedForm, backend })=>{
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <select name="grade" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.grade} onChange={changeFormVariable} placeholder="Grade" required>
+                                <select onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} name="grade" style={{backgroundColor:"#a4a4a46a", outline:"none", padding:"0.5rem", cursor:"pointer"}} value={formVariables.grade} onChange={changeFormVariable} placeholder="Grade" required>
                                     <option value="M1">Middle 1</option>
                                     <option value="M2">Middle 2</option>
                                     <option value="M3">Middle 3</option>
@@ -240,7 +241,7 @@ const Form = ({ setUsedForm, backend })=>{
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
                             <button onClick={signup} disabled={isLoading}>
                                 {isLoading?<Spinner size={15}/>:"Sign up"}
@@ -293,7 +294,7 @@ const Form = ({ setUsedForm, backend })=>{
             </div>
             {/* <!-- END FORM SECTION --> */}
             {/* <!-- CONTENT SECTION --> */}
-            <div className="row content-row">
+            <div className="row content-row" style={{zIndex:"1"}}>
                 {/* <!-- SIGN IN CONTENT --> */}
                 <div className="col align-items-center flex-col">
                     <div className="text sign-in">
@@ -312,8 +313,8 @@ const Form = ({ setUsedForm, backend })=>{
                     <div className="img sign-up">
                     
                     </div>
-                    <div className="text sign-up">
-                        <h2>
+                    <div className="text sign-up" >
+                        <h2 style={{display: focus?"none":"flex"}}>
                             Join with us
                         </h2>
         

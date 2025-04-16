@@ -29,8 +29,8 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
     const navigate = useNavigate();
     const [buyFormOpen, setBuyFormOpen] = useState(false);
     const [lectureAboutToBeBought, setLectureAboutToBeBought] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSubmiting, setIsSubmiting] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmiting, setIsSubmiting] = useState(false);
 
     const notifyError = (mssg) =>{
         toast.error(mssg);

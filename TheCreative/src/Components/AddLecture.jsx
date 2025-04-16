@@ -15,6 +15,8 @@ const AddLecture = ({backend, theme}) =>{
     const [isRevision, setIsRevision] = useState(false);
     const [isCustomized, setIsCustomized] = useState(false);
     const [isSubmiting, setIsSubmiting] = useState(false);
+    const [explainIframLoad, setExplainIframLoad] = useState(false);
+    const [HWIframLoad, setHWIframLoad] = useState(false);
 
     const notifySuccess = (mssg) =>{
         toast.success(mssg);
@@ -28,12 +30,15 @@ const AddLecture = ({backend, theme}) =>{
     const addLecture = async(e)=>{
         e.preventDefault();
         setIsSubmiting(true);
-        if (explainationError){
+
+        if (!explainIframLoad && explainationError){
             notifyError("Please resolve the error in the explaination video link");
+            setIsSubmiting(false);
             return;
         }
-        if (HWError){
+        if (!HWIframLoad && HWError){
             notifyError("Please resolve the error in the hw video link");
+            setIsSubmiting(false);
             return;
         }
         console.log(formVariables)
@@ -116,6 +121,10 @@ const AddLecture = ({backend, theme}) =>{
         setHWError(null);
         let name = entry.target.name;
         let value = entry.target.value;
+
+        if(name == 'explainationLink') setExplainIframLoad(false);
+        if(name =='hwLink') setHWIframLoad(false);
+
         if (name == "unit") value = parseInt(value);
         if (name == "number") value = parseInt(value);
         if (name == "cost") value = parseInt(value);
@@ -182,7 +191,7 @@ const AddLecture = ({backend, theme}) =>{
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.explainationLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <iframe allow="fullscreen" onLoad={()=>setExplainIframLoad(true)} allowfullscreen height="100%" src={formVariables.explainationLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
                 ):(<></>)}
             </Preveiw>
 
@@ -200,7 +209,7 @@ const AddLecture = ({backend, theme}) =>{
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.hwLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <iframe allow="fullscreen" onLoad={()=>setHWIframLoad(true)} allowfullscreen height="100%" src={formVariables.hwLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
 
                 ):(<></>)}
             </Preveiw>

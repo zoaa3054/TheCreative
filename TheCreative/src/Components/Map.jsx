@@ -1,6 +1,6 @@
-const MapNode = ({ label, filled , onIt}) => {
+const MapNode = ({ label, filled , onIt, number , setStage}) => {
     return (
-      <div style={{ display: "flex", whiteSpace:'nowrap' }}>
+      <div style={{ display: "flex", whiteSpace:'nowrap' }} onClick={()=>setStage(number)}>
         <div
           style={{
             width: "16px",
@@ -25,12 +25,12 @@ const MapNode = ({ label, filled , onIt}) => {
     );
   };
   
-  const Map = ({ stage }) => {
+  const Map = ({ stage, setStage }) => {
     return (
       <div style={{ display: "flex", flexDirection: "column",padding: "20px" }}>
         {/* Exam */}
         <div style={{ position: "relative" }}>
-          <MapNode label="Exam" filled={stage>=1} onIt={stage==1}/>
+          <MapNode label="Exam" filled={stage>=1} onIt={stage==1} number={1} setStage={setStage}/>
           <div
             style={{
               width: "2px",
@@ -43,7 +43,7 @@ const MapNode = ({ label, filled , onIt}) => {
   
         {/* HW Check */}
         <div style={{ position: "relative" }}>
-          <MapNode label="HW Check" filled={stage>=2} onIt={stage==2}/>
+          <MapNode label="HW Check" filled={stage>=2} onIt={stage==2} number={2} setStage={setStage}/>
           <div
             style={{
               width: "2px",
@@ -56,7 +56,7 @@ const MapNode = ({ label, filled , onIt}) => {
   
         {/* Lecture */}
         <div style={{ position: "relative" }}>
-          <MapNode label="Lecture" filled={stage>=3} onIt={stage==3}/>
+          <MapNode label="Lecture" filled={stage>=3} onIt={stage==3} number={3} setStage={setStage}/>
           <div
             style={{
               width: "2px",
@@ -68,7 +68,7 @@ const MapNode = ({ label, filled , onIt}) => {
         </div>
   
         {/* HW */}
-        <MapNode label="HW" filled={stage==4} onIt={stage==4}/>
+        <MapNode label="HW" filled={stage==4} onIt={stage==4} number={4} setStage={setStage}/>
       </div>
     );
   };

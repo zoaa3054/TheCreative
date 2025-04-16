@@ -109,7 +109,7 @@ const LecturePage = ()=>{
             <Controller isOpen={isControllerOpen} theme={theme}>
                 <BackButton theme={theme} onClick={()=>setIsControllerOpen(prev=>!prev)}>...</BackButton>
                 <div>
-                    <Map stage={stage}/>
+                    <Map stage={stage} setStage={setStage}/>
                     <Buttons>
                         <Button onClick={decrementStage} disabled={stage==1}>Back</Button>
                         <Button onClick={incrementStage} disabled={stage==4}>Next</Button>
@@ -152,6 +152,7 @@ const Content = styled.div`
 
 const Controller = styled.div`
     flex-shrink: 0;
+    z-index: 2;
     display: flex;
     flex-direction: row;
     justify-content: start;

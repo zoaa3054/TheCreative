@@ -28,13 +28,15 @@ const Video = ({ link, theme, describtion }) => {
     const regex =
       /(?:youtube\.com\/(?:[^\/]+\/[^\/]+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
     const match = url.match(regex);
-    return match ? match[1] : null;
+    let r = match ? match[1] : null;
+    return r;
   };
 
 
   return (
     <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center", height: "100%"}}>
-      {!videoID ? (
+      <div style={{position:"absolute", left:"0" ,zIndex: "2",width: "100%", height:"5rem", backgroundColor:theme=='light'?"white":"#181818"}}></div>
+      {videoID ? (
         <div style={{ marginTop: "20px", width:"100%", height:"100%", textAlign:"start"}}>
           <YouTube videoId={videoID} opts={videoOptions}/>
           <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
@@ -43,7 +45,7 @@ const Video = ({ link, theme, describtion }) => {
       ):
       link?
       <div style={{width:"100%", height:"100%",  display:"flex", flexDirection:"column", alignItems: "start"}}>
-        <iframe allow="fullscreen" allowfullscreen height="100%" src="https://streamable.com/e/cg87sp?loop=0" width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+        <iframe allow="fullscreen" allowfullscreen height="100%" src={link} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
         <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
         <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?describtion:""}</p>
         
