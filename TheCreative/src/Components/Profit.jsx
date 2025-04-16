@@ -62,7 +62,7 @@ const Profit = ( { backend, theme, isSideBarOpen } )=>{
     return(
         <Container>
             {isLoading?
-            <Loader/>:profit.length>0 && 
+            <Loader/>: 
             <TableWrapper>
                 <StyledTable theme={theme}>
                     <thead>
@@ -78,15 +78,17 @@ const Profit = ( { backend, theme, isSideBarOpen } )=>{
                         <td>{item.amount}</td>
                         </tr>
                     ))}
+                    {!isLoading&&
                         <tr>
                         <td>Total</td>
                         <td>{totalAmount}</td>
                         </tr>
+                    }
                     </tbody>
                 </StyledTable>
             </TableWrapper>
             }
-            {profit.length==0 && !isLoading &&<img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>}
+            {/* {profit.length==0 && !isLoading &&<img src={noDataFound} alt="" style={{width:"50%", height:"80%"}}/>} */}
         </Container>
     );
 };

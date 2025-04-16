@@ -634,11 +634,11 @@ const initializeServer = () => {
             .updateOne({username: req.body.username}, {$inc: {cash: parseInt(req.body.amount, 10)}})
             .then(async (_)=>{
                 await db.collection('profit')
-                .updateOne({month: getCurrentMonth()}, {$inc: {amount: req.body.amount}})
+                .updateOne({month: getCurrentMonth()}, {$inc: {amount: parseInt(req.body.amount)}})
                 .then(async(result)=>{
                     if(!result){
                         await db.collection('profit')
-                        .insertOne({month: getCurrentMonth(), amount: req.body.amount})
+                        .insertOne({month: getCurrentMonth(), amount: parseInt(req.body.amount)})
                     }
                     //logging the operation
                     await db.collection('logs')
