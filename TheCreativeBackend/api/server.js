@@ -534,6 +534,7 @@ const initializeServer = () => {
                     term: lecture.term,
                     description: lecture.explainDescribtion,
                     date: Date.now(),
+                    specialMonth: lecture.specialMonth,
                     mark: ''
                 }}})
                 .then((_)=>{

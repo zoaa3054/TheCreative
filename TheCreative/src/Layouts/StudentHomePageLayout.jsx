@@ -215,7 +215,27 @@ const StudentHomePageLayout = ({ backend })=>{
             setNotifSwitch(false);
         }
         else{
-            notificationPermissionPrompt();
+            if ('Notification' in window){
+                Notification.requestPermission()
+                .then(async(permission)=>{
+                    if(permission == 'granted'){
+                        let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
+                        let sw = await navigator.serviceWorker.ready;
+                        let push = await sw.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: serverPublicKey
+                        })
+                        
+                        sendTokenToBackend(push);
+                        setNotifSwitch(true);
+                    }
+                    else{
+                        console.log("couldn't enable notifications");
+                        notifyError("Something went wrong, couldn't enable notifications");
+                    }
+                })
+            }
+            else alert('no notification')
         }
     }
 
