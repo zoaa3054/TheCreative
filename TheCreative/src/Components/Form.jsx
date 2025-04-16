@@ -294,7 +294,7 @@ const Form = ({ setUsedForm, backend })=>{
             </div>
             {/* <!-- END FORM SECTION --> */}
             {/* <!-- CONTENT SECTION --> */}
-            <div className="row content-row" style={{zIndex:"1"}}>
+            <div className="row content-row">
                 {/* <!-- SIGN IN CONTENT --> */}
                 <div className="col align-items-center flex-col">
                     <div className="text sign-in">
