@@ -23,7 +23,7 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                 else if(usedForm == 'signup') container.classList.add('sign-up')
             }, 200)
         }
-        return clearTimeout(timer);
+        return ()=> clearTimeout(timer);
     }, [])
     
     const toggle = (form) => {
