@@ -16,8 +16,9 @@ const Form = ({usedForm, setUsedForm, backend })=>{
     
     useEffect(()=>{
         let container = document.getElementById('container')
+        let timer;
         if (container){
-            let timer = setTimeout(() => {
+            timer = setTimeout(() => {
                 if(usedForm == 'login') container.classList.add('sign-in')
                 else if(usedForm == 'signup') container.classList.add('sign-up')
             }, 200)
