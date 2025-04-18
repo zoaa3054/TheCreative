@@ -106,7 +106,6 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             } 
             else if (res.status == 409) notifyError("Admin already exists");
             else notifyError("Something went wrong, Please contact the system's developer")
-            return res.json();
         })
         .catch((error)=>console.log(error));
         
