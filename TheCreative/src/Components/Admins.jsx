@@ -228,7 +228,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             >              
                 <FormButton type="button" onClick={()=>setIsAddingAdmin(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"1.5rem"}}>Add Admin</p>
-                <form onSubmit={addAdmin}>
+                <AddAdminForm onSubmit={addAdmin}>
                 <label style={{marginTop:"1rem", marginBottom:"1rem",fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
                 <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" pattern="^[^A-Z\s]+$" onInvalid={()=>{
                                     let errorText = "Username can't contain capital characters"
@@ -245,7 +245,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 <FormButton type="submit" disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Add"}    
                 </FormButton>
-                </form>
+                </AddAdminForm>
             </Modal>
         </Container>
     );
@@ -433,3 +433,9 @@ const FormButton = styled.button`
         border: 1px solid black;
     }
 `
+
+const AddAdminForm = styled.form`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+`;
