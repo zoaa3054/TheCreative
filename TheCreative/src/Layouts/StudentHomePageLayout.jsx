@@ -166,7 +166,8 @@ const StudentHomePageLayout = ({ backend })=>{
         setIsSideBarOpen(prev=>!prev);
     }
 
-    const switchTheme = ()=>{
+    const switchTheme = (e)=>{
+        e.preventDefault();
         if (theme == 'light') {
             setTheme('dark');
             localStorage.setItem("TheCreativeTheme", 'dark');
@@ -283,7 +284,7 @@ const StudentHomePageLayout = ({ backend })=>{
                         <img src={sideBarIcon} alt="" style={{width:"2rem", height:"2rem", cursor:"pointer", margin: "1rem"}} onClick={toggleSideBar}/>
                     </NavBarIcons>
                     <NavBarIcons>
-                        <ThemeButton type="button" src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
+                        <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
                             {/* {notifSwitch?
                                 <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>
                                 :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>    

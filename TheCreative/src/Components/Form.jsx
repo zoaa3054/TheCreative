@@ -108,13 +108,13 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                     setNumberOfLoginAttmpts(prev=>prev+1);
                 }
             }
-            else if (res.status == 500 || res.status == 422) {
-                notifyError("Something went wrong, please contact system administrator.");
-                console.log(res)
-            }
             else if (res.status == 200){
                 const token =  res.headers.get('authorization').split(" ")[1];
                 sessionStorage.setItem("theCreativeAuthToken", token);
+            }
+            else {
+                notifyError("Something went wrong, please contact system administrator.");
+                console.log(res)
             }
             return res.json();
         })
