@@ -166,8 +166,7 @@ const StudentHomePageLayout = ({ backend })=>{
         setIsSideBarOpen(prev=>!prev);
     }
 
-    const switchTheme = (e)=>{
-        e.preventDefault();
+    const switchTheme = ()=>{
         if (theme == 'light') {
             setTheme('dark');
             localStorage.setItem("TheCreativeTheme", 'dark');
@@ -293,7 +292,7 @@ const StudentHomePageLayout = ({ backend })=>{
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
                         </Wallet>
-                        <LogoutButton type="button" onClick={logout}>LOG OUT</LogoutButton>
+                        <LogoutButton onClick={logout}>LOG OUT</LogoutButton>
                     </NavBarIcons>
                 </NavBar>
                 <StudentContentOutlet setBuyingAlert={setBuyingAlert} theme={theme} isSideBarOpen={isSideBarOpen} backend={backend} selectedComponent={selectedComponent}/>

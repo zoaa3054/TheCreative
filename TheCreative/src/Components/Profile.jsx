@@ -11,6 +11,7 @@ const Profile = ({backend, theme, isAdmin}) => {
   const [admin, setAdmin] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [error, setError] = useState({});
 
   useEffect(()=>{
     if (isAdmin) getAdmin();
@@ -66,6 +67,7 @@ const Profile = ({backend, theme, isAdmin}) => {
   }
 
   const editUserInfo = async()=>{
+
     setIsSubmiting(true);
     await fetch(`${backend}/edit/user/info`,{
         method:"POST",
@@ -78,6 +80,10 @@ const Profile = ({backend, theme, isAdmin}) => {
     .then((result)=>{
         if (result.status == 200) {
             setIsEditing(!isEditing);
+            setUser((prev)=>{
+              delete prev.password
+              return prev
+            })
             notifySuccess("User info edited Successfuly!");
         }
         else throw Error("Couldn't edit user info")
@@ -102,6 +108,10 @@ const Profile = ({backend, theme, isAdmin}) => {
     .then((result)=>{
         if (result.status == 200) {
             setIsEditing(!isEditing);
+            setAdmin((prev)=>{
+              delete prev.password
+              return prev
+            })
             notifySuccess("Admin info edited Successfuly!");
         }
         else throw Error("Couldn't edit admin info")
@@ -113,6 +123,10 @@ const Profile = ({backend, theme, isAdmin}) => {
   }
 
   const handleChange = (e) => {
+    setError((prev)=>{
+      delete prev[e.target.name];
+      return prev;
+    })
     if (isAdmin) setAdmin({ ...admin, [e.target.name]: e.target.value });
     else setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -129,31 +143,39 @@ const Profile = ({backend, theme, isAdmin}) => {
     isLoading?
       <Loader/>:
     <ProfileContainer theme={theme} onSubmit={handleButtonClick}>
-      <Info>
+      <Info theme={theme}>
           <h3>Username: {isAdmin?admin.username:user.username}</h3>
       </Info>
       {!isAdmin &&<>
-        <Info>
+        <Info theme={theme}>
           {isEditing ? (
               <>
                   <label htmlFor="studentPhone" style={{marginRight:"1rem"}}>Student Phone: </label>
-                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^\+20\d{10}$" onInvalid={notifyError("Number must be in +201234567891 format")} onChange={handleChange} />
+                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^\+20\d{10}$" onInvalid={()=>{
+                    let errorText = "Number must be in +201234567891 format"
+                    setError({...error, ['studentPhone']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} onChange={handleChange} />
               </>
           ) : (
             <p>Student Phone:{user.studentPhone}</p>
           )}
         </Info>
-        <Info>
+        <Info theme={theme}>
           {isEditing ? (
               <>
                   <label htmlFor="parentPhone" style={{marginRight:"1rem"}}>Parent Phone: </label>
-                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^\+20\d{10}$" onInvalid={notifyError("Number must be in +201234567891 format")} onChange={handleChange} />
+                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^\+20\d{10}$" onInvalid={()=>{
+                    let errorText = "Number must be in +201234567891 format"
+                    setError({...error, ['parentPhone']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} onChange={handleChange} />
               </>
           ) : (
             <p>Parent Phone: {user.parentPhone}</p>
           )}
         </Info>
-        <Info>
+        <Info theme={theme}>
           {isEditing ? (
               <>
                   <label htmlFor="grade" style={{marginRight:"1rem"}}>Grade: </label>
@@ -169,7 +191,7 @@ const Profile = ({backend, theme, isAdmin}) => {
             <p>Grade: {user.grade}</p>
           )}
         </Info>
-        <Info>
+        <Info theme={theme}>
           {isEditing ? (
               <>
                   <label htmlFor="city" style={{marginRight:"1rem"}}>City:</label>
@@ -184,15 +206,19 @@ const Profile = ({backend, theme, isAdmin}) => {
           )}
         </Info>
       </>}
-      <Info>
+      <Info theme={theme}>
           {isEditing && (
               <>
                   <label htmlFor="password" style={{marginRight:"1rem"}}>New Password: </label>
-                  <input type="password" name="password" minLength='8' onInvalid={notifyError("Password must be at least 8 characters")} value={isAdmin?admin.password:user.password} onChange={handleChange} required/>
+                  <input type="password" name="password" minLength='8' onInvalid={()=>{
+                                    let errorText = "Password must be at least 8 characters"
+                                    setError({...error, ['password']:errorText});
+                                    notifyError(errorText);
+                                    }} style = {{border: error['password']?"2px solid red":"2px solid transparent"}} value={isAdmin?admin.password:user.password} onChange={handleChange} required={isAdmin}/>
               </>
           )}
         </Info>
-      <Button type="submit" disabled={isSubmiting}>
+      <Button disabled={isSubmiting} type="submit">
         {isSubmiting?<Spinner size={15}/>:isEditing ? "Save" : "Edit Profile"}
       </Button>
     </ProfileContainer>
@@ -222,6 +248,7 @@ const Info = styled.div`
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    background-color: ${({theme})=>theme=='light'?"#00000029":"#ccc"};
   }
 `;
 

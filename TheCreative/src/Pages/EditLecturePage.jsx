@@ -178,6 +178,13 @@ const EditLecturePage = () =>{
         setFormVariables({...formVariables, [name]: value});
     }
 
+    const formatLink = (link)=>{
+        const matchLink = link.match(/https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{25,})\//);
+        if(matchLink)
+            return matchLink[0]+"preview";
+        return link;
+    }
+
     return(
         isLoading?
             <Loader/>:
@@ -240,7 +247,7 @@ const EditLecturePage = () =>{
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.explainationLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
                 ):(<></>)}
             </Preveiw>
 
@@ -258,7 +265,7 @@ const EditLecturePage = () =>{
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formVariables.hwLink} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
 
                 ):(<></>)}
             </Preveiw>
