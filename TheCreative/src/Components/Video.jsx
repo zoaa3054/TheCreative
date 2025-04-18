@@ -44,6 +44,7 @@ const Video = ({ link, theme, describtion }) => {
       ):
       link?
       <div style={{width:"100%", height:"100%",  display:"flex", flexDirection:"column", alignItems: "start"}}>
+        <div style={{width:"100%", height:"5rem", position:"absolute", backgroundColor:theme=='light'?"white":"#181818"}}/>
         <iframe allow="fullscreen" allowfullscreen height="100%" src={link} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
         <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
         <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?describtion:""}</p>

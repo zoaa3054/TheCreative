@@ -91,51 +91,26 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
 
     const addAdmin = async()=>{
         setIsUploading(true);
-        if (checkInputVariables()){
-            await fetch(`${backend}/add/admin`, {
-                method:"POST",
-                headers:{
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${sessionStorage.getItem("theCreativeAuthToken")}`
-                },
-                body: JSON.stringify(formVariables)
-            })
-            .then((res)=>{
-                if (res.status == 201){
-                    notifySuccess("Account added successfuly");
-                    setIsAddingAdmin(false);
-                } 
-                else if (res.status == 409) notifyError("Admin already exists");
-                else notifyError("Something went wrong, Please contact the system's developer")
-                return res.json();
-            })
-            .catch((error)=>console.log(error));
-        }
-        setIsUploading(false);
-    }
-
-    const checkInputVariables = ()=>{
-        setError({});
+        await fetch(`${backend}/add/admin`, {
+            method:"POST",
+            headers:{
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${sessionStorage.getItem("theCreativeAuthToken")}`
+            },
+            body: JSON.stringify(formVariables)
+        })
+        .then((res)=>{
+            if (res.status == 201){
+                notifySuccess("Account added successfuly");
+                setIsAddingAdmin(false);
+            } 
+            else if (res.status == 409) notifyError("Admin already exists");
+            else notifyError("Something went wrong, Please contact the system's developer")
+            return res.json();
+        })
+        .catch((error)=>console.log(error));
         
-        let allFine = true;
-        let errorText = '';
-
-        for (let index in Object.keys(formVariables)){
-            let name = Object.keys(formVariables)[index];
-            if(name == 'password' && formVariables[name].length<8){
-                errorText = "Password must be at least 8 characters";
-                setError({...error, [name]:errorText});
-                notifyError(errorText);
-                allFine = false;
-            }
-            else if(name == 'username' && !/^[^A-Z\s]+$/.test(formVariables[name])){
-                errorText = "Username can not contain CAPITAL letters or spaces."
-                setError({...error, [name]:errorText});
-                notifyError(errorText);
-                allFine = false;
-            }
-        }
-        return allFine;
+        setIsUploading(false);
     }
 
     const changeSortDirection = ()=>{
@@ -173,6 +148,11 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
         const name = variable.target.name;
         const value = variable.target.value;
 
+        setError((prev)=>{
+            delete prev[name];
+            return prev;
+        })
+
         setFormVariables({...formVariables, [name]: value});
     }
 
@@ -184,11 +164,13 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 </FilterControl>
                 <SortControl>
                     <Button 
+                        type="button"
                         title="sorting direction" 
                         src={sortDirection==1?ascSortIcon:descSortIcon}
                         onClick={changeSortDirection}
                     />
                     <Button 
+                    type="button"
                     title="add admin" 
                     src={addIcon}
                     onClick={()=>setIsAddingAdmin(true)}
@@ -214,6 +196,7 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                         <td>{timeStampToDate(item.date)}</td>
                         <td style={{backgroundColor:item.disabled?"":"#DC143C", textAlign:"center"}}>                
                             <Button 
+                            type="button"
                             title="delete account"
                             style={{display:item.disabled&&"none"}}
                             src={deleteIcon}
@@ -232,9 +215,9 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 onRequestClose={()=>setIsDeleting(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsDeleting(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton type="button" onClick={()=>setIsDeleting(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"larg"}}>You are about to delete the account of {adminAboutToBeDeleted.username}, are you sure?</p>
-                <FormButton onClick={deleteAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
+                <FormButton type="button" onClick={deleteAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Delete"}    
                 </FormButton>
             </Modal>
@@ -243,17 +226,26 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
                 onRequestClose={()=>setIsAddingAdmin(false)}
                 style={editWalletFormStyle}
             >              
-                <FormButton onClick={()=>setIsAddingAdmin(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
+                <FormButton type="button" onClick={()=>setIsAddingAdmin(false)} disabled={isUploading} style={{alignSelf:"end"}} theme={theme}>X</FormButton>
                 <p style={{fontSize:"1.5rem"}}>Add Admin</p>
-                
+                <form onSubmit={addAdmin}>
                 <label style={{marginTop:"1rem", marginBottom:"1rem",fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="username">USERNAME</label>
-                <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                <input style={{backgroundColor:"#a4a4a46a", border: error['username']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="text" pattern="^[^A-Z\s]+$" onInvalid={()=>{
+                                    let errorText = "Username can't contain capital characters"
+                                    setError({...error, ['username']:errorText});
+                                    notifyError(errorText);
+                                    }} value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
                 
                 <label style={{marginTop:"1rem", marginBottom:"1rem", fontWeight:"bold", fontFamily: "Arial, Helvetica, sans-serif"}} htmlFor="password">PASSWORD</label>
-                <input style={{backgroundColor:"#a4a4a46a", marginBottom:"1rem", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" minLength='8' value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
-                <FormButton onClick={addAdmin} disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
+                <input style={{backgroundColor:"#a4a4a46a", marginBottom:"1rem", border: error['password']?"2px solid red":"2px solid transparent", outline:"none", padding:"0.5rem"}} type="password" minLength='8' onInvalid={()=>{
+                                    let errorText = "Password must be at least 8 characters"
+                                    setError({...error, ['password']:errorText});
+                                    notifyError(errorText);
+                                    }} value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                <FormButton type="submit" disabled={isUploading} style={{justifySelf:"center"}} theme={theme}>
                     {isUploading?<Spinner size={15}/>:"Add"}    
                 </FormButton>
+                </form>
             </Modal>
         </Container>
     );

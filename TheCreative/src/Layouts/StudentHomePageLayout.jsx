@@ -283,7 +283,7 @@ const StudentHomePageLayout = ({ backend })=>{
                         <img src={sideBarIcon} alt="" style={{width:"2rem", height:"2rem", cursor:"pointer", margin: "1rem"}} onClick={toggleSideBar}/>
                     </NavBarIcons>
                     <NavBarIcons>
-                        <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
+                        <ThemeButton type="button" src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
                             {/* {notifSwitch?
                                 <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>
                                 :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>    
@@ -292,7 +292,7 @@ const StudentHomePageLayout = ({ backend })=>{
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
                         </Wallet>
-                        <LogoutButton onClick={logout}>LOG OUT</LogoutButton>
+                        <LogoutButton type="button" onClick={logout}>LOG OUT</LogoutButton>
                     </NavBarIcons>
                 </NavBar>
                 <StudentContentOutlet setBuyingAlert={setBuyingAlert} theme={theme} isSideBarOpen={isSideBarOpen} backend={backend} selectedComponent={selectedComponent}/>
