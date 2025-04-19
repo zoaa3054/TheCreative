@@ -69,7 +69,7 @@ const Form = ({usedForm, setUsedForm, backend })=>{
             formatedParentPhone = formVariables.parentPhone;
         else if(/^201\d{9}$/.test(formVariables.parentPhone))
             formatedParentPhone = "+" + formVariables.parentPhone;
-        else if(/^01\d{9}$/.test(formVariables.studentPhone))
+        else if(/^01\d{9}$/.test(formVariables.parentPhone))
             formatedParentPhone = "+2" + formVariables.parentPhone;
 
         await fetch(`${backend}/signup`, {
