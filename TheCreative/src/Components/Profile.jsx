@@ -67,15 +67,35 @@ const Profile = ({backend, theme, isAdmin}) => {
   }
 
   const editUserInfo = async()=>{
-
     setIsSubmiting(true);
+
+    let formatedStudentPhone;
+    let formatedParentPhone;
+    if(/^\+201\d{9}$/.test(user.studentPhone))
+        formatedStudentPhone = user.studentPhone;
+    else if(/^201\d{9}$/.test(user.studentPhone))
+        formatedStudentPhone = "+" + user.studentPhone;
+    else if(/^01\d{9}$/.test(user.studentPhone))
+        formatedStudentPhone = "+2" + user.studentPhone;
+
+    if(/^\+201\d{9}$/.test(user.parentPhone))
+        formatedParentPhone = user.parentPhone;
+    else if(/^201\d{9}$/.test(user.parentPhone))
+        formatedParentPhone = "+" + user.parentPhone;
+    else if(/^01\d{9}$/.test(user.studentPhone))
+        formatedParentPhone = "+2" + user.parentPhone;
+
     await fetch(`${backend}/edit/user/info`,{
         method:"POST",
         headers:{
             'Content-Type': 'Application/json',
             'Authorization': `Bearer ${sessionStorage.getItem("theCreativeAuthToken")}`
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify({
+          ...user,
+          studentPhone: formatedStudentPhone, 
+          parentPhone: formatedParentPhone
+        })
     })
     .then((result)=>{
         if (result.status == 200) {
@@ -151,8 +171,8 @@ const Profile = ({backend, theme, isAdmin}) => {
           {isEditing ? (
               <>
                   <label htmlFor="studentPhone" style={{marginRight:"1rem"}}>Student Phone: </label>
-                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^\+20\d{10}$" onInvalid={()=>{
-                    let errorText = "Number must be in +201234567891 format"
+                  <input type="text" name="studentPhone" value={user.studentPhone} pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "Student phone number is not correct"
                     setError({...error, ['studentPhone']:errorText});
                     notifyError(errorText);
                     }} style ={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} onChange={handleChange} />
@@ -165,8 +185,8 @@ const Profile = ({backend, theme, isAdmin}) => {
           {isEditing ? (
               <>
                   <label htmlFor="parentPhone" style={{marginRight:"1rem"}}>Parent Phone: </label>
-                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^\+20\d{10}$" onInvalid={()=>{
-                    let errorText = "Number must be in +201234567891 format"
+                  <input type="text" name="parentPhone" value={user.parentPhone} pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "Parent phone number is not correct"
                     setError({...error, ['parentPhone']:errorText});
                     notifyError(errorText);
                     }} style ={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} onChange={handleChange} />

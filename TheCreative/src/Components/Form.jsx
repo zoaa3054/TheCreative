@@ -181,8 +181,8 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                             </div>
                             <div className="input-group">
                                 <i className='bx bx-mail-send'></i>
-                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^(\+201|201|01)\d{9}$" onInvalid={(e)=>{
-                                    let errorText = `You have only enterd ${e.target.value.length} numbers`
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                                    let errorText = "Student phone number is not correct"
                                     setError({...error, ['studentPhone']:errorText});
                                     notifyError(errorText);
                                     }}  style={{border: error['studentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.studentPhone} onChange={changeFormVariable} name="studentPhone" placeholder="Student phone number" required/>
@@ -190,7 +190,7 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
                                 <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} pattern="^(\+201|201|01)\d{9}$" onInvalid={(e)=>{
-                                    let errorText = `You have only enterd ${e.target.value.length} numbers`
+                                    let errorText = "Parent phone number is not correct"
                                     setError({...error, ['parentPhone']:errorText});
                                     notifyError(errorText);
                                     }}  style={{border: error['parentPhone']?"2px solid red":"2px solid transparent"}} type="tel" value={formVariables.parentPhone} onChange={changeFormVariable} name="parentPhone" placeholder="Parent phone number" required/>
