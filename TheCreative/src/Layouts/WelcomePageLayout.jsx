@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import Modal from "react-modal";
 import facebookIcon from "../assets/facebookIcon.png";
+import youtubeIcon from "../assets/youtubeIcon.png";
 import swapeRightIcon from "../assets/swapeRightIcon.png";
 import swapeLeftIcon from "../assets/swapeLeftIcon.png";
 
@@ -122,10 +123,15 @@ const WelcomePageLayout = ()=>{
                 style={aboutStyle}
             >
                 <ModalButton onClick={()=>setAboutSwitch(false)} style={{alignSelf:"end"}}>X</ModalButton>
-                <h2>Info about Mr. Alaa Mohey </h2>
+                <h2>Mr. Alaa Mohey, Mathematics teacher in Elekbal National College in Alexandria, Egypt. Teaches from Middle 1 to Senior 2.</h2>
+                <div style={{display: "flex", alignSelf:"center"}}>
                 <ModalButton onClick={()=>window.open('https://www.facebook.com/share/192tEXETrm/')} style={{justifySelf:"center"}}>
                     <img src={facebookIcon} alt=""/>
                 </ModalButton>
+                <ModalButton onClick={()=>window.open('https://www.youtube.com/channel/UCpxwyheWurUnB4GluDMJ1Zw')} style={{justifySelf:"center", scale:"0.7"}}>
+                    <img src={youtubeIcon} alt=""/>
+                </ModalButton>
+                </div>
             </Modal>
             <Modal
                 isOpen={videoTutorial}
@@ -133,8 +139,8 @@ const WelcomePageLayout = ()=>{
                 style={aboutStyle}
             >
                 <ModalButton onClick={()=>setVideoTutorial(false)} style={{alignSelf:"end"}}>X close</ModalButton>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/0-bSQ14H_PY?si=WMjl4p8IZj-6oUM7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </Modal>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/hZwqonx5XVI?si=qgwM-ocmUUL478_l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>            
+                </Modal>
         </div>
     );
 };

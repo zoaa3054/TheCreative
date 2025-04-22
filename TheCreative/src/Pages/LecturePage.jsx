@@ -20,6 +20,8 @@ const LecturePage = ()=>{
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
     
     useEffect(()=>{
         fetchLecture();
@@ -28,6 +30,25 @@ const LecturePage = ()=>{
     const notifySuccess = (mssg)=>{
         toast.success(mssg);
     }
+
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e) => {
+        touchEndX.current = e.changedTouches[0].screenX;
+        handleSwipe();
+    };
+
+    const handleSwipe = () => {
+        const diff = touchStartX.current - touchEndX.current;
+
+        if (diff > 50) {
+            setIsControllerOpen(false);
+        } else if (diff < -50) {
+            setIsControllerOpen(true)
+        }
+    };
 
     const fetchLecture = async()=>{
         await fetch(`${backend}/lecture?id=${id}`, {
@@ -73,7 +94,9 @@ const LecturePage = ()=>{
             <Loader/>:
         <Container>
         {Object.keys(lecture).length!= 0?<>
-            <Content theme={theme}>
+            <Content theme={theme} 
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}>
                 {stage==1&&
                 <>
                     {!lecture.examId?
