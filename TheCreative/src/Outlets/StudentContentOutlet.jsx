@@ -72,7 +72,7 @@ const StudentContentOutlet = ({ backend, theme, selectedComponent, isSideBarOpen
             {
                 selectedComponent == "wallet" &&  <Card 
                                                         title={`Ballance: ${wallet}`} 
-                                                        description={paymentNumber?`To charge your wallet please pay on this number: ${paymentNumber} as Vodaphone Cash and then send a photo for the recept on the whatsapp of the same previous number.`:"Comming soon!"}
+                                                        description={paymentNumber?`To charge your wallet please pay on this number: ${paymentNumber} as Vodaphone Cash and then send a photo for the recept and your username on the whatsapp of the same previous number (tap to go to whatsapp).`:"Comming soon!"}
                                                         variant="card1"
                                                         onClickFunction={messageWhatsapp}/>
 

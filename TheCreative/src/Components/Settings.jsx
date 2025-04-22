@@ -10,6 +10,8 @@ const Settings = ({backend, theme}) => {
   const [formVariables, setFormVariables] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmiting, setIsSubmiting] = useState(false);
+    const [error, setError] = useState({});
+  
 
   useEffect(()=>{
     setIsLoading(true);
@@ -42,13 +44,54 @@ const Settings = ({backend, theme}) => {
 
   const editContacts = async()=>{
     setIsSubmiting(true);
+
+    let formatedProblemsReportNumber;
+    if(/^\+201\d{9}$/.test(formVariables.problemsReportNumber))
+      formatedProblemsReportNumber = formVariables.problemsReportNumber;
+    else if(/^201\d{9}$/.test(formVariables.problemsReportNumber))
+      formatedProblemsReportNumber = "+" + formVariables.problemsReportNumber;
+    else if(/^01\d{9}$/.test(formVariables.problemsReportNumber))
+      formatedProblemsReportNumber = "+2" + formVariables.problemsReportNumber;
+
+
+    let formatedFAQNumber;
+    if(/^\+201\d{9}$/.test(formVariables.faqNumber))
+      formatedFAQNumber = formVariables.faqNumber;
+    else if(/^201\d{9}$/.test(formVariables.faqNumber))
+      formatedFAQNumber = "+" + formVariables.faqNumber;
+    else if(/^01\d{9}$/.test(formVariables.faqNumber))
+      formatedFAQNumber = "+2" + formVariables.faqNumber;
+
+
+    let formatedSendingMessagesNumber;
+    if(/^\+201\d{9}$/.test(formVariables.sendingMessagesNumber))
+      formatedSendingMessagesNumber = formVariables.sendingMessagesNumber;
+    else if(/^201\d{9}$/.test(formVariables.sendingMessagesNumber))
+      formatedSendingMessagesNumber = "+" + formVariables.sendingMessagesNumber;
+    else if(/^01\d{9}$/.test(formVariables.sendingMessagesNumber))
+      formatedSendingMessagesNumber = "+2" + formVariables.sendingMessagesNumber;
+
+
+    let formatedPaymentNumber;
+    if(/^\+201\d{9}$/.test(formVariables.paymentNumber))
+      formatedPaymentNumber = formVariables.paymentNumber;
+    else if(/^201\d{9}$/.test(formVariables.paymentNumber))
+      formatedPaymentNumber = "+" + formVariables.paymentNumber;
+    else if(/^01\d{9}$/.test(formVariables.paymentNumber))
+      formatedPaymentNumber = "+2" + formVariables.paymentNumber;
+
     await fetch(`${backend}/edit/contacts`,{
         method:"POST",
         headers:{
             'Content-Type': 'Application/json',
             'Authorization': `Bearer ${sessionStorage.getItem("theCreativeAuthToken")}`
         },
-        body: JSON.stringify(formVariables)
+        body: JSON.stringify({
+          problemsReportNumber: formatedProblemsReportNumber, 
+          faqNumber: formatedFAQNumber, 
+          sendingMessagesNumber: formatedSendingMessagesNumber, 
+          paymentNumber: formatedPaymentNumber, 
+        })
     })
     .then((result)=>{
         if (result.status == 200) {
@@ -65,6 +108,10 @@ const Settings = ({backend, theme}) => {
 
 
   const handleChange = (e) => {
+    setError((prev)=>{
+      delete prev[e.target.name];
+      return prev;
+    })
     setFormVariables({ ...formVariables, [e.target.name]: e.target.value });
   };
 
@@ -88,7 +135,11 @@ const Settings = ({backend, theme}) => {
           {isEditing ? (
               <>
                   <label htmlFor="paymentNumber" style={{marginRight:"1rem"}}>Payment number: </label>
-                  <input type="text" name="paymentNumber" pattern="^\+20\d{10}$" value={formVariables.paymentNumber?formVariables.paymentNumber:contacts.paymentNumber} onChange={handleChange} />
+                  <input type="text" name="paymentNumber" pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "payment number is not correct"
+                    setError({...error, ['paymentNumber']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['paymentNumber']?"2px solid red":"2px solid transparent"}} value={formVariables.paymentNumber?formVariables.paymentNumber:contacts.paymentNumber} onChange={handleChange} />
               </>
           ) : (
             <p>Payment number: {contacts.paymentNumber?contacts.paymentNumber:"NA"}</p>
@@ -98,7 +149,11 @@ const Settings = ({backend, theme}) => {
           {isEditing ? (
               <>
                   <label htmlFor="problemsReportNumber" style={{marginRight:"1rem"}}>Problems report number: </label>
-                  <input type="text" name="problemsReportNumber" pattern="^\+20\d{10}$" value={formVariables.problemsReportNumber?formVariables.problemsReportNumber:contacts.problemsReportNumber} onChange={handleChange} />
+                  <input type="text" name="problemsReportNumber" pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "problems report number is not correct"
+                    setError({...error, ['problemsReportNumber']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['problemsReportNumber']?"2px solid red":"2px solid transparent"}} value={formVariables.problemsReportNumber?formVariables.problemsReportNumber:contacts.problemsReportNumber} onChange={handleChange} />
               </>
           ) : (
             <p>Problems report number: {contacts.problemsReportNumber?contacts.problemsReportNumber:"NA"}</p>
@@ -108,7 +163,11 @@ const Settings = ({backend, theme}) => {
         {isEditing ? (
               <>
                   <label htmlFor="faqNumber" style={{marginRight:"1rem"}}>FAQ number: </label>
-                  <input type="text" name="faqNumber" pattern="^\+20\d{10}$" value={formVariables.faqNumber?formVariables.faqNumber:contacts.faqNumber} onChange={handleChange} />
+                  <input type="text" name="faqNumber" pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "FAQ number is not correct"
+                    setError({...error, ['faqNumber']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['faqNumber']?"2px solid red":"2px solid transparent"}} value={formVariables.faqNumber?formVariables.faqNumber:contacts.faqNumber} onChange={handleChange} />
               </>
           ) : (
             <p>FAQ number: {contacts.faqNumber?contacts.faqNumber:"NA"}</p>
@@ -118,7 +177,11 @@ const Settings = ({backend, theme}) => {
         {isEditing ? (
               <>
                   <label htmlFor="sendingMessagesNumber" style={{marginRight:"1rem"}}>Sending messages number: </label>
-                  <input type="text" name="sendingMessagesNumber" pattern="^\+20\d{10}$" value={formVariables.sendingMessagesNumber?formVariables.sendingMessagesNumber:contacts.sendingMessagesNumber} onChange={handleChange} />
+                  <input type="text" name="sendingMessagesNumber" pattern="^(\+201|201|01)\d{9}$" onInvalid={()=>{
+                    let errorText = "sending messages number is not correct"
+                    setError({...error, ['sendingMessagesNumber']:errorText});
+                    notifyError(errorText);
+                    }} style ={{border: error['sendingMessagesNumber']?"2px solid red":"2px solid transparent"}} value={formVariables.sendingMessagesNumber?formVariables.sendingMessagesNumber:contacts.sendingMessagesNumber} onChange={handleChange} />
               </>
           ) : (
             <p>Sending messages number: {contacts.sendingMessagesNumber?contacts.sendingMessagesNumber:"NA"}</p>

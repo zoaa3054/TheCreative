@@ -245,11 +245,11 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                         <form onSubmit={login} className="form sign-in">
                             <div className="input-group">
                                 <i className='bx bxs-user'></i>
-                                <input style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['username']?"2px solid red":"2px solid transparent"}} type="text" value={formVariables.username} onChange={changeFormVariable} name="username" placeholder="Username" required/>
                             </div>
                             <div className="input-group">
                                 <i className='bx bxs-lock-alt'></i>
-                                <input style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
+                                <input onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} style={{border: error['password']?"2px solid red":"2px solid transparent"}} type="password" value={formVariables.password} onChange={changeFormVariable} name="password" placeholder="Password" required/>
                             </div>
                             <button type="submit" disabled={isLoading}>
                                 {isLoading?<Spinner size={15}/>:"login"}
@@ -276,7 +276,7 @@ const Form = ({usedForm, setUsedForm, backend })=>{
                 {/* <!-- SIGN IN CONTENT --> */}
                 <div className="col align-items-center flex-col">
                     <div className="text sign-in">
-                        <h2>
+                        <h2 style={{display: focus?"none":"flex"}}>
                             Welcome
                         </h2>
         
