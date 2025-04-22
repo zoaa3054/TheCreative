@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Map from "../Components/Map";
@@ -44,9 +44,9 @@ const LecturePage = ()=>{
         const diff = touchStartX.current - touchEndX.current;
 
         if (diff > 50) {
-            setIsControllerOpen(false);
+            setIsControllerOpen(true);
         } else if (diff < -50) {
-            setIsControllerOpen(true)
+            setIsControllerOpen(false)
         }
     };
 
