@@ -24,6 +24,8 @@ const EditLecturePage = () =>{
     const [isCustomized, setIsCustomized] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
+    const [explainIframLoad, setExplainIframLoad] = useState(false);
+    const [HWIframLoad, setHWIframLoad] = useState(false);
 
     useEffect(()=>{
         fetchLecture();
@@ -62,11 +64,11 @@ const EditLecturePage = () =>{
     const editLecture = async(e)=>{
         e.preventDefault();
         setIsUploading(true);
-        if (explainationError){
+        if (!explainIframLoad && explainationError){
             notifyError("Please resolve the error in the explaination video link");
             return;
         }
-        if (HWError){
+        if (!HWIframLoad && HWError){
             notifyError("Please resolve the error in the hw video link");
             return;
         }
@@ -182,7 +184,7 @@ const EditLecturePage = () =>{
         const matchLink = link.match(/https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{25,})\//);
         if(matchLink)
             return matchLink[0]+"preview";
-        return link;
+        return link.replace(/(\?[^#]*?)(&|\?)?dl=0/, '$1&raw=1');
     }
 
     return(
@@ -247,7 +249,11 @@ const EditLecturePage = () =>{
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <video onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                    </video>
                 ):(<></>)}
             </Preveiw>
 
@@ -265,8 +271,11 @@ const EditLecturePage = () =>{
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
-                    <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-
+                    // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
+                    <video onLoadedData={()=>setHWIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                    </video>
                 ):(<></>)}
             </Preveiw>
 
