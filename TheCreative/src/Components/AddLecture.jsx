@@ -3,6 +3,8 @@ import YouTube from "react-youtube";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
+import { VideoJsPlayer } from '@videojs-player/react';
+import 'video.js/dist/video-js.css';
 
 const AddLecture = ({backend, theme}) =>{
     const [formVariables, setFormVariables] = useState({});
@@ -17,6 +19,13 @@ const AddLecture = ({backend, theme}) =>{
     const [isSubmiting, setIsSubmiting] = useState(false);
     const [explainIframLoad, setExplainIframLoad] = useState(false);
     const [HWIframLoad, setHWIframLoad] = useState(false);
+
+    const videoJsOptions = {
+        controls: true,
+        responsive: true,
+        fluid: true,
+        playbackRates: [0.5, 1, 1.5, 2] // Enable speed control
+      };
 
     const notifySuccess = (mssg) =>{
         toast.success(mssg);
@@ -200,10 +209,14 @@ const AddLecture = ({backend, theme}) =>{
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
                     // <iframe allow="fullscreen" onLoad={()=>setExplainIframLoad(true)} allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
-                    <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
+                    // <video onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    // <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
+                    // Your browser does not support the video tag.
+                    // </video>
+                    <VideoJsPlayer options={{...videoJsOptions, sources: [{
+                        src: formatLink(formVariables.explainationLink),
+                        type: 'video/mp4'
+                      }]}} />
                 ):(<></>)}
             </Preveiw>
 
