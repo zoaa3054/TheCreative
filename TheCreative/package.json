@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@mui/icons-material": "^6.4.8",
-    "@videojs-player/react": "^1.0.0",
     "country-state-city": "^3.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -22,8 +21,7 @@
     "react-toastify": "^11.0.5",
     "react-youtube": "^10.1.0",
     "styled-components": "^6.1.15",
-    "thecreative": "file:",
-    "video.js": "^8.22.0"
+    "thecreative": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
