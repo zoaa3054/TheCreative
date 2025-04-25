@@ -343,6 +343,7 @@ const Select = styled.select`
     margin: 1rem;
     background-color: transparent;
     color: black;
+    flex-grow: 1;
     cursor: pointer;
 
     @media (max-width: 400px){
@@ -361,19 +362,22 @@ const SortButton = styled.img`
     }
 `;
 
+const FilterControl = styled.div`
+    flex-grow: 1;
+    display: flex;
+    justify-content: start;
+
+`;
+
 const SortControl = styled.div`
-    width: 50%;
+    flex-grow: 0;
     display: flex;
     justify-content: end;
     align-items: center;
+
 `;
 
-const FilterControl = styled.div`
-    padding-left: 1rem;
-    width: 50%;
-    display: flex;
-    justify-content: start;
-`;
+
 
 const NewLabel = styled.span`
     &::after{

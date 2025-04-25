@@ -89,7 +89,8 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
         setIsUploading(false);
     }
 
-    const addAdmin = async()=>{
+    const addAdmin = async(e)=>{
+        e.preventDefault();
         setIsUploading(true);
         await fetch(`${backend}/add/admin`, {
             method:"POST",
@@ -100,7 +101,6 @@ const Admins = ( { backend, theme, isSideBarOpen } )=>{
             body: JSON.stringify(formVariables)
         })
         .then((res)=>{
-            alert("herel")
             if (res.status == 201){
                 notifySuccess("Account added successfuly");
                 setIsAddingAdmin(false);

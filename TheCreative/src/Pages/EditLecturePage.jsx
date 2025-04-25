@@ -126,11 +126,24 @@ const EditLecturePage = () =>{
     }
 
     const addExplainVideoSize = (entry)=>{
-        setExplainVideoSize(entry.target.getDuration());
+
+        try {
+            setExplainVideoSize(entry.target.getDuration());
+        }catch(error){
+            console.log(error);
+            setExplainVideoSize(entry.target.duration);
+        }
+
     }
 
     const addHWVideoSize = (entry)=>{
-        setHWVideoSize(entry.target.getDuration());
+        try {
+            setHWVideoSize(entry.target.getDuration());
+        }catch(error){
+            console.log(error);
+            setHWVideoSize(entry.target.duration);
+        }
+
     }
 
     const extractYouTubeID = (type) => {
@@ -250,7 +263,7 @@ const EditLecturePage = () =>{
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
                     // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <video onLoadedData={(e)=>{setExplainIframLoad(true); addExplainVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
                     <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     Your browser does not support the video tag.
                     </video>
@@ -272,7 +285,7 @@ const EditLecturePage = () =>{
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
                     // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onLoadedData={()=>setHWIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <video onLoadedData={(e)=>{setHWIframLoad(true); addHWVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
                     <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     Your browser does not support the video tag.
                     </video>

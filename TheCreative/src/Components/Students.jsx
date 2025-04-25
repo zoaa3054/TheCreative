@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 
+
 const gradesList = ['M1', 'M2', 'M3', 'S1', 'S2'];
 
 
@@ -110,7 +111,7 @@ const Students = ( { backend, theme, isSideBarOpen } )=>{
                     <label htmlFor="filterON">Filter</label>
                     <input name="filterON" type="checkbox" onChange={(e)=>{setFilterON(prev=>!prev)}} style={{cursor:"pointer"}}/>
                     </div>
-                    <Select title="filter by city" disabled={!filterON} theme={theme} value={cityFilter} onChange={(event)=>setCityFilter(event.target.value)}>
+                    <Select  title="filter by city" disabled={!filterON} theme={theme} value={cityFilter} onChange={(event)=>setCityFilter(event.target.value)}>
                         {State.getStatesOfCountry('EG').map((state, key)=>(
                             <option key={key} value={state.name}>{state.name}</option>
                         ))}
@@ -187,6 +188,7 @@ const Container = styled.div`
 const ControlBar = styled.div`
     border-radius: 1rem;
     display: flex;
+    flex-direction: row;
     width: 98%;
     height: 10%;
     justify-content: start;
@@ -203,6 +205,7 @@ const Select = styled.select`
     margin: 1rem;
     background-color: transparent;
     color: black;
+    flex-grow: 1;
     cursor: pointer;
 
     @media (max-width: 500px){
@@ -214,14 +217,14 @@ const Select = styled.select`
 
 
 const FilterControl = styled.div`
-    padding-left: 1rem;
-    width: 100%;
+    padding-left: 5px;
+    flex-grow: 1;
     display: flex;
     justify-content: start;
 `;
 
 const SortControl = styled.div`
-    width: 50%;
+    flex-grow: 0;
     display: flex;
     justify-content: end;
     align-items: center;
@@ -258,6 +261,9 @@ const SearchBar = styled.input`
     color: black;
     width: 100%;
 
+    &::placeholder{
+        color: #f0f8ff96;
+    }
     @media (max-width: 500px){
         width: 5rem;
         margin: 0.2rem;
