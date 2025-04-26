@@ -83,8 +83,7 @@ const WelcomePageLayout = ()=>{
                     <Logo>TheCreative</Logo>
                 </div>
                 <IconsContainer sideBarSwitch={sideBarSwitch}>
-                    {/* <Icon onClick={()=>setAboutSwitch(true)}>About</Icon> */}
-                    <Icon onClick={()=>navigate('/test')}>About</Icon>
+                    <Icon onClick={()=>setAboutSwitch(true)}>About</Icon>
                     <Icon onClick={()=>{window.location.href = "mailto:easymath85@gmail.com"}}>Contact</Icon>
                     <Icon onClick={()=>navigate('/register', {state:{desiredForm:'signup'}})}>SignUp</Icon>
                     <LoginButton onClick={()=>navigate('/register', {state:{desiredForm:'login'}})}>LogIn</LoginButton>
