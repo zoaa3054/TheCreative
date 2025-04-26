@@ -222,7 +222,7 @@ const AddLecture = ({backend, theme}) =>{
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
                     // <iframe allow="fullscreen" onLoad={()=>setHWIframLoad(true)} allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onLoadedData={()=>setHWIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <video onContextMenu={(e) => e.preventDefault()} onLoadedData={()=>setHWIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
                     <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     Your browser does not support the video tag.
                     </video>

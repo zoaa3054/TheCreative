@@ -19,9 +19,6 @@ function App() {
       let sw =  await navigator.serviceWorker.register('/sw.js');
       console.log(sw);
     })
-    // document.addEventListener('contextmenu', function(e) {
-    //   e.preventDefault();
-    // });
   }, []);
 
   const router = createBrowserRouter(
