@@ -200,7 +200,7 @@ const AddLecture = ({backend, theme}) =>{
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
                     // <iframe allow="fullscreen" onLoad={()=>setExplainIframLoad(true)} allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
+                    <video onContextMenu={(e) => e.preventDefault()} onLoadedData={()=>setExplainIframLoad(true)} width="400" height="200" controls controlsList="nodownload">
                     <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     Your browser does not support the video tag.
                     </video>
