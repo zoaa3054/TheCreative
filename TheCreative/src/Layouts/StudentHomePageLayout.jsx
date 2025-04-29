@@ -28,8 +28,8 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
-    useEffect(()=>{
-        notificationPermissionPrompt();
+    useEffect(async()=>{
+        await notificationPermissionPrompt();
         getNotificationsToken()
         .then((token)=>{
             if(token) setNotifSwitch(true);
