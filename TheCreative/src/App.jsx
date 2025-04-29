@@ -15,8 +15,8 @@ function App() {
   // const backend = `https://192.168.1.17:8081`;
   const backend = `https://the-creative.vercel.app`;
 
-  useEffect(()=>{
-    addEventListener('load', async()=>{
+  useEffect(async()=>{
+    await addEventListener('load', async()=>{
       let sw =  await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       alert(sw);
     })
