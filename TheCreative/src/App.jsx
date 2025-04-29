@@ -17,7 +17,7 @@ function App() {
 
   useEffect(()=>{
     addEventListener('load', async()=>{
-      let sw =  await navigator.serviceWorker.register('/sw.js');
+      let sw =  await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       alert(sw);
     })
   }, []);
