@@ -209,34 +209,32 @@ const StudentHomePageLayout = ({ backend })=>{
         return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
       }
 
-    const toggleNotifications = ()=>{
+    const toggleNotifications = async()=>{
         if(notifSwitch){
             deleteNotificationsToken();
             setNotifSwitch(false);
         }
-        else{
-            if ('Notification' in window){
-                Notification.requestPermission()
-                .then(async(permission)=>{
-                    if(permission == 'granted'){
-                        let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
-                        let sw = await navigator.serviceWorker.ready;
-                        let push = await sw.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: serverPublicKey
-                        })
-                        
-                        sendTokenToBackend(push);
-                        setNotifSwitch(true);
-                    }
-                    else{
-                        console.log("couldn't enable notifications");
-                        notifyError("Something went wrong, couldn't enable notifications");
-                    }
-                })
-            }
-            else alert('no notification')
+        else if ('Notification' in window){
+            await Notification.requestPermission()
+            .then(async(permission)=>{
+                if(permission == 'granted'){
+                    let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
+                    let sw = await navigator.serviceWorker.ready;
+                    let push = await sw.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: serverPublicKey
+                    })
+                    
+                    sendTokenToBackend(push);
+                    setNotifSwitch(true);
+                }
+                else{
+                    console.log("couldn't enable notifications");
+                    notifyError("Something went wrong, couldn't enable notifications");
+                }
+            })
         }
+        else notifyError('This window does not support notifications')
     }
 
     return(
@@ -284,10 +282,10 @@ const StudentHomePageLayout = ({ backend })=>{
                     </NavBarIcons>
                     <NavBarIcons>
                         <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
-                            {/* {notifSwitch?
+                            {notifSwitch?
                                 <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>
                                 :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={toggleNotifications} alt=""/>    
-                            } */}
+                            }
                         <Wallet>
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
