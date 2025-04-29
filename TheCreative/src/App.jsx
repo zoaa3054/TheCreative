@@ -18,7 +18,7 @@ function App() {
   useEffect(()=>{
     addEventListener('load', async()=>{
       let sw =  await navigator.serviceWorker.register('/sw.js');
-      console.log(sw);
+      alert(sw);
     })
   }, []);
 
