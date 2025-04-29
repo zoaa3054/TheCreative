@@ -19,10 +19,10 @@ function App() {
     addEventListener('load', ()=>{
       navigator.serviceWorker.register('/sw.js')
       .then((registration)=>{
-        if(registration) alert("done");
-        else alert("not done");
+        if(registration) console.log(registration);
+        else console.log("Registration failed");
       })
-      .catch((error)=>alert(error))
+      .catch((error)=>console.log(error))
     })
   }, []);
 

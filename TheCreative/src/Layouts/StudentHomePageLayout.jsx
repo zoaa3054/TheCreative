@@ -181,17 +181,13 @@ const StudentHomePageLayout = ({ backend })=>{
         if ('Notification' in window){
             await Notification.requestPermission()
             .then(async(permission)=>{
-                alert(permission)
                 if(permission == 'granted'){
-                    alert("pass 1")
                     let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
                     let sw = await navigator.serviceWorker.ready;
-                    alert(sw)
                     let push = await sw.pushManager.subscribe({
                         userVisibleOnly: true,
                         applicationServerKey: serverPublicKey
                     })
-                    alert(push)
                     
                     sendTokenToBackend(push);
                     setNotifSwitch(true);
@@ -202,7 +198,7 @@ const StudentHomePageLayout = ({ backend })=>{
                 }
             })
         }
-        else alert('no notification')
+        else alert('No notification is allowed in this window')
     }
 
     function urlBase64ToUint8Array(base64String) {
