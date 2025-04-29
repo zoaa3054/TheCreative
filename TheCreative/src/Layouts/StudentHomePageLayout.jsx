@@ -179,7 +179,7 @@ const StudentHomePageLayout = ({ backend })=>{
 
     const notificationPermissionPrompt = async()=>{
         if ('Notification' in window){
-            Notification.requestPermission()
+            await Notification.requestPermission()
             .then(async(permission)=>{
                 if(permission == 'granted'){
                     let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
@@ -215,7 +215,6 @@ const StudentHomePageLayout = ({ backend })=>{
             setNotifSwitch(false);
         }
         else if ('Notification' in window){
-            alert("here")
             await Notification.requestPermission()
             .then(async(permission)=>{
                 if(permission == 'granted'){
