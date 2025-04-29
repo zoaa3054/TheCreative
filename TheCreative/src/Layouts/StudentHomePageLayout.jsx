@@ -181,6 +181,7 @@ const StudentHomePageLayout = ({ backend })=>{
         if ('Notification' in window){
             await Notification.requestPermission()
             .then(async(permission)=>{
+                alert(permission)
                 if(permission == 'granted'){
                     let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
                     let sw = await navigator.serviceWorker.ready;
