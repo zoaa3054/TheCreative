@@ -595,7 +595,7 @@ const initializeServer = () => {
 
             // check if exists first
             db.collection('admins')
-            .updateOne({username: req.username}, {$set: body.password})
+            .updateOne({username: req.username}, {$set: {password: body.password}})
             .then((_)=>{
                 res.status(200).json({mssg: "Admin info edited successfuly"})
             })
