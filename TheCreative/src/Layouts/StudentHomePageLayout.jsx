@@ -29,7 +29,7 @@ const StudentHomePageLayout = ({ backend })=>{
     }, [buyingAlert]);
 
     useEffect(()=>{
-        // notificationPermissionPrompt();
+        notificationPermissionPrompt();
         getNotificationsToken()
         .then((token)=>{
             if(token) setNotifSwitch(true);

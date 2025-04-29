@@ -675,7 +675,7 @@ const initializeServer = () => {
                         //logging the operation
                         await db.collection('logs')
                         .insertOne({
-                            text: `The lecture number ${req.body.number} in ${req.body.field} U${req.body.unit} in ${req.body.grade} was added`,
+                            text: `The lecture number ${req.body.number} in ${req.body.unit != -1?req.body.field + 'U' + req.body.unit:getCurrentMonth() + " Revision"} in ${req.body.grade} was added`,
                             admin: req.username,
                             method: 'ADD',
                             date: Date.now()
@@ -690,7 +690,7 @@ const initializeServer = () => {
                                     if(item){
                                         const payload = JSON.stringify({
                                             title: "New Lecture",
-                                            body: `Lecture ${req.body.number} ${req.body.field} Unit ${req.body.unit} is online now.`
+                                            body: `Lecture ${req.body.number} ${req.body.unit != -1?req.body.field + 'U' + req.body.unit:getCurrentMonth() + " Revision"} is online now.`
                                         })
                                         sendNotification(item.token, payload);
                                     }
