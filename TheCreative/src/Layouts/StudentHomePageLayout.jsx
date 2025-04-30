@@ -28,8 +28,8 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
-    useEffect(async()=>{
-        await notificationPermissionPrompt();
+    useEffect(()=>{
+        notificationPermissionPrompt();
         getNotificationsToken()
         .then((token)=>{
             if(token) setNotifSwitch(true);
@@ -177,9 +177,9 @@ const StudentHomePageLayout = ({ backend })=>{
         }
     }
 
-    const notificationPermissionPrompt = async()=>{
+    const notificationPermissionPrompt = ()=>{
         if ('Notification' in window){
-            await Notification.requestPermission()
+            Notification.requestPermission()
             .then(async(permission)=>{
                 if(permission == 'granted'){
                     let serverPublicKey = urlBase64ToUint8Array('BBTd9hGJU7ni6tyP-kRiodUmyECgP9v8gBGKjCbi4OU_z6mOgXZVittndfOqXMKeIKVUhXJgzcboili0OUY1M04');
