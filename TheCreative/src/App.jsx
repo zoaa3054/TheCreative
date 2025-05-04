@@ -10,6 +10,7 @@ import StudentPage from './Pages/StudentPage';
 import EditLecturePage from './Pages/EditLecturePage';
 import { useEffect } from 'react';
 import Test from './Pages/Test';
+import AddExam from './Components/AddExam';
 
 function App() {
   // const backend = `https://192.168.1.17:8081`;
@@ -36,7 +37,7 @@ function App() {
         <Route path='/edit/lecture/:id' element={<EditLecturePage/>}/>
         <Route path='/student/:id' element={<StudentPage/>}/>
         <Route path='/admin/home' element={<AdminHomePageLayout backend={backend}/>}/>
-        <Route path='/test' element={<Test/>}/>
+        <Route path='/test' element={<AddExam/>}/>
         <Route path='*' element={<EmptyPage/>}/>
       </>
       
