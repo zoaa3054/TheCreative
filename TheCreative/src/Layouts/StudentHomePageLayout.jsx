@@ -28,13 +28,13 @@ const StudentHomePageLayout = ({ backend })=>{
         getProblemsReportNumber();
     }, [buyingAlert]);
 
-    useEffect(()=>{
-        notificationPermissionPrompt();
-        getNotificationsToken()
-        .then((token)=>{
-            if(token) setNotifSwitch(true);
-        })
-    }, [])
+    // useEffect(()=>{
+    //     notificationPermissionPrompt();
+    //     getNotificationsToken()
+    //     .then((token)=>{
+    //         if(token) setNotifSwitch(true);
+    //     })
+    // }, [])
 
     const logout = ()=>{
         sessionStorage.removeItem("theCreativeAuthToken");
@@ -282,12 +282,12 @@ const StudentHomePageLayout = ({ backend })=>{
                     </NavBarIcons>
                     <NavBarIcons>
                         <ThemeButton src={theme=='dark'?lightModeLogo:darkModeLogo} onClick={switchTheme}/>
-                            <button style={{backgroundColor:"transparent", border:"none", outline:"none"}} onClick={toggleNotifications}>
-                            {notifSwitch?
-                                <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}}  alt="toggle notification"/>
-                                :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} alt="toggle notification"/>    
-                            }
-                            </button>
+                        {/*<button style={{backgroundColor:"transparent", border:"none", outline:"none"}} onClick={toggleNotifications}>
+                        {notifSwitch?
+                            <img src={enableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}}  alt="toggle notification"/>
+                            :<img src={disableNotificationsIcon} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} alt="toggle notification"/>    
+                        }
+                        </button>*/}
                         <Wallet>
                             <img src={walletLogo} style={{cursor:"pointer", width:"2rem", height:"2rem", marginRight:"0.5rem"}} onClick={goToWallet} alt=""/>
                             <p>{wallet}LE</p>
