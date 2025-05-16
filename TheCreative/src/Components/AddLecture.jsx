@@ -144,11 +144,27 @@ const AddLecture = ({backend, theme}) =>{
     }
 
     const formatLink = (link)=>{
-        const matchDriveLink = link.match(/https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{25,})\//);
-        if(matchDriveLink)
-            return matchDriveLink[0]+"preview";
-        
-        return link.replace(/(\?[^#]*?)(&|\?)?dl=0/, '$1&raw=1');
+        let src;
+        const embeddedCodeMatch = link.match(/src="([^"]+)"/);
+        const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
+        if(embeddedCodeMatch){
+            src = embeddedCodeMatch[1];
+        }
+        else if (embedLinkMatch) {
+            src = embedLinkMatch[0];
+        }
+
+        const url = new URL(src);
+        const hideTitle = url.searchParams.get('hideTitle') === 'true';
+        const disableDownload = url.searchParams.get('disableDownload') === 'true';
+
+        if (!hideTitle) {
+            url.searchParams.set('hideTitle', 'true');
+        }
+        if (!disableDownload) {
+            url.searchParams.set('disableDownload', 'true');
+        }
+        return url.toString();        
     }
 
     return(
@@ -215,7 +231,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formVariables.explainationLink} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={()=>formatLink(formVariables.explainationLink)} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
@@ -237,7 +253,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formVariables.hwLink} onLoad={(e)=>{setHWIframLoad(true); alert(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={()=>formatLink(formVariables.hwLink)} onLoad={(e)=>{setHWIframLoad(true); console.log(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
