@@ -154,23 +154,28 @@ const AddLecture = ({backend, theme}) =>{
             src = embedLinkMatch[0];
         }
 
-        const url = new URL(src);
-        const hideTitle = url.searchParams.get('hideTitle') === 'true';
-        const disableDownload = url.searchParams.get('disableDownload') === 'true';
+        try{
+            const url = new URL(src);
+            const hideTitle = url.searchParams.get('hideTitle') === 'true';
+            const disableDownload = url.searchParams.get('disableDownload') === 'true';
 
-        if (!hideTitle) {
-            url.searchParams.set('hideTitle', 'true');
+            if (!hideTitle) {
+                url.searchParams.set('hideTitle', 'true');
+            }
+            if (!disableDownload) {
+                url.searchParams.set('disableDownload', 'true');
+            }
+
+            if (linkType == "explain") 
+                setFormVariables({...formVariables, ['explainationLink']: url.toString()});
+            else if (linkType == "hw")
+                setFormVariables({...formVariables, ['hwLink']: url.toString()});
+
+            return url.toString();
         }
-        if (!disableDownload) {
-            url.searchParams.set('disableDownload', 'true');
-        }
-
-        if (linkType == "explain") 
-            setFormVariables({...formVariables, ['explainationLink']: url.toString()});
-        else if (linkType == "hw")
-            setFormVariables({...formVariables, ['hwLink']: url.toString()});
-
-        return url.toString();        
+        catch (error) {
+            console.log("Error parsing URL:", error);
+        }      
     }
 
     return(
