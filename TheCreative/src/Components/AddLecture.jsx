@@ -249,7 +249,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formatLink(formVariables.hwLink)} onLoad={(e)=>{setHWIframLoad(true); console.log(e.target)}} allow="fullscreen" webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={formatLink(formVariables.hwLink)} onLoad={()=>{setHWIframLoad(true)}} allow="fullscreen" webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
