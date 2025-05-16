@@ -215,7 +215,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formVariables.explainationLink} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={formVariables.explainationLink} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
@@ -237,7 +237,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formVariables.hwLink} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={formVariables.hwLink} onLoad={(e)=>{setHWIframLoad(true); alert(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
