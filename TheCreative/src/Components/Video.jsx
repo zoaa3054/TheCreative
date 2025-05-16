@@ -64,7 +64,7 @@ const Video = ({ link, theme, describtion }) => {
       link?
       <div style={{width:"100%", height:"100%",  display:"flex", flexDirection:"column", alignItems: "start"}}>
         {/* <div style={{width:"100%", height:"5rem", position:"absolute", backgroundColor:theme=='light'?"white":"#181818"}}/> */}
-        <iframe src={formatLink(link)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+        <iframe src={formatLink(link)} allow="fullscreen" webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
         {/* <video onContextMenu={(e) => e.preventDefault()} width={"100%"} height={"100%"} controls controlsList="nodownload">
             <source src={formatLink(link)} type="video/mp4"/>
             Your browser does not support the video tag.
