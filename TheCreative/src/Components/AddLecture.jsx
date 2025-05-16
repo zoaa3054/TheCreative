@@ -145,16 +145,9 @@ const AddLecture = ({backend, theme}) =>{
 
     const formatLink = (link, linkType)=>{
         let src = link;
-        const embeddedCodeMatch = link.match(/src="([^"]+)"/);
         const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
-        if(embeddedCodeMatch){
-            src = embeddedCodeMatch[1];
-        }
-        else if (embedLinkMatch) {
+        if (embedLinkMatch) {
             src = embedLinkMatch[0];
-        }
-
-        try{
             const url = new URL(src);
             const hideTitle = url.searchParams.get('hideTitle') === 'true';
             const disableDownload = url.searchParams.get('disableDownload') === 'true';
@@ -171,11 +164,9 @@ const AddLecture = ({backend, theme}) =>{
             else if (linkType == "hw")
                 setFormVariables({...formVariables, ['hwLink']: url.toString()});
 
-            return url.toString();
+            return url.toString();  
         }
-        catch (error) {
-            console.log("Error parsing URL:", error);
-        }      
+        return src;     
     }
 
     return(
