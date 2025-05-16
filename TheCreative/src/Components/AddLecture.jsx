@@ -143,8 +143,8 @@ const AddLecture = ({backend, theme}) =>{
         setFormVariables({...formVariables, [name]: value});
     }
 
-    const formatLink = (link)=>{
-        let src;
+    const formatLink = (link, linkType)=>{
+        let src = link;
         const embeddedCodeMatch = link.match(/src="([^"]+)"/);
         const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
         if(embeddedCodeMatch){
@@ -164,6 +164,12 @@ const AddLecture = ({backend, theme}) =>{
         if (!disableDownload) {
             url.searchParams.set('disableDownload', 'true');
         }
+
+        if (linkType == "explain") 
+            setFormVariables({...formVariables, ['explainationLink']: url.toString()});
+        else if (linkType == "hw")
+            setFormVariables({...formVariables, ['hwLink']: url.toString()});
+
         return url.toString();        
     }
 
