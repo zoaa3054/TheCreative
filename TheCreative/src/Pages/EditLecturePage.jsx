@@ -194,10 +194,23 @@ const EditLecturePage = () =>{
     }
 
     const formatLink = (link)=>{
-        const matchLink = link.match(/https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{25,})\//);
-        if(matchLink)
-            return matchLink[0]+"preview";
-        return link.replace(/(\?[^#]*?)(&|\?)?dl=0/, '$1&raw=1');
+        let src = link;
+        const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
+        if (embedLinkMatch) {
+            src = embedLinkMatch[0];
+            const url = new URL(src);
+            const hideTitle = url.searchParams.get('hideTitle') === 'true';
+            const disableDownload = url.searchParams.get('disableDownload') === 'true';
+
+            if (!hideTitle) {
+                url.searchParams.set('hideTitle', 'true');
+            }
+            if (!disableDownload) {
+                url.searchParams.set('disableDownload', 'true');
+            }
+            return url.toString();  
+        }
+        return src;     
     }
 
     return(
@@ -262,11 +275,11 @@ const EditLecturePage = () =>{
                 {!explainationError && formVariables.explainationLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("explain")} onReady={addExplainVideoSize} opts={videoOptions}/>
                 ) :formVariables.explainationLink?(
-                    // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onContextMenu={(e) => e.preventDefault()} onLoadedData={(e)=>{setExplainIframLoad(true); addExplainVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
-                    <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
+                    // <video onContextMenu={(e) => e.preventDefault()} onLoadedData={(e)=>{setExplainIframLoad(true); addExplainVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
+                    // <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
+                    // Your browser does not support the video tag.
+                    // </video>
+                    <iframe src={formatLink(formVariables.explainationLink)} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
@@ -284,11 +297,12 @@ const EditLecturePage = () =>{
                 {!HWError && formVariables.hwLink? (
                     <YouTube key={reload} videoId={extractYouTubeID("hw")} onReady={addHWVideoSize} opts={videoOptions}/>
                 ) : formVariables.hwLink?(
-                    // <iframe allow="fullscreen" allowfullscreen height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}/>
-                    <video onContextMenu={(e) => e.preventDefault()} onLoadedData={(e)=>{setHWIframLoad(true); addHWVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
-                    <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
+                    // <video onContextMenu={(e) => e.preventDefault()} onLoadedData={(e)=>{setHWIframLoad(true); addHWVideoSize(e)}} width="400" height="200" controls controlsList="nodownload">
+                    // <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
+                    // Your browser does not support the video tag.
+                    // </video>
+                    <iframe src={formatLink(formVariables.hwLink)} onLoad={(e)=>{setHWIframLoad(true); console.log(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+
                 ):(<></>)}
             </Preveiw>
 

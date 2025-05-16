@@ -33,12 +33,24 @@ const Video = ({ link, theme, describtion }) => {
   };
 
   const formatLink = (link)=>{
-    const matchDriveLink = link.match(/https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{25,})\//);
-    if(matchDriveLink)
-        return matchDriveLink[0]+"preview";
-    
-    return link.replace(/(\?[^#]*?)(&|\?)?dl=0/, '$1&raw=1');
-}
+    let src = link;
+    const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
+    if (embedLinkMatch) {
+        src = embedLinkMatch[0];
+        const url = new URL(src);
+        const hideTitle = url.searchParams.get('hideTitle') === 'true';
+        const disableDownload = url.searchParams.get('disableDownload') === 'true';
+
+        if (!hideTitle) {
+            url.searchParams.set('hideTitle', 'true');
+        }
+        if (!disableDownload) {
+            url.searchParams.set('disableDownload', 'true');
+        }
+        return url.toString();  
+    }
+    return src;     
+  }
 
   return (
     <div style={{width:"100%", display:"flex", flexDirection:"column", textAlign:"center", height: "100%"}}>
@@ -52,11 +64,11 @@ const Video = ({ link, theme, describtion }) => {
       link?
       <div style={{width:"100%", height:"100%",  display:"flex", flexDirection:"column", alignItems: "start"}}>
         {/* <div style={{width:"100%", height:"5rem", position:"absolute", backgroundColor:theme=='light'?"white":"#181818"}}/> */}
-        {/* <iframe allow="fullscreen" allowfullscreen height="100%" src={link} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe> */}
-        <video onContextMenu={(e) => e.preventDefault()} width={"100%"} height={"100%"} controls controlsList="nodownload">
+        <iframe src={formatLink(link)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+        {/* <video onContextMenu={(e) => e.preventDefault()} width={"100%"} height={"100%"} controls controlsList="nodownload">
             <source src={formatLink(link)} type="video/mp4"/>
             Your browser does not support the video tag.
-        </video>
+        </video> */}
         <h2 style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?"Description":""}</h2>
         <p style={{color:theme=='light'?"black":"white", fontFamily:'Roboto, Arial, sans-serif;'}}>{describtion?describtion:""}</p>
         

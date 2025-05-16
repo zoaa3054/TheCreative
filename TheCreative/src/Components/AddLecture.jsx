@@ -143,7 +143,7 @@ const AddLecture = ({backend, theme}) =>{
         setFormVariables({...formVariables, [name]: value});
     }
 
-    const formatLink = (link, linkType)=>{
+    const formatLink = (link)=>{
         let src = link;
         const embedLinkMatch = link.match(/^https:\/\/jumpshare\.com\/embed\/[a-zA-Z0-9]+(\?[^ ]*)?$/);
         if (embedLinkMatch) {
@@ -158,12 +158,6 @@ const AddLecture = ({backend, theme}) =>{
             if (!disableDownload) {
                 url.searchParams.set('disableDownload', 'true');
             }
-
-            if (linkType == "explain") 
-                setFormVariables({...formVariables, ['explainationLink']: url.toString()});
-            else if (linkType == "hw")
-                setFormVariables({...formVariables, ['hwLink']: url.toString()});
-
             return url.toString();  
         }
         return src;     
@@ -233,7 +227,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.explainationLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formatLink(formVariables.explainationLink, "explain")} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={formatLink(formVariables.explainationLink)} onLoad={()=>setExplainIframLoad(true)} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
@@ -255,7 +249,7 @@ const AddLecture = ({backend, theme}) =>{
                     // <source height="100%" src={formatLink(formVariables.hwLink)} width="100%" style={{border:"none", width:"100%", height:"100%", display:"flex"}} type="video/mp4"/>
                     // Your browser does not support the video tag.
                     // </video>
-                    <iframe src={formatLink(formVariables.hwLink, "hw")} onLoad={(e)=>{setHWIframLoad(true); console.log(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
+                    <iframe src={formatLink(formVariables.hwLink)} onLoad={(e)=>{setHWIframLoad(true); console.log(e.target)}} webkitallowfullscreen mozallowfullscreen allowfullscreen style={{border:"none", width:"100%", height:"100%", display:"flex"}}></iframe>
                 ):(<></>)}
             </Preveiw>
 
