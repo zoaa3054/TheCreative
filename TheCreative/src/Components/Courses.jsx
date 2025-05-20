@@ -279,9 +279,11 @@ const Courses = ( { backend, theme, isSideBarOpen, setBuyingAlert, isAdmin } )=>
                         <td>{item.grade}</td>
                         <td>{item.term}</td>
                         <td>{timeStampToDate(item.date)}</td>
-                        <td>{(item.size/3600).toFixed(2)}hr</td>
+                        {/* <td>{(item.size/3600).toFixed(2)}hr</td> */}
+                        <td>{item.size!=0?(item.size/3600).toFixed(2) + "hr":"Not defined"}</td>
                         <td style={{color: boughtLectures.includes(item._id)&&"#05aa05", fontWeight:"bold"}}>{boughtLectures.includes(item._id)?"PAYED":`${item.cost} LE`}</td>
-                        <td>{item.explainDescribtion&&item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td>
+                        {/* <td>{item.explainDescribtion&&item.explainDescribtion.length > 20?item.explainDescribtion.slice(0, 20)+'...':item.explainDescribtion}</td> */}
+                        <td>{item.explainDescribtion?item.explainDescribtion:"-"}</td>
                         <td>{item.numOfPurchases}</td>
                         </tr>
                     ))}
