@@ -458,6 +458,7 @@ const StyledTable = styled.table`
 
   td{
     background-color: #f2f2f2;
+    max-width: 2rem;
   }
 
   tbody tr:hover {
